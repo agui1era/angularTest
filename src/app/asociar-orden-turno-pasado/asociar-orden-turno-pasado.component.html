@@ -1,0 +1,37 @@
+<app-mi-loader *ngIf="loading"></app-mi-loader>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-6">
+      <h1>Ordenes de trabajo</h1>
+    </div>
+    <div class="col-6">
+      <button (click)="openCreateMaintenance()" style="border: none;width:fit-content;padding:0 13px;float: right"
+              class="ml-5 fig mat-elevation-z5">
+        <div>
+          <div style="padding-left: 5px;margin-right: 9px">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M19.3333 11.3332H11.3333V19.3332H8.66663V11.3332H0.666626V8.6665H8.66663V0.666504H11.3333V8.6665H19.3333V11.3332Z"
+                fill="white"/>
+            </svg>
+
+          </div>
+          <div class="action">
+            <p>
+              Crear
+            </p>
+          </div>
+        </div>
+      </button>
+    </div>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-4 mt-5" *ngFor="let ot of allOrdenesDeTrabajo">
+          <app-otcard (click)="asociar(ot)" [ot]="ot" [afueraFunc]="afueraFunc"
+                      btnText="Asociar orden de trabajo"></app-otcard>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

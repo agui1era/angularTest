@@ -1,0 +1,204 @@
+<app-btn-cerrar-modal></app-btn-cerrar-modal>
+<app-mi-loader *ngIf="loading"></app-mi-loader>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h2><b>Notificaciones del usuario:</b> {{data.usr.nombre}} {{data.usr.apellido}}</h2>
+    </div>
+    <div class="col-12">
+      <div style="position: relative;" class="col-12" *ngFor="let pl of listaSuscribibles">
+        <div style="
+            position: absolute;
+            left: -10px;
+            top: 10px;">
+          <mat-checkbox *ngIf="pl.procesos.length > 0" class="example-margin"
+                        [indeterminate]="someCompletePlanta(pl,pl.procesos)"
+                        [checked]="pl.all"
+                        (change)="setAllPlanta($event.checked,pl,pl.procesos)">
+            Todo
+          </mat-checkbox>
+        </div>
+
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{pl.nombre}}
+              </mat-panel-title>
+
+            </mat-expansion-panel-header>
+
+
+            <div *ngFor="let pr of pl.procesos" style="position: relative;">
+              <div style="position: absolute;
+            left: -20px;
+            top: 10px;">
+
+                <mat-checkbox *ngIf="pr.maquinas.length > 0"
+                              [indeterminate]="someCompleteProceso(pr,pr.maquinas)"
+                              [checked]="pr.all"
+                              (change)="setAllPrdoceso(pl,$event.checked,pr,pr.maquinas)"
+                >
+                  Todo
+                </mat-checkbox>
+              </div>
+              <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{pr.nombre}}
+                    </mat-panel-title>
+
+                  </mat-expansion-panel-header>
+
+
+                  <div *ngFor="let maq of pr.maquinas" style="position: relative;">
+                    <div style="position: absolute;
+            left: -20px;
+            top: 10px;">
+                      <mat-checkbox
+                        [indeterminate]="someCompleteMaquina(maq,maq.suscribibles)"
+                        [checked]="maq.all"
+                        (change)="setAllMaquina(pr,$event.checked,maq,maq.suscribibles)"
+                      >
+                        Todo
+                      </mat-checkbox>
+                    </div>
+                    <mat-accordion >
+                      <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            {{maq.nombre}}
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div style="position: relative">
+
+                          <mat-accordion>
+                            <mat-expansion-panel>
+                              <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                  Mantencion
+                                </mat-panel-title>
+
+                              </mat-expansion-panel-header>
+                              <mat-checkbox
+                                [indeterminate]="someComplete(maq,maq.suscribibles,'Mantencion')"
+                                [checked]="maq['Mantencion']"
+                                (change)="setAll(pr,$event.checked,maq,maq.suscribibles,'Mantencion')"
+                              >
+                                Todo
+                              </mat-checkbox>
+
+                              <ul *ngFor="let suscribible of maq.suscribibles">
+                                <li *ngIf="suscribible.tipo == 'Mantencion'">
+                                  <mat-checkbox
+                                    [(ngModel)]="suscribible.activo"
+                                    (ngModelChange)="updateAllComplete(pr,maq,maq.suscribibles,suscribible.tipo)"
+                                  >
+                                    {{suscribible.gatillo}}
+                                  </mat-checkbox>
+                                </li>
+                              </ul>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel>
+                              <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                  Ordenes de trabajo
+                                </mat-panel-title>
+
+                              </mat-expansion-panel-header>
+                              <mat-checkbox
+                                [indeterminate]="someComplete(maq,maq.suscribibles,'Orden de trabajo')"
+                                [checked]="maq['Orden de trabajo']"
+                                (change)="setAll(pr,$event.checked,maq,maq.suscribibles,'Orden de trabajo')"
+                              >
+                                Todo
+                              </mat-checkbox>
+                              <ul *ngFor="let suscribible of maq.suscribibles">
+                                <li *ngIf="suscribible.tipo == 'Orden de trabajo'">
+                                  <mat-checkbox
+                                    [(ngModel)]="suscribible.activo"
+                                    (ngModelChange)="updateAllComplete(pr,maq,maq.suscribibles,suscribible.tipo)"
+                                  >
+                                    {{suscribible.gatillo}}
+                                  </mat-checkbox>
+                                </li>
+                              </ul>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel>
+                              <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                  Paradas
+                                </mat-panel-title>
+
+                              </mat-expansion-panel-header>
+                              <mat-checkbox
+                                [indeterminate]="someComplete(maq,maq.suscribibles,'Paradas')"
+                                [checked]="maq['Paradas']"
+                                (change)="setAll(pr,$event.checked,maq,maq.suscribibles,'Paradas')"
+                              >
+                                Todo
+                              </mat-checkbox>
+                              <ul *ngFor="let suscribible of maq.suscribibles">
+                                <li *ngIf="suscribible.tipo == 'Paradas'">
+                                  <mat-checkbox
+                                    [(ngModel)]="suscribible.activo"
+                                    (ngModelChange)="updateAllComplete(pr,maq,maq.suscribibles,suscribible.tipo)"
+                                  >
+                                    {{suscribible.gatillo}}
+                                  </mat-checkbox>
+                                </li>
+                              </ul>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel>
+                              <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                  Informativa/Reporte
+                                </mat-panel-title>
+
+                              </mat-expansion-panel-header>
+                              <mat-checkbox
+                                [indeterminate]="someComplete(maq,maq.suscribibles,'Informativa')"
+                                [checked]="maq['Informativa']"
+                                (change)="setAll(pr,$event.checked,maq,maq.suscribibles,'Informativa')"
+                              >
+                                Todo
+                              </mat-checkbox>
+                              <ul *ngFor="let suscribible of maq.suscribibles">
+                                <li *ngIf="suscribible.tipo == 'Informativa'">
+                                  <mat-checkbox
+                                    [(ngModel)]="suscribible.activo"
+                                    (ngModelChange)="updateAllComplete(pr,maq,maq.suscribibles,suscribible.tipo)"
+                                  >
+                                    {{suscribible.gatillo}}
+                                  </mat-checkbox>
+                                </li>
+                              </ul>
+                            </mat-expansion-panel>
+
+                          </mat-accordion>
+                        </div>
+
+                      </mat-expansion-panel>
+
+                    </mat-accordion>
+
+                  </div>
+
+                </mat-expansion-panel>
+              </mat-accordion>
+
+
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+
+      </div>
+      <div class="col-12 mt-2">
+        <button class="fR" color="primary" (click)="guardarConf()" mat-raised-button>Guardar</button>
+      </div>
+
+    </div>
+  </div>
+</div>

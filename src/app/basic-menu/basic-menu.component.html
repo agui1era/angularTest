@@ -1,0 +1,7 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12" *ngFor="let m of data.menus">
+      <button mat-raised-button (click)="abrirMenu(m.cmp)">{{m.nombre}}</button>
+    </div>
+  </div>
+</div>

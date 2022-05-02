@@ -1,0 +1,29 @@
+<app-btn-cerrar-modal></app-btn-cerrar-modal>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="textCenter">Registrar Sensor</h1>
+    </div>
+    <div class="col-12">
+      <div class="formu">
+        <mat-form-field>
+          <mat-label>ID</mat-label>
+          <input [(ngModel)]="dataId" disabled matInput type="text">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Categoria sensor</mat-label>
+          <mat-select [(ngModel)]="dataCategorySensor">
+            <mat-option *ngFor="let cat of allCategorySensor" [value]="cat.id">
+              {{cat.nombre}}
+            </mat-option>
+
+          </mat-select>
+        </mat-form-field>
+        <div>
+          <button [disabled]="this.dataCategorySensor == ''" (click)="registrar()" class="fitContentAuto primaryBTN" mat-raised-button >Registrar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

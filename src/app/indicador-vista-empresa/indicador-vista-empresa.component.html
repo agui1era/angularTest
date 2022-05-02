@@ -1,0 +1,28 @@
+<div  [ngStyle]="{transform: 'scale('+chico+')'}">
+  <mwl-gauge *ngIf="!bl" [ngClass]="malo ? 'sevenR':regular?'sevenNar':''"
+             [max]="100"
+             [dialStartAngle]="130"
+             [dialEndAngle]="50"
+             [animated]="true"
+             [animationDuration]="1"
+             [value]="valu"
+
+  >
+  </mwl-gauge>
+
+  <mwl-gauge *ngIf="bl" [ngClass]="malo ? 'sevenRNegro':regular?'sevenNarNegro':'sevenVNegro'"
+             [max]="100"
+             [dialStartAngle]="130"
+             [dialEndAngle]="50"
+             [animated]="true"
+             [animationDuration]="1"
+             [value]="valu"
+
+  >
+  </mwl-gauge>
+
+  <p class="gpercent" [ngClass]=" bl ? 'negro':''" >%</p>
+  <p  [ngClass]="bl ? 'negro':''"
+     [ngStyle]="{'font-size':laLetra+'rem'}"
+     class="glabel" >{{label}}</p>
+</div>

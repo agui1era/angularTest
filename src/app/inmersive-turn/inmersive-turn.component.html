@@ -1,0 +1,457 @@
+<div class="screen" [ngClass]="isFullScreen ? 'full-screen':''">
+  <app-mi-loader *ngIf="loading"></app-mi-loader>
+
+
+  <!-- <div (click)="toFullScreen()" class="fullScreen">
+       <mat-icon>
+         fullscreen
+       </mat-icon>
+   </div>-->
+  <div class="contentMain">
+    <div class="row">
+      <div *ngIf="productoTurnoActivo?.idordendetrabajo" class="col-5 ">
+        <div class="contentUp1 ml-2">
+          <div>
+            <div>
+              <div class="cifrasProd">
+                <div class="actual" *ngIf="productoTurnoActivo?.idordendetrabajo_ordendetrabajo">
+                  <h1><b>Este turno: </b>{{totalProdTurnoActivo}} pcs</h1>
+                  <h1><b>Total: </b>{{totalProdActual}} pcs</h1>
+                  <h1>
+                    <b>Faltan: </b>{{(productoTurnoActivo?.idordendetrabajo_ordendetrabajo.cantidadesperada - totalProdActual) > 0 ?
+                    productoTurnoActivo?.idordendetrabajo_ordendetrabajo.cantidadesperada - totalProdActual :
+                    0
+                    }}</h1>
+                </div>
+                <div class="actual" *ngIf="!productoTurnoActivo?.idordendetrabajo_ordendetrabajo">
+                  <h1>{{totalProdActual}}</h1>
+                  <small>pcs</small>
+                </div>
+                <div class="porcentaje" *ngIf="productoTurnoActivo?.idordendetrabajo_ordendetrabajo">
+                  <h1>
+                    {{totalPercent ? totalPercent : 0}}%
+                  </h1>
+                </div>
+              </div>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10"
+                     aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width:totalPercent+'%',background: 'green'}">
+                  <span class="sr-only">70% Complete</span>
+                </div>
+              </div>
+              <div class="info">
+                <div class="row" style="margin:0">
+                  <div class="col-12">
+                    <div class="row">
+                      <div class="col-4" style="
+                      display: flex;
+                      align-items: center;" *ngIf="isActiveTurnObj.idturno_turno.horafin != null">
+                        <p class="ordenesP"><strong> {{this.productTurnListNoDuplicados.length}} ordenes de
+                          trabajo</strong></p>
+
+                      </div>
+                      <div class="col-8" *ngIf="isActiveTurnObj.idturno_turno.horafin != null">
+
+                        <div class="botones">
+
+                          <button mat-icon-button (click)="cambiarOt('back')">
+                            <mat-icon>
+                              arrow_back_ios
+                            </mat-icon>
+                          </button>
+                          <p style="background: none;font-size:14px;color: blue" (click)="openAsociarOrden()" class="p0 agregarP">
+                            Asociar orden
+                          </p>
+                          <button mat-icon-button (click)="cambiarOt('next')">
+                            <mat-icon>
+                              arrow_forward_ios
+                            </mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 plomoP black mt-2" [ngClass]="Teanimo ? 'aa':'ee'"
+                       style="border-top-left-radius: 10px;border-bottom-left-radius: 10px;">
+                    <h4 [ngClass]="Teanimo ? 'aa':'ee'">
+                      <b>Producto: </b>{{productoTurnoActivo?.idsubproducto_subproducto?.nombre || 'no informado'}}
+                    </h4>
+                    <h4><b>SKU: </b>{{productoTurnoActivo?.idsubproducto_subproducto?.sku || 'no informado'}}</h4>
+                    <h4><b>Serie: </b>{{productoTurnoActivo?.serie || 'no informado'}}</h4>
+                    <h4><b>Esperado: </b>{{productoTurnoActivo?.cantidadesperada || 'no informado'}}</h4>
+
+                  </div>
+                  <div class="col-6 plomoP black mt-2 p0" [ngClass]="Teanimo ? 'aa':'ee'"
+                       style="border-top-right-radius: 10px;border-bottom-right-radius: 10px">
+                    <h4><b>Nombre
+                      OT: </b>{{productoTurnoActivo?.idordendetrabajo_ordendetrabajo?.nombre || 'no informado'}}</h4>
+                    <h4><b>Formato: </b>{{productoTurnoActivo?.formato || 'no informado'}}</h4>
+                    <h4><b>Unidad: </b>{{productoTurnoActivo?.formatounidad || 'no informado'}}</h4>
+                    <h4><b>Condición: </b>{{productoTurnoActivo?.condicion || 'no informado'}}</h4>
+
+                    <h4 *ngIf="productTurnListNoDuplicados.length > 1 && isActiveTurnObj.idturno_turno.horafin != null"
+                        class="eliminar" (click)="eliminarPt(productoTurnoActivo?.id)">Borrar</h4>
+
+                  </div>
+
+                  <!--  <div class="col-12">
+                      <div class="infoMisc">
+                        <div style="display: flex;">
+                          <img src="assets/logo.svg" alt="">
+
+                          <p *ngIf="produccionParadaEnCurso" style="font-size: 0.8rem"><b>Tiempo en
+                            pausa:</b> {{timepoEnPausa | number: '1.0-0'}} minuto{{timepoEnPausa > 1 ? 's' : ''}} <b>Hora
+                            inicio: </b>{{horaInicioInterrupcion0 | date:'HH:mm:ss'}}</p>
+                          <p [ngStyle]="produccionParadaEnCurso ? {color:'red'}:''">{{ time | async | date: 'HH:mm:ss' }}</p>
+                        </div>
+                      </div>
+                    </div>-->
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!productoTurnoActivo?.idordendetrabajo" class="col-5 ">
+
+
+      </div>
+      <div class="col-7">
+        <div class="row">
+
+          <div *ngIf="!productoTurnoActivo?.idordendetrabajo" class="col-7">
+
+          </div>
+          <div *ngIf="productoTurnoActivo?.idordendetrabajo" class="col-7 p0 mb-5">
+            <div class="contentUp1">
+              <div class="botonesChart">
+                <button *ngIf="isActiveTurnObj.idturno_turno.idmaquina_maquina.conSensor" (click)="cambiarChart(true)" [ngClass]="sensorChartsEnMinutos ? 'activo':''">M</button>
+                <br>
+                <button  (click)="cambiarChart(false)" [ngClass]="!(sensorChartsEnMinutos) ? 'activo':''">H</button>
+              </div>
+              <app-real-line-chart *ngIf="isActiveTurnObj.idturno_turno.idmaquina_maquina.conSensor"
+                                   [resuls]="socketSeries">
+              </app-real-line-chart>
+              <app-real-line-chart *ngIf="!(isActiveTurnObj.idturno_turno?.idmaquina_maquina.conSensor)"
+                                   [resuls]="manualSeries">
+              </app-real-line-chart>
+
+              <!--  <ngx-charts-bar-vertical *ngIf="!(isActiveTurnObj.idturno_turno?.idmaquina_maquina.conSensor)"
+                                         [scheme]="colorScheme"
+                                         [results]="single"
+                                         [gradient]="gradient"
+                                         [xAxis]="showXAxis"
+                                         [yAxis]="showYAxis"
+                                         [legend]="false"
+                                         [showXAxisLabel]="showXAxisLabel"
+                                         [showYAxisLabel]="showYAxisLabel"
+                                         [xAxisLabel]="xAxisLabel"
+                                         [yAxisLabel]="yAxisLabel"
+                                         style="fill: white;"
+                >
+                </ngx-charts-bar-vertical>-->
+
+            </div>
+          </div>
+          <div class="col-5 p0">
+            <div class="row" style="height: 100%">
+              <div class="col-12">
+                <app-turn-selector-manager></app-turn-selector-manager>
+
+              </div>
+              <div class="col-12">
+                <div class="infoMisc">
+                  <div style="display: flex;  align-items: center;">
+
+                    <img src="assets/logo.svg" alt="">
+                    <p *ngIf="produccionParadaEnCurso" style="font-size: 0.8rem"><b>Tiempo en
+                      pausa:</b> {{timepoEnPausa | number: '1.0-0'}} minuto{{timepoEnPausa > 1 ? 's' : ''}} <b>Hora
+                      inicio: </b>{{horaInicioInterrupcion0 | date:'HH:mm:ss'}}</p>
+                    <p [ngStyle]="produccionParadaEnCurso ? {color:'red'}:''">{{ time | async | date: 'HH:mm:ss' }}</p>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div *ngIf="produccionParadaEnCurso" class="col-12">
+        <h2 align="center">La maquina esta en pausa</h2>
+        <div *ngIf="!isOperator">
+          <div class="row">
+            <div class="col-6 offset-3 datosParadaEnCurso">
+              <h3>Existe una parada inconclusa</h3>
+              <div class="row">
+                <div class="col-4">
+                  <p><b>Nombre: </b>{{produccionParadaEnCursoObj.tipo_parada?.nombre}}</p>
+                </div>
+                <div class="col-4">
+                  <p>
+                    <b>Categoría: </b>{{produccionParadaEnCursoObj.tipo_parada?.idcategoriaparada_categoriadeparada?.nombre}}
+                  </p>
+                </div>
+                <div class="col-4">
+                  <p>
+                    <b>Creador: </b>{{produccionParadaEnCursoObj.quiennecesitaconfirmacion}}
+                  </p>
+                </div>
+                <div class="col-4">
+                  <p>
+                    <b>Hora de inicio: </b>{{produccionParadaEnCursoObj.horainicio | date:'HH:mm:ss' }}
+                  </p>
+                </div>
+                <div class="col-4">
+                  <p>
+                    <b>Duración: </b>{{timepoEnPausa | number: '1.0-2'}}
+                    min{{timepoEnPausa > 1 ? 's' : ''}} {{timepoEnPausaSecs |number:'1.0-0'}}
+                    seg{{timepoEnPausaSecs > 1 ? 's' : ''}}
+                  </p>
+                </div>
+                <div class="col-4">
+                  <p>
+                    <b>Necesita confirmación: </b>{{produccionParadaEnCursoObj.necesitaconfirmacion ? 'Si' : 'No'}}
+                  </p>
+                </div>
+                <div *ngIf="produccionParadaEnCursoObj.quiencreaconfirmacion" class="col-4">
+                  <p>
+                    <b>Quien confirma: </b>{{produccionParadaEnCursoObj.quiencreaconfirmacion }}
+                  </p>
+                </div>
+              </div>
+              <div *ngIf="!produccionParadaEnCursoObj.necesitaconfirmacion" (click)="terminarActual()"
+                   class="reanudoDiv" [ngStyle]="{background:'orange'}">
+                <p>Reanudar trabajo</p>
+              </div>
+              <div *ngIf="produccionParadaEnCursoObj.necesitaconfirmacion"
+                   (click)="confirmar(produccionParadaEnCursoObj)" class="reanudoDiv" [ngStyle]="{background:'green'}">
+                <p>Confirmar</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isOperator" (click)="terminarActual()" class="reanudoDiv" [ngStyle]="{background:'orange'}">
+          <p>Reanudar trabajo</p>
+        </div>
+      </div>
+      <!-- <div *ngIf="loading" class="col-12">
+       </div>-->
+      <div *ngIf="!produccionParadaEnCurso" class="col-12">
+        <div class="contentDown1">
+          <button (click)="recargarParaMostrarParadas()" style="position: absolute;top:-10%" mat-icon-button>
+            <mat-icon>refresh</mat-icon>
+          </button>
+          <div class="vLine l15" style="--le: 24%;"></div>
+          <div class="vLine l30" style="--le: 47.1%;"></div>
+          <div class="vLine l45" style="--le: 70.2%;"></div>
+
+          <div  [hidden]="productoTurnoActivo?.idordendetrabajo_ordendetrabajo" class="contentUp1 ml-2" style="display: flex;justify-content: center;align-items: center">
+            <p (click)="openAsociarOrden()"
+               class="p0 agregarP Sola">
+              Asociar orden
+            </p>
+
+          </div>
+
+          <app-scheduler [hidden]="productoTurnoActivo?.idordendetrabajo_ordendetrabajo == null"
+                         *ngFor="let evnt of schedulerDataObj.listaHoras" [tope]="schedulerDataObj.horas[evnt].tope"
+                         [labelH]="evnt"
+                         [eventsList]='schedulerDataObj.horas[evnt].interruptions'
+                         [prodInfo]="schedulerDataObj.horas[evnt].produccion"
+                         [sensorData]="schedulerDataObj.horas[evnt].minutos"></app-scheduler>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contentTabs">
+    <div *ngIf="isOperator && !isActiveTurnObj.idturno_turno.idmaquina_maquina.conSensor" (click)="openDetentions()"
+         class="aTab ">
+
+      <div class="rojo">
+        <mat-icon>
+          report_problem
+        </mat-icon>
+        <p>
+          Paradas
+        </p>
+      </div>
+    </div>
+    <div (click)="openMermas()" class="aTab ">
+      <div class="naranjo">
+        <mat-icon>
+          delete_sweep
+        </mat-icon>
+        <p>
+          Mermas
+        </p>
+      </div>
+    </div>
+    <div (click)="inpuProd()" routerLink="/produccion-anotar" class="aTab ">
+      <div class="verde">
+        <mat-icon>
+          production_quantity_limits
+        </mat-icon>
+        <p>
+          Produccion
+        </p>
+      </div>
+    </div>
+    <!-- <div *ngIf="!isOperator" routerLink="/vista-empresa" class="aTab">
+       <mat-icon>
+         groups
+       </mat-icon>
+       <p>
+         Vista empresa
+       </p>
+     </div>-->
+
+    <!-- <div class="aTab">
+       <mat-icon>
+         message
+       </mat-icon>
+       <p>
+         Mensajes
+       </p>
+     </div>-->
+    <!-- <div *ngIf="!isActiveTurnObj.idturno_turno.idmaquina_maquina.conSensor" (click)="openVelocidad()" class="aTab ">
+       <div class="amarillo">
+         <mat-icon>
+           speed
+         </mat-icon>
+         <p>
+           Pérdida de velocidad
+         </p>
+       </div>
+     </div>-->
+    <!-- <div (click)="logout()" class="aTab">
+       <mat-icon>
+         warning
+       </mat-icon>
+       <p>
+         Cerrar sesion
+       </p>
+     </div>-->
+
+    <div *ngIf="isOperator" (click)="irAOrdenes()" class="aTab ">
+      <div class="azul">
+        <mat-icon>
+          inventory2
+        </mat-icon>
+        <p>
+          Cambio de producto / Volver
+        </p>
+      </div>
+    </div>
+    <div *ngIf="isOperator" (click)="endTurn()" class="aTab ">
+      <div class="celeste">
+        <mat-icon>
+          logout
+        </mat-icon>
+        <p>
+          Cambiar de maquina
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<!--<div class="monitoring">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-3">
+            <div class="corpImg">
+              <img width="200" src="assets/images.png" alt="">
+            </div>
+          </div>
+          <div class="col-3"></div>
+          <div class="col-3"></div>
+          <div class="col-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="options">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-6">
+           <div (click)="goTablaProd()" class="optionButton">
+             <p>Tabla de produccion</p>
+           </div>
+          </div>
+          <div class="col-6">
+           <div class="optionButton">
+             <p>Falla de servicios</p>
+           </div>
+          </div>
+          <div class="col-6">
+           <div class="optionButton">
+             <p>Falla de servicios</p>
+           </div>
+          </div>
+          <div class="col-6">
+           <div class="optionButton">
+             <p>Falla de servicios</p>
+           </div>
+          </div>
+          <div class="col-6">
+           <div class="optionButton">
+             <p>Falla de servicios</p>
+           </div>
+          </div>
+          <div class="col-6">
+           <div class="optionButton">
+             <p>Falla de servicios</p>
+           </div>
+          </div>
+          <div class="col-6">
+           <div class="optionButton">
+             <p>Falla de servicios</p>
+           </div>
+          </div>
+          <div class="col-6">
+           <div class="optionButton">
+             <p>Falla de servicios</p>
+           </div>
+          </div>
+          <div class="col-6">
+           <div class="optionButton">
+             <p>Falla de servicios</p>
+           </div>
+          </div>
+          <div class="col-6">
+           <div class="optionButton">
+             <p>Falla de servicios</p>
+           </div>
+          </div>
+          <div class="col-6">
+           <div class="optionButton">
+             <p>Falla de servicios</p>
+           </div>
+          </div>
+          <div class="col-6">
+           <div (click)="endTurn()" class="optionButtonEnd" >
+             <p>Terminar Turno</p>
+           </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+-->

@@ -1,0 +1,406 @@
+<app-mi-loader [text]="'Cargando'" *ngIf="loading"></app-mi-loader>
+<div class="filtros ml-5">
+  <form [formGroup]="filtrosGroup">
+    <mat-form-field>
+      <mat-select (selectionChange)="selectPlant()" placeholder="Planta" formControlName="planta">
+        <mat-option value="all">
+          Todas
+        </mat-option>
+        <mat-option value="{{plant.id}}" *ngFor="let plant of allPlants">
+          {{plant.nombre}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select (selectionChange)="selectProcess()" placeholder="Proceso" formControlName="proceso">
+        <mat-option *ngIf="f.planta.value == 'all'" value="all">
+          Todas
+        </mat-option>
+        <mat-option value="{{proc.id}}" *ngFor="let proc of allProcess">
+          {{proc.nombre}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select (selectionChange)="selectMachine()" placeholder="Maquina" formControlName="maquina">
+        <mat-option *ngIf="f.proceso.value == 'all'" value="all">
+          Todas
+        </mat-option>
+        <mat-option value="{{machine.id}}" *ngFor="let machine of allMachineSelect">
+          {{machine.nombre}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select (selectionChange)="selectCategory()" placeholder="Categoria" formControlName="categoria">
+        <mat-option value="all">
+          Todas
+        </mat-option>
+        <mat-option value="{{obj.id}}" *ngFor="let obj of allCategoryDetentions">
+          {{obj.nombre}}
+        </mat-option>
+        <mat-option value="1">
+          Programadas
+        </mat-option>
+        <mat-option value="sin definir">
+          Sin definir
+        </mat-option>
+      </mat-select>
+
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select (selectionChange)="selectCategory()" placeholder="Turno" formControlName="turno">
+        <mat-option value="all">
+          Todas
+        </mat-option>
+        <mat-option value="{{obj.id}}" *ngFor="let obj of allHorarios">
+          {{obj.nombre}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input (change)="selectDia()" matInput formControlName="dia" type="date" placeholder="Dia">
+    </mat-form-field>
+  </form>
+  <button mat-icon-button color="primary" class="mr-5">
+    <mat-icon (click)="openCreateInterruption()">add</mat-icon>
+  </button>
+  <button mat-icon-button color="primary" class="mr-5">
+    <mat-icon (click)="agGridVista = !agGridVista">settings_suggest</mat-icon>
+  </button>
+  <!-- <button style="border: none" (click)="openCreateInterruption()" class="fig mat-elevation-z5  mr-3">
+     <div>
+       <div style="padding-left: 16px;margin-right: 14px">
+         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+           <path
+             d="M19.3333 11.3333H11.3333V19.3333H8.66663V11.3333H0.666626V8.66663H8.66663V0.666626H11.3333V8.66663H19.3333V11.3333Z"
+             fill="white"/>
+         </svg>
+       </div>
+       <div class="action">
+         <p>
+           Parada
+         </p>
+       </div>
+     </div>
+   </button>-->
+
+</div>
+
+<div>
+  <!-- <button class="btn btn-danger btnAdd">
+     <mat-icon>
+       add
+     </mat-icon>
+     Parada
+   </button>-->
+
+</div>
+
+<div class="tabla">
+  <ag-grid-angular *ngIf="agGridVista"
+    style="width: 100%; height: 80vh;"
+    class="ag-theme-alpine"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+  >
+  </ag-grid-angular>
+  <table mat-table [dataSource]="dataSource" *ngIf="!agGridVista">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="horaInicio">
+      <th mat-header-cell *matHeaderCellDef> Hora inicio</th>
+      <td mat-cell *matCellDef="let element">
+        <p *ngIf="!element.isEdit">
+          {{element.horainicio | date:"dd/MM/yyyy HH:mm"}}
+        </p>
+        <mat-form-field style="width: 80%" *ngIf="element.isEdit">
+          <input style="font-size: 0.7rem" matInput placeholder="Hora Inicio" type="datetime-local"
+                 [(ngModel)]="element.horainicioDisplay">
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="Duracion">
+      <th mat-header-cell *matHeaderCellDef> Duracion</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field *ngIf="element.isEdit">
+          <input matInput placeholder="Duracion" type="number" [(ngModel)]="element.duracionInput">
+        </mat-form-field>
+        <p
+          *ngIf="!element.isEdit">{{(element.duracion != 0 ? (element.duracion / 60) : element.duracion) | number : '1.0-0'}}
+          mins</p>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="Maquina">
+      <th mat-header-cell *matHeaderCellDef> Maquina</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field *ngIf="element.isEdit">
+          <mat-select placeholder="Maquina" [(ngModel)]="element.tipo_parada.paradamaquinas[0].id">
+            <mat-option [value]="maqui.id" *ngFor="let maqui of allMachineSelect">{{maqui.nombre}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p *ngIf="!element.isEdit">
+          {{element.tipo_parada.paradamaquinas[0].idmaquina_maquina.nombre}}
+
+        </p>
+      </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="Categoria">
+      <th mat-header-cell *matHeaderCellDef> Categoria</th>
+      <td mat-cell
+          *matCellDef="let element">
+
+        <p
+          [ngStyle]=" element.tipo_parada?.idcategoriaparada_categoriadeparada?.tipo == 'programada' ? {color:'blue'}:'' "
+          *ngIf="!element.isEdit">
+
+          {{element.tipo_parada?.idcategoriaparada_categoriadeparada?.tipo == 'programada' ?
+          'Programadas' : element.tipo_parada?.idcategoriaparada_categoriadeparada?.nombre}}
+
+        </p>
+        <p *ngIf="element.tipo_parada.idcategoriaparada == null && !element.isEdit">Sin categorizar</p>
+        <mat-form-field *ngIf="element.isEdit">
+          <mat-select (selectionChange)="aniadirCat(element)" placeholder="Categoria"
+                      [(ngModel)]="element.tipo_parada.idcategoriaparada">
+
+            <mat-option *ngFor="let catDet of allCategoryDetentions" [value]="catDet.id.toString()">
+              {{catDet.nombre}}
+            </mat-option>
+
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="Tipo">
+      <th mat-header-cell *matHeaderCellDef> Tipo</th>
+      <td mat-cell *matCellDef="let element">
+        <p *ngIf="!element.isEdit">
+          {{  element.tipo_parada?.nombre}}
+        </p>
+
+
+        <mat-form-field *ngIf="element.isEdit">
+
+          <!-- <mat-select placeholder="Tipo" [(value)]="element.tipo">
+             <mat-option *ngFor="let detentionOfMachine of detentionsByCat(element)"
+                         value="{{detentionOfMachine?.id}}">
+               {{detentionOfMachine?.nombre}}
+             </mat-option>
+           </mat-select>
+           -->
+          <input matInput [(ngModel)]="element.tipo_parada.nombre"
+                 type="text"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option [hidden]="option.idcategoriaparada != element.tipo_parada?.idcategoriaparada"
+                        *ngFor="let option of allDetentionsSelect" [value]="option.nombre">
+              {{option.nombre}}
+            </mat-option>
+          </mat-autocomplete>
+
+
+        </mat-form-field>
+
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="Comentario">
+      <th mat-header-cell *matHeaderCellDef> Comentario</th>
+      <td mat-cell *matCellDef="let element">
+
+        <p *ngIf="!element.isEdit">
+          {{element.comentario}}
+        </p>
+        <mat-form-field *ngIf="element.isEdit">
+          <input matInput placeholder="comentario" type="text" [(ngModel)]="element.comentario">
+        </mat-form-field>
+
+
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="confirmar">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <button *ngIf="element.necesitaconfirmacion" color="primary" mat-icon-button>
+          <mat-icon style="cursor: pointer" (click)="confirmar(element)">thumb_up</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="ver">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button>
+          <mat-icon style="cursor: pointer" (click)="ver(element)">visibility</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Editar">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <button [hidden]="element.tipo_parada?.idcategoriaparada_categoriadeparada?.tipo == 'programada' &&
+element.tipo_parada?.idcategoriaparada_categoriadeparada?.requiereInventario == false"
+                (click)="openEditInterruption(element)" *ngIf="!element.isEdit" color="accent" mat-icon-button>
+          <mat-icon>edit</mat-icon>
+        </button>
+        <div style="display: flex">
+          <button *ngIf="element.isEdit" (click)="editInterruption(element)" color="accent" mat-icon-button
+                  aria-label="Example icon button with a vertical three dot icon">
+            <mat-icon style="color: yellowgreen">check</mat-icon>
+          </button>
+          <button (click)="element.isEdit = !element.isEdit;cancelEdition()" *ngIf="element.isEdit" color="warn"
+                  mat-icon-button
+                  aria-label="Example icon button with a vertical three dot icon">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Eliminar">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <button [hidden]="element.tipo_parada?.idcategoriaparada_categoriadeparada?.tipo == 'programada' &&
+element.tipo_parada?.idcategoriaparada_categoriadeparada?.requiereInventario == false"
+                (click)="deleteInterruption(element)" color="warn" mat-icon-button
+                aria-label="Example icon button with a vertical three dot icon">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;let i = index"
+        [ngClass]="
+        allInterruptionsList[i]?.tipo_parada?.idcategoriaparada_categoriadeparada?.alertacritica &&
+        allInterruptionsList[i]?.necesitaconfirmacion &&
+         allInterruptionsList[i]?.tipo_parada?.idcategoriaparada_categoriadeparada?.tipo == 'no programada'
+         ? 'nada':''"></tr>
+  </table>
+  <div class="paginas">
+    <p *ngFor="let ii of [].constructor(paginasTotales);let iii = index" (click)="cambiarAPagina(iii)">
+      {{iii +1}}
+    </p>
+  </div>
+  <!--  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic elements">
+    </mat-paginator>-->
+</div>
+
+<!--
+
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+-->
+
+
+<!--<table class="table table-hover table-dark">
+  <thead>
+  <tr>
+    <th scope="col">Hora Inicio</th>
+    <th scope="col">Duracion</th>
+    <th scope="col">Categoria</th>
+    <th scope="col">Tipo</th>
+    <th scope="col">Comentario</th>
+    <th scope="col">Editar</th>
+    <th scope="col">Eliminar</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let interruption of allInterruptionsList">
+    <td>{{interruption.horainicio}}</td>
+    <td>{{interruption.duracion}}</td>
+    <td>{{interruption.tipo_parada.idcategoriaparada_categoriadeparada.tipo == 'programada' ?
+      'Programada' : interruption.tipo_parada.idcategoriaparada_categoriadeparada.nombre}}</td>
+    <td>{{interruption.tipo_parada.nombre}}</td>
+    <td>{{interruption.comentario}}</td>
+    <td>
+      <button class="btn btn-success" (click)="editInterruption(interruption)">Editar</button>
+    </td>
+    <td>
+      <button class="btn btn-danger" (click)="deleteInterruption(interruption)">Eliminar</button>
+    </td>
+  </tr>
+
+  </tbody>
+</table>-->
+
+<!--
+<div class="container">
+  <p>
+    crear interrupcion
+  </p>
+
+  <div>
+    <form [formGroup]="newInterruptionFormGroup">
+      <mat-form-field>
+        <mat-select placeholder="Maquina" formControlName="maquina">
+          <mat-option *ngFor="let machine of allMachineSelect" value="{{machine.id}}">
+            {{machine.nombre}}
+          </mat-option>
+        </mat-select>
+
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="hora inicio" type="datetime-local" formControlName="horainicio">
+
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="duracion" type="number" formControlName="duracion">
+
+      </mat-form-field>
+
+
+      <mat-form-field>
+        <mat-select [disabled]="allCategoryDetentions.length==0" placeholder="Categoria"
+                    (valueChange)="selectCategoryDet($event,true)"
+                    [(value)]="selectedCategoryDetention">
+          <mat-option *ngFor="let catDet of allCategoryDetentions" value="{{catDet.id}}">
+            {{catDet.nombre}}
+          </mat-option>
+        </mat-select>
+
+      </mat-form-field>
+      <mat-error *ngIf="allCategoryDetentions.length==0">No existen categorias de tipo "no programada"</mat-error>
+
+      <br>
+      <mat-form-field>
+
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="tipo">
+          <mat-option *ngFor="let detentionOfMachine of allDetentionsBySelectedCatDet"
+                      value="{{detentionOfMachine.id}}">
+            {{detentionOfMachine.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
+
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Comentario</mat-label>
+        <textarea formControlName="comentario" matInput></textarea>
+      </mat-form-field>
+    </form>
+
+    <button [disabled]="newInterruptionFormGroup.invalid" (click)="createInterruption()" mat-raised-button
+            color="primary">{{editing ? 'Guardar cambios' : 'Crear nuevo'}}</button>
+    <button (click)="limpiar()" mat-raised-button color="primary">Limpiar</button>
+
+  </div>
+</div>
+-->
+

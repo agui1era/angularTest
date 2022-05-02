@@ -1,0 +1,36 @@
+<div class="labels">
+  <div class="prodTotal">
+    <p>
+      Produccion total
+    </p>
+  </div>
+  <div class="nDEvent">
+    <p>
+      Numero de eventos
+    </p>
+  </div>
+</div>
+<div class="recordes">
+  <div *ngFor="let r of records" [ngStyle]="{color: r.colorRecord}" class="aRecorde">
+    <p>
+      ● {{r.name}} </p>
+    <p>
+      {{r.value}}
+    </p>
+  </div>
+  <!--<div style="color: #367BF5" class="aRecorde">
+    <p>
+      ● Producción Aceptada </p>
+    <p>
+      1300
+    </p>
+  </div>
+  <div style="color: #EA3D2F" class="aRecorde">
+    <p>
+      ● Mermas </p>
+    <p>
+      200
+    </p>
+  </div>-->
+
+</div>

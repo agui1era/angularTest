@@ -1,0 +1,58 @@
+<app-print-boton></app-print-boton>
+<div class="tod">
+  <div class="cajaRoot">
+
+    <table border="3">
+      <tr>
+        <td>Orden de mantención</td>
+        <td>{{data.mant?.idinterrupcion_interrupcion?.tipo_parada?.nombre}}</td>
+      </tr>
+      <tr>
+        <td>Fecha de inicio</td>
+        <td>{{data.mant?.fechaprogramada | date:'dd/MM/yyyy'}}</td>
+      </tr>
+      <tr>
+        <td>Duración aprox</td>
+        <td>{{data.mant?.idinterrupcion_interrupcion?.duracion}}</td>
+      </tr>
+      <tr>
+        <td>Maquina</td>
+        <td>{{data.mant?.idinterrupcion_interrupcion?.tipo_parada?.paradamaquinas[0].machineData.nombre}}</td>
+      </tr>
+      <tr>
+        <td>Planta</td>
+        <td>{{data.mant?.idinterrupcion_interrupcion?.tipo_parada?.paradamaquinas[0].machineData.idproceso_proceso.idplanta_plantum.nombre}}</td>
+      </tr>
+      <tr>
+        <td>Proceso</td>
+        <td>{{data.mant?.idinterrupcion_interrupcion?.tipo_parada?.paradamaquinas[0].machineData.idproceso_proceso.nombre}}</td>
+      </tr>
+      <tr>
+        <td>Comentario</td>
+        <td>{{data.mant?.idinterrupcion_interrupcion?.comentario}}</td>
+      </tr>
+
+    </table>
+
+    <div class="fotoQR ">
+      <div class="logoIgr ">
+        <!-- <img src="assets/iGr-6.png" alt="">-->
+        <img src="{{fotoEmpresa}}" alt="">
+      </div>
+      <qrcode qrdata="{{dataQR | json}}" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+
+    </div>
+  </div>
+
+</div>
+<!--<div class="row">
+  <div class="col-5 bor">
+    <img src="" alt="">
+    <img src="" alt="">
+  </div>
+  <div class="col-7 bor">
+    <h2>Nombre: </h2>
+    <h2>Cargo: </h2>
+    <img src="" alt="">
+  </div>
+</div-->

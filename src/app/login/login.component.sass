@@ -1,0 +1,90 @@
+@media only screen and (max-width: 1024px)
+  mat-card
+    width: 20vw
+
+
+
+.mainContent
+  flex: 1 1 0%
+  box-sizing: border-box
+  place-content: center
+  align-items: center
+  flex-direction: row
+  display: flex
+
+mat-form-field
+  padding: 8px
+mat-card
+  width: 40vw
+  background: #212529
+mat-icon
+  font-size: 16px
+  margin: 0 3px
+.image
+  padding: 15px 0px
+  place-content: center flex-start
+  align-items: center
+  flex-direction: column
+  box-sizing: border-box
+  display: flex
+
+  div
+    box-sizing: border-box
+
+    img
+      flex: 1 1 0%
+      box-sizing: border-box
+      width: 280px
+      height: 60px
+      text-decoration: none
+      cursor: pointer
+      border: none
+      transform: none
+
+.notImage
+  flex-direction: column
+  box-sizing: border-box
+  display: flex
+  padding: 8px
+input
+  font-size: 18px
+/* input color class */
+//::ng-deep input.mat-input-element
+  color: #ffffff
+
+//::ng-deep input.mat-input-element:focus
+  color: white !important
+  box-shadow: none !important
+
+//::ng-deep .mat-form-field-underline
+  background: #ffffff !important
+    color: #ffffff !important
+
+//::ng-deep .mat-form-field-label
+  color: #ffffff !important
+
+/* Change label color on focused */
+//::ng-deep .mat-form-field.mat-focused .mat-form-field-label
+  color: #ffffff !important
+
+/* underline border color on focused */
+//::ng-deep .mat-focused .mat-form-field-underline .mat-form-field-ripple
+  background: #ffffff !important
+
+
+
+.recoveryPass
+  place-content: center flex-end
+  align-items: center
+  flex-direction: row
+  box-sizing: border-box
+  display: flex
+  padding: 0 .5em 1em
+  button
+    color: white
+.entrar
+  padding: 20px 0 16px
+  button
+    width: 100%
+    color: white
+    background: #673ab7

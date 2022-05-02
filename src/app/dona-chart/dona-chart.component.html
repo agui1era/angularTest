@@ -1,0 +1,50 @@
+<div style="display: flex;width: 90%;">
+  <div class="cn" style="position: relative">
+    <ngx-charts-pie-chart class="laDona"
+      [view]="[220,200]"
+      [scheme]="colorr"
+      [results]="series"
+      [legend]="esLegend"
+      [labels]="false"
+      [doughnut]="true"
+      [legendPosition]="'bottom'"
+      [legendTitle]="''"
+
+    ><!--  <ngx-charts-pie-chart
+    [scheme]="colorr"
+    [results]="series"
+    [legend]="true"
+    [labels]="true"
+    [doughnut]="true"
+    [legendPosition] = "'bottom'"
+    [legendTitle]="''"
+    [view]="[470,350]"
+  >-->
+    </ngx-charts-pie-chart>
+    <div class="info">
+      <p>{{totaltotal}}</p>
+      <p>{{totaltotalText || 'Produccion total'}}</p>
+    </div>
+  </div>
+  <div class="laTable ajustarScroll"   style="--w: 60%;--h:25vh;--ys:auto;--xs:hidden"
+  >
+    <div class="losTh">
+      <p>{{tableLabel}}</p>
+      <p>%</p>
+      <p>Unidades</p>
+    </div>
+    <hr>
+    <div class="losTd" *ngFor="let data of series">
+      <p [ngStyle]="{color:data.color}">{{data.name}}</p>
+      <p [ngStyle]="{color:data.color}"> {{ data.value / totaltotal * 100  | number: '1.0-0'}}%</p>
+      <p class="ml-2" [ngStyle]="{color:data.color}">{{data.value}}</p>
+      <hr>
+    </div>
+    <div class="losTd">
+      <p>Total</p>
+      <p>100%</p>
+      <p class="ml-2">{{totaltotal}}</p>
+    </div>
+  </div>
+
+</div>

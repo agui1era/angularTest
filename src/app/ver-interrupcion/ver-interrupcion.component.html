@@ -1,0 +1,46 @@
+<app-btn-cerrar-modal></app-btn-cerrar-modal>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12">
+      <p><b>Parada: </b> {{data.element.tipo_parada?.nombre }}</p>
+
+    </div>
+    <div class="col-8">
+
+      <p><b>Categoria de parada:</b>
+        {{this.data.element.tipo_parada.idcategoriaparada_categoriadeparada?.nombre || 'Sin categorizar'}}
+      </p>
+    </div>
+    <div class="col-4">
+      <p><b>Planta:</b> {{data.element.maq.idproceso_proceso.idplanta_plantum.nombre}}</p>
+    </div>
+    <div class="col-8">
+      <p><b>Necesita ser confirmada:</b> {{data.element.necesitaconfirmacion ? 'Necesita ser confirmada':'No necesita ser confirmada'}}</p>
+
+    </div>
+    <div class="col-4">
+      <p><b>Proceso:</b>{{data.element.maq.idproceso_proceso?.nombre}}</p>
+    </div>
+    <div class="col-8">
+      <div class="row">
+        <div class="col-12">
+          <p><b>Hora Inicio</b> {{data.element.horainicio | date: "dd/MM/yyyy HH:mm"}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <p><b>Maquina:</b> {{data.element.maq.nombre || 'Sin definir'}}</p>
+    </div>
+    <div class="col-4">
+      <p><b>Comentario: </b> {{data.element.comentario}}</p>
+    </div>
+    <div class="col-4">
+      <p><b>Confirmador: </b> {{data.element.quiencreaconfirmacion}}</p>
+    </div>
+    <div class="col-4">
+      <p><b>Operador: </b> {{data.element.quiennecesitaconfirmacion}}</p>
+    </div>
+
+
+  </div>
+</div>

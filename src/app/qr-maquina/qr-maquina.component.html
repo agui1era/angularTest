@@ -1,0 +1,40 @@
+<app-print-boton></app-print-boton>
+
+<div class="tod">
+  <div class="cajaRoot">
+    <div class="sCaja1">
+      <div class="logoE ">
+        <img src="{{fotoEmpresa}}" alt="">
+
+      </div>
+      <div class="infoUsr ">
+        <h2><b>Nombre: </b>{{data.maq.nombre}} </h2>
+        <br>
+        <br>
+        <h2><b>Proceso: </b> {{data.maq.idproceso_proceso.nombre}}</h2>
+      </div>
+    </div>
+    <div class="sCaja2">
+      <div class="fotoQR ">
+        <qrcode qrdata="{{dataQR | json}}" [width]="270" [errorCorrectionLevel]="'M'"></qrcode>
+
+      </div>
+
+      <div class="logoIgr ">
+        <img src="assets/iGr-6.png" alt="">
+      </div>
+    </div>
+  </div>
+
+</div>
+<!--<div class="row">
+  <div class="col-5 bor">
+    <img src="" alt="">
+    <img src="" alt="">
+  </div>
+  <div class="col-7 bor">
+    <h2>Nombre: </h2>
+    <h2>Cargo: </h2>
+    <img src="" alt="">
+  </div>
+</div-->

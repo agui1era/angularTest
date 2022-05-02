@@ -1,0 +1,12 @@
+<div>
+  <h1>Crear interrupcion de categoria {{data.category.nombre}}</h1>
+  <mat-form-field style="width: 100%;">
+    <input [(ngModel)]="inputNombreValue" [matAutocomplete]="auto" type="text" matInput  >
+    <mat-autocomplete #auto="matAutocomplete" >
+      <mat-option [value]="det.nombre" *ngFor="let det of detentionsOfMachine">
+        {{det.nombre}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <button [disabled]="inputNombreValue.length == 0" (click)="crearParada()" class="btn btn-block btn-success">Crear</button>
+</div>

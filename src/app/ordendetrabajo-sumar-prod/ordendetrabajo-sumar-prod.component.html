@@ -1,0 +1,37 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h2>Sumar <b>{{totalProduccion}} </b> a la orden de trabajo</h2>
+    </div>
+    <div class="col-12">
+      <div class="ordenes">
+        <div class="row">
+          <div class="col-4" *ngFor="let ord of data.listaOT">
+            <mat-card class="example-card " [ngClass]="ord.estado">
+              <mat-card-header>
+                <div mat-card-avatar class="example-header-image"><mat-icon>inventory2</mat-icon></div>
+                <mat-card-title><b>Orden: </b>{{ord.nombre}}</mat-card-title>
+                <mat-card-subtitle><b>Estado: </b>{{ord.estado}}</mat-card-subtitle>
+              </mat-card-header>
+              <img height="200" mat-card-image src="{{ord.foto}}" alt="Photo of a Shiba Inu">
+              <mat-card-content>
+                <p><b>Producto: </b>{{ord.idsubproducto_subproducto?.nombre}}
+                {{ord.unidadelegida}}
+                {{ord.formatoelegido}}
+                {{ord.condicionelegida}}
+                </p>
+                <p><b>Cantidad esperada: </b>{{ord.cantidadesperada}}</p>
+                <p><b>Cantidad actual: </b>{{ord.cantidadactual}}</p>
+                <p><b>Asignada: </b>{{ord.maq.nombre}}</p>
+
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-raised-button color="primary" (click)="sumar(ord.id)"><mat-icon>add</mat-icon>Sumar a esta orden de trabajo</button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

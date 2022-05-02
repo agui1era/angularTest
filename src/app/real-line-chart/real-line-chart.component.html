@@ -1,0 +1,19 @@
+<div>
+  <ngx-charts-line-chart
+    [legend]="false"
+    [showXAxisLabel]="false"
+    [showYAxisLabel]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [xAxisLabel]="'Tiempo'"
+    [yAxisLabel]="'Piezas'"
+    [results]="resuls"
+    [scheme]="{domain:['#FF0000','#40ff00']}"
+
+    (select)="onSelect($event)"
+    (activate)="onActivate($event)"
+    (deactivate)="onDeactivate($event)"
+    style="fill: white;"
+  ></ngx-charts-line-chart>
+
+</div>

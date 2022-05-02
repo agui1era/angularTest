@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2><b>Tipo de evento: </b>{{data.item.classes == 'otAct' ?
+        'Progreso actual OT' : data.item.classes == 'ot' ?
+          'Progreso esperado OT' : data.item.classes == 'int' ?
+            'Interrupción' : data.item.classes == 'mant' ?
+              'Mantención' : ''
+
+        }}</h2>
+    </div>  <div class="col-12">
+      <h2><b>Nombre: </b>{{data.item.name}}</h2>
+      <h2><b>Duracion: </b>{{duracionInicial}}</h2>
+    </div>
+    <div class="col-12">
+      <p><b>Comienzo</b></p>
+      <div class="row">
+        <div class="col-2">Año <input [disabled]="data.item.classes != 'int'" [(ngModel)]="iYear" class="fechaInp"  type="number"></div>
+        <div class="col-2">Mes <input [disabled]="data.item.classes != 'int'" max="12" min="0" (keyup)="validarMesI()" [(ngModel)]="iMes" class="fechaInp"  type="number"></div>
+        <div class="col-2">Día <input [disabled]="data.item.classes != 'int'" max="31" min="0" (keyup)="validarDiasI()"  [(ngModel)]="iDia"  class="fechaInp" type="number"></div>
+        <div class="col-2">Hora <input [disabled]="data.item.classes != 'int'" max="23" min="0" (keyup)="validarHorasI()" [(ngModel)]="iHora"  class="fechaInp" type="number"></div>
+        <div class="col-4">Minuto <input [disabled]="data.item.classes != 'int'" max="59" min="0" (keyup)="validarMinutosI()" [(ngModel)]="iMinuto" class="fechaInp" type="number"></div>
+      </div>
+    </div>
+    <div class="col-12 mt-3">
+      <p><b>Fin</b></p>
+      <div class="row">
+        <div class="col-2">Año <input [disabled]="data.item.classes != 'int'" [(ngModel)]="fYear" class="fechaInp"  type="number"></div>
+        <div class="col-2">Mes <input [disabled]="data.item.classes != 'int'" max="12" min="0"  (keyup)="validarMesF()"[(ngModel)]="fMes" class="fechaInp"  type="number"></div>
+        <div class="col-2">Día <input [disabled]="data.item.classes != 'int'" max="31" min="0" (keyup)="validarDiasF()" [(ngModel)]="fDia"  class="fechaInp" type="number"></div>
+        <div class="col-2">Hora <input [disabled]="data.item.classes != 'int'" max="23" min="0" (keyup)="validarHorasF()" [(ngModel)]="fHora"  class="fechaInp" type="number"></div>
+        <div class="col-4">Minuto <input [disabled]="data.item.classes != 'int'" max="59" min="0" (keyup)="validarMinutosF()" [(ngModel)]="fMinuto" class="fechaInp" type="number"></div>
+      </div>
+    </div>
+    <div class="col-12 mt-2">
+      <button (click)="guardar()" mat-raised-button class="fR">Guardar</button>
+    </div>
+  </div>
+</div>

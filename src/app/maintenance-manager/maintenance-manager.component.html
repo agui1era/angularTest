@@ -1,0 +1,91 @@
+<app-btn-cerrar-modal></app-btn-cerrar-modal>
+<mat-tab-group>
+  <mat-tab  *ngIf="data.operador" label="Orden de trabajo">
+    <app-ordende-trabajo-manager [esOperador]="data.operador" [conMaquina]="data.maquina"></app-ordende-trabajo-manager>
+  </mat-tab>
+  <mat-tab  *ngIf="!(data.operador)" label="Mantencion">
+    <div >
+
+      <div>
+          <mat-form-field>
+            <mat-label>Planta</mat-label>
+            <mat-select (selectionChange)="cambiarPlanta()"  [disabled]="esOperador" [(ngModel)]="plantSelected">
+              <mat-option *ngFor="let maq of allPlants " [value]="maq.id">{{maq.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Proceso</mat-label>
+            <mat-select (selectionChange)="cambiarProceso()"  [disabled]="plantSelected == '' || esOperador" [(ngModel)]="procSelected">
+              <mat-option *ngFor="let maq of allProcs " [value]="maq.id">{{maq.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        <mat-form-field>
+          <mat-label>Maquina</mat-label>
+          <mat-select [disabled]="procSelected == ''" [(ngModel)]="newInterruption.idmaquina">
+            <mat-option *ngFor="let machine of allMaqs" value="{{machine.id}}">
+              {{machine.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Fecha programada" type="datetime-local" [(ngModel)]="newInterruption.horainicio">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Duracion estimada(en minutos)" type="number"
+                 [(ngModel)]="newInterruption.duracion">
+        </mat-form-field>
+
+
+        <!--  <mat-form-field>
+            <mat-label>Categoria</mat-label>
+            <mat-select (valueChange)="selectCategoryDet($event,true)" [(value)]="selectedCategoryDetention">
+              <mat-option>
+                None
+              </mat-option>
+              <mat-option *ngFor="let catDet of allCategoryDetentions" value="{{catDet.id}}">
+                {{catDet.nombre}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>-->
+        <mat-form-field>
+
+          <mat-label>Nombre</mat-label>
+
+          <input matInput [(ngModel)]="newInterruption.nombreMant"
+                 type="text"
+                 [matAutocomplete]="auto">
+
+        </mat-form-field>
+        <mat-form-field>
+
+          <mat-label>Tipo</mat-label>
+
+          <input matInput [(ngModel)]="newInterruption.tipoNombre"
+                 type="text"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of allDetentions" [value]="option.nombre">
+              {{option.nombre}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Comentario</mat-label>
+          <textarea [(ngModel)]="newInterruption.comentario" matInput></textarea>
+        </mat-form-field>
+
+        <button *ngIf="!editando" [disabled]="yaCreo || newInterruption.idmaquina == ''" (click)="crear()" mat-raised-button
+                style="float: right;color: white;background: green">{{'Crear nuevo'}}</button>
+
+        <button *ngIf="editando" [disabled]="yaCreo" (click)="edit()" mat-raised-button
+                style="float: right;color: white;background: green">editar</button>
+
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+
+

@@ -1,0 +1,89 @@
+<div class="container" >
+  <div>
+    <form [formGroup]="newInterruptionFormGroup">
+      <mat-form-field>
+        <mat-label>Planta</mat-label>
+        <mat-select (selectionChange)="cambiarPlanta()" formControlName="planta"   [(ngModel)]="plantSelected">
+          <mat-option *ngFor="let maq of allPlants " [value]="maq.id">{{maq.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Proceso</mat-label>
+        <mat-select (selectionChange)="cambiarProceso()"  formControlName="proceso"  [(ngModel)]="procSelected" [disabled]="plantSelected == ''">
+          <mat-option *ngFor="let maq of allProcs " [value]="maq.id">{{maq.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Maquina</mat-label>
+        <mat-select [disabled]="procSelected == ''" formControlName="maquina" >
+          <mat-option *ngFor="let machine of allMaqs" [value]="machine.id">
+            {{machine.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="hora inicio" type="datetime-local" formControlName="horainicio">
+
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="duracion(en minutos)" type="number" formControlName="duracion">
+
+      </mat-form-field>
+
+
+      <mat-form-field>
+        <mat-select [disabled]="allCategoryDetentions.length==0"  [ngModelOptions]="{standalone: true}" placeholder="Categoria"
+                    [(ngModel)]="selectedCategoryDetention"><!-- <mat-select [disabled]="allCategoryDetentions.length==0" placeholder="Categoria"
+                    (valueChange)="selectCategoryDet($event,true)"
+                    [(value)]="selectedCategoryDetention">-->
+          <mat-option
+            [hidden]="catDet.nombre == 'Perdida de capacidad productiva' ||
+                      catDet.nombre == 'Perdidas legales'"
+            *ngFor="let catDet of allCategoryDetentions"  [value]="catDet.id">
+            {{catDet.nombre}}
+          </mat-option>
+        </mat-select>
+
+      </mat-form-field>
+      <mat-error *ngIf="allCategoryDetentions.length==0">No existen categorias de tipo "no programada"</mat-error>
+
+      <br>
+      <mat-form-field *ngIf="selectedCategoryDetention">
+
+        <mat-label>Tipo</mat-label>
+    <!--    <mat-select>
+          <mat-option *ngFor="let detentionOfMachine of allDetentionsBySelectedCatDet"
+                      value="{{detentionOfMachine.id}}">
+            {{detentionOfMachine.nombre}}
+          </mat-option>
+        </mat-select>-->
+
+        <input matInput  formControlName="tipo"
+               type="text"
+                [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete" >
+          <mat-option [hidden]="option.idcategoriaparada != selectedCategoryDetention" *ngFor="let option of allDetentionsSelect" [value]="option.nombre">
+            {{option.nombre}}
+          </mat-option>
+        </mat-autocomplete>
+
+
+      </mat-form-field>
+      <br>
+
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Comentario</mat-label>
+        <textarea formControlName="comentario" matInput></textarea>
+      </mat-form-field>
+    </form>
+
+    <button *ngIf="!editando"  [disabled]="newInterruptionFormGroup.invalid || yaCreo" (click)="createInterruption()" mat-raised-button
+            color="primary">{{ 'Crear nuevo'}}</button>
+    <button *ngIf="editando" [disabled]="newInterruptionFormGroup.invalid || yaCreo" (click)="edit()" mat-raised-button
+            color="primary">{{ 'Editar'}}</button>
+ <!--   <button (click)="limpiar()" mat-raised-button color="primary">Limpiar</button>
+-->
+  </div>
+</div>

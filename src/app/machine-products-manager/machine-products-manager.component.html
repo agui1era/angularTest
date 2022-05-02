@@ -1,0 +1,101 @@
+<!--
+<fieldset >
+  <legend style="width: fit-content">Productos de la maquina</legend>
+  <div class="row p-2">
+    <div class="col-12">
+      <div class="btn btn-success btn-sm" (click)="addProduct()">
+        <mat-icon>add</mat-icon>
+      </div>
+    </div>
+    <div class="col-12">
+      <div *ngFor="let selProduct of selectedProducts;let i = index">
+        <div class="row mt-2">
+          <div class="col-9">
+            <select  (ngModelChange)="changeProduct(selProduct,$event,i)" [(ngModel)]="selProduct.value" class="custom-select">
+              <option *ngFor="let producto of productsList" value="{{producto.id}}">{{producto.nombre}}</option>
+            </select>
+          </div>
+          <div class="col-3">
+            <div (click)="deleteProduct(i,selProduct)" class="btn btn-danger btn-sm">
+              <mat-icon>delete</mat-icon>
+            </div>
+          </div>
+
+          &lt;!&ndash;  <div class="col">
+              <input formControlName="velPromProd" type="text" class="form-control"
+                     placeholder="Formato">
+            </div>&ndash;&gt;
+        </div>
+      </div>
+    </div>
+
+  </div>
+</fieldset>
+-->
+<div *ngIf="inModal" style="float: right">
+  <button mat-dialog-close class="btn btn-danger" mat-icon-button><mat-icon >close</mat-icon></button>
+</div>
+<div *ngIf="productsList.length == 0" style="width: 100%">
+  <h3 style="color: crimson;text-align: center">No existen productos   <a style="text-decoration: underline" [routerLink]="['/datos','productos']" (click)="cerrarTodo()">Ir a productos</a>
+  </h3>
+</div>
+<div *ngIf="productsList.length>0" class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="plomoP">Producto seleccionado <b>{{selectedProduct.nombre ? selectedProduct.nombre:'' }}</b></h2>
+      <mat-form-field class="fullW">
+        <mat-select (selectionChange)="cambiarSubProducts()" [(ngModel)]="selectedProduct" placeholder="Seleccionar producto">
+          <mat-option [value]="product" *ngFor="let product of productsList">
+                {{product.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div *ngIf="selectedProduct.nombre" class="col-12">
+      <h2 class="plomoP">Subproductos de <b> {{selectedProduct.nombre}}</b></h2>
+      <div class="subproductsContent">
+        <h3 *ngIf="selectedProduct.subproductos.length == 0" style="color: crimson">No existen subproductos asociados a <b>{{selectedProduct.nombre}} </b>  <b (click)="irAProducto(selectedProduct)" style="color: #1f497d;text-decoration: underline;cursor: pointer"> Editar producto</b></h3>
+        <div class="row">
+          <div class="col-12">
+            <em>Encontrados: {{selectedProduct.subproductos.length}}</em>
+          </div>
+          <div class="col-12">
+            <form (ngSubmit)="buscar()">
+              <mat-form-field  appearance="fill">
+                <mat-label>Buscar</mat-label>
+                <input [ngModelOptions]="{standalone: true}" matInput type="text" [(ngModel)]="busqueda">
+
+                <mat-icon matSuffix (click)="buscar()">
+                  search
+                </mat-icon>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-12">
+            <div class="aSubProductItem">
+                  <mat-checkbox type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();">
+                  Todos
+                  </mat-checkbox>
+            </div>
+
+          </div>
+          <div class="col-12" *ngFor="let subProduct of selectedProduct.subproductos">
+            <div class="aSubProductItem" >
+              <mat-checkbox (change)="elegirSubProduct(subProduct);checkIfAllSelected()" [(ngModel)]="subProduct.activo" >
+                {{subProduct.nombre}}
+                {{subProduct.unidad}}
+                {{subProduct.formato}}
+                {{subProduct.condicion}}
+
+              </mat-checkbox>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+

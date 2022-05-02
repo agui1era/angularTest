@@ -1,0 +1,449 @@
+@import "ag-grid-community/dist/styles/ag-grid.css"
+@import "ag-grid-community/dist/styles/ag-theme-alpine.css"
+@font-face
+  font-family: Nunito
+  src: url("assets/nunito/static/Nunito-Regular.ttf") format("opentype")
+@font-face
+  font-family: Inter
+  src: url("assets/Inter/static/Inter-Regular.ttf") format("opentype")
+
+
+@media print
+  html, body
+    height: 100vh
+    margin: 0 !important
+    padding: 0 !important
+    overflow: hidden
+
+html
+  overflow-y: auto
+
+body, html
+  background: #fafafa !important
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle
+  border-color: rgb(66, 134, 244)
+
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle
+  color: rgb(66, 134, 244)
+  background-color: rgb(66, 134, 244)
+
+
+.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element
+  background-color: rgb(255, 37, 37, .26)
+
+app-inmersive-turn
+  z-index: 100 !important
+
+mat-toolbar
+  z-index: 99 !important
+
+.mat-drawer-inner-container
+  overflow: hidden !important
+
+@keyframes suFade
+  0%
+    opacity: 0
+  100%
+    opacity: 1
+
+
+@keyframes hacerZoom
+  0%
+    transform: scale(1)
+  50%
+    transform: scale(1.3)
+  100%
+    transform: scale(1)
+
+@keyframes shake
+  10%
+    transform: scale(1.05)
+  25%
+    transform: rotate(3deg)
+  50%
+    transform: rotate(-3deg)
+  75%
+    transform: scale(1.05)
+  100%
+    transform: scale(1)
+
+@keyframes blind
+  0%
+    opacity: 0
+  50%
+    opacity: 1
+  100%
+    opacity: 0
+
+@keyframes shake2
+  0%
+    transform: rotate(-13deg)
+  50%
+    transform: rotate(13deg)
+  100%
+    transform: rotate(-13deg)
+
+@keyframes beat
+  0%
+    transform: scale(1)
+    opacity: 1
+  100%
+    transform: scale(1.2)
+    opacity: 0.3
+
+//@import '~@angular/material/prebuilt-themes/deeppurple-amber.css'
+
+
+
+
+//$primaryPalette: mat-palette($mat-indigo)
+//$accentPalette:  mat-palette($mat-pink, A200, A100, A400)
+
+// the default warn palette is red, so use that if the theme doesn't define one
+//$warnPalette:    mat-palette($mat-red)
+
+/* You can add global styles to this file, and also import other style files */
+a
+  cursor: pointer
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Roboto&display=swap')
+//@media only screen and (max-width: 1024px)
+  *
+    font-size: 97% !important
+
+
+.turnSelect
+  margin-top: 2rem
+
+  h1
+    text-align: center
+    font-size: 3rem
+
+
+.formulario
+  padding: 40px 10px
+  margin: 20px auto
+  width: 50%
+  box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%)
+  border-radius: 6px
+
+
+.bordeSuave
+  border-bottom: solid 1px #F1F3F4
+
+::-webkit-scrollbar
+  width: 14px
+  background: transparent
+  height: 3px
+  cursor: pointer
+
+
+/* Track */
+::-webkit-scrollbar-track
+  background: #e3e3e3
+
+
+
+/* Handle */
+::-webkit-scrollbar-thumb
+  background: #78909C
+  border-radius: 9px
+
+
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover
+  background: #a8a8a8
+  cursor: pointer !important
+  border-radius: 9px
+
+
+
+.aItem
+  background: #5E6366
+  color: white
+  font-size: 170%
+  z-index: 1000
+  cursor: pointer
+
+.aItem:hover
+  transition: all 200ms linear
+  transform: scale(1.2)
+
+html, body
+  height: 100%
+  min-height: 100%
+  position: relative
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+  -webkit-touch-callout: none
+  -webkit-text-size-adjust: 100%
+  -ms-text-size-adjust: 100%
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+.p0
+  padding: 0
+
+button:focus
+  outline: none
+
+mwl-gauge
+  width: 230px
+  height: 150px
+  display: block
+  padding: 10px
+
+mwl-gauge > .gauge > .dial
+  stroke: #eee
+  stroke-width: 2
+  fill: rgba(0, 0, 0, 0)
+
+mwl-gauge > .gauge > .value
+  stroke: #2FA84F
+  stroke-width: 5
+  fill: rgba(0, 0, 0, 0)
+
+mwl-gauge > .gauge > .value-text
+  fill: #ffffff
+  font-family: sans-serif
+  font-weight: bold
+  font-size: 1em
+//text-shadow: 2px 2px 9px #b4b3b3
+
+mwl-gauge.LaN > .gauge > .value-text
+  fill: #000000
+  font-family: sans-serif
+  font-weight: bold
+  font-size: 1em
+//text-shadow: 2px 2px 9px #b4b3b3
+
+mwl-gauge.gaugAmarillo > .gauge > .dial
+  stroke: #334455
+  fill: #334455
+  stroke-width: 20
+
+mwl-gauge.gaugAmarillo > .gauge > .value
+  stroke: #ff6daf
+  stroke-width: 20
+
+mwl-gauge.gaugAmarillo > .gauge > .value-text
+  fill: #ff6daf
+  font-size: 0.7em
+
+mwl-gauge.seven > .gauge > .dial
+  stroke: transparent
+  stroke-width: 5
+  transform: scale(0.9, 0.9) translate3d(5.5px, 5.5px, 0)
+  fill: rgb(255, 255, 255)
+//fill: rgba(148, 112, 57, 0.42)
+
+mwl-gauge.seven > .gauge > .value
+  stroke: #f8774b
+  stroke-dasharray: none
+  stroke-width: 5
+
+//mwl-gauge.sevenV > .gauge > .dial
+  stroke: transparent
+  stroke-width: 5
+  transform: scale(0.9, 0.9) translate3d(5.5px, 5.5px, 0)
+  fill: rgb(255, 255, 255)
+//fill: rgba(93, 255, 29, 0.42)
+
+mwl-gauge.sevenV > .gauge > .value
+  stroke: #2FA84F
+  stroke-dasharray: none
+  stroke-width: 8
+
+mwl-gauge.sevenA > .gauge > .dial
+  stroke: transparent
+  stroke-width: 5
+  transform: scale(0.9, 0.9) translate3d(5.5px, 5.5px, 0)
+  fill: rgb(255, 255, 255)
+//fill: rgba(255, 203, 0, 0.42)
+
+mwl-gauge.sevenA > .gauge > .value
+  stroke: #ffdd36
+  stroke-dasharray: none
+  stroke-width: 5
+
+//mwl-gauge.sevenR > .gauge > .dial
+  stroke: transparent
+  stroke-width: 5
+  transform: scale(0.9, 0.9) translate3d(5.5px, 5.5px, 0)
+  //fill: rgb(255, 255, 255)
+//fill: rgba(175, 20, 20, 0.42)
+
+mwl-gauge.sevenR > .gauge > .value
+  stroke: #ff3535
+  stroke-dasharray: none
+  stroke-width: 5
+
+mwl-gauge.sevenRNegro > .gauge > .value
+  stroke: #ff3535
+  stroke-dasharray: none
+  stroke-width: 5
+
+mwl-gauge.sevenNar > .gauge > .value
+  stroke: #ff7400
+  stroke-dasharray: none
+  stroke-width: 5
+
+mwl-gauge.sevenNarNegro > .gauge > .value
+  stroke: #ff7400
+  stroke-dasharray: none
+  stroke-width: 5
+
+mwl-gauge.sevenR > .gauge > .value-text
+  fill: #ffffff
+  //fill: #ff3535
+  font-family: sans-serif
+  font-weight: bold
+  font-size: 1em
+//text-shadow: 2px 2px 9px #b4b3b3
+mwl-gauge.sevenRNegro > .gauge > .value-text
+  fill: #000000
+  //fill: #ff3535
+  font-family: sans-serif
+  font-weight: bold
+  font-size: 1em
+//text-shadow: 2px 2px 9px #b4b3b3
+mwl-gauge.sevenNar > .gauge > .value-text
+  fill: #ffffff
+  //fill: #ff7400
+  font-family: sans-serif
+  font-weight: bold
+  font-size: 1em
+//text-shadow: 2px 2px 9px #b4b3b3
+mwl-gauge.sevenNarNegro > .gauge > .value-text
+  fill: #000000
+  //fill: #ff7400
+  font-family: sans-serif
+  font-weight: bold
+  font-size: 1em
+//text-shadow: 2px 2px 9px #b4b3b3
+.mat-drawer-container
+  z-index: 6 !important
+
+mwl-gauge.sevenVNegro > .gauge > .value-text
+  fill: #000000
+  font-family: sans-serif
+  font-weight: bold
+  font-size: 1em
+//text-shadow: 2px 2px 9px #b4b3b3
+.mat-ink-bar
+  background-color: #367BF5 !important
+
+.mat-tab-label
+  color: #5E6366 !important
+
+.mat-tab-label.mat-tab-label-active
+  color: #367BF5 !important
+
+.cambiarVista
+  mat-icon
+    color: #367BF5 !important
+    cursor: pointer
+
+.barr
+  margin: auto
+  background: var(--bg)
+  width: var(--ancho)
+  height: var(--alto)
+
+.fullW
+  width: 100%
+
+.plomoP
+  background: #E3E5E5
+
+.laPrimary
+  background: #367BF5
+
+\:root
+  --plomop: #E3E5E5
+  --laPrimary: #b676f6
+
+.fitContentAuto
+  width: fit-content
+  margin: auto
+
+.textCenter
+  text-align: center
+
+.primaryBTN
+  color: white !important
+  background: var(--laPrimary) !important
+
+.Comenzar
+  background: #2FA84F
+
+.Terminado
+  background: var(--plomop)
+
+.Pausado
+  background: #ffaf00
+  color: black !important
+
+.Comenzado
+  background: var(--laPrimary)
+  color: white !important
+
+/* Make lines in line chart thick, with rounded ends */
+g.line-chart > g:last-of-type > g:nth-child(n) g.line-series > path
+  stroke-width: 6px !important
+  stroke-linecap: round
+
+.rojo
+  background-color: red !important
+
+.time-sch-item
+  background-color: red
+
+.fR
+  float: right
+
+.ot
+  background-color: green !important
+  font-size: 12px !important
+  //font-weight: bold !important
+  white-space: nowrap !important
+
+.otAct
+  height: 20px !important
+  margin-top: 58px !important
+  background-color: #0e58a2 !important
+  font-size: 10px !important
+//font-weight: bold !important
+
+.mant
+  background: rgba(134, 128, 255, 0.9) !important
+  z-index: 9999 !important
+
+.int
+  background: rgba(98, 0, 27, 0.9) !important
+  z-index: 10000 !important
+
+.anch
+  width: 999px !important
+
+.btn-accept
+  background: green !important
+  color: white !important
+.mat-tab-body-content
+  overflow: hidden !important
+  //overflow-y: auto !important
+.laDona
+  ngx-charts-chart
+    div
+      svg
+        left: -26px
+        position: absolute
+.ajustarScroll
+  min-width: var(--w)
+  max-width: var(--w)
+  min-height: var(--h)
+  max-height: var(--h)
+  overflow-x: var(--xs)
+  overflow-y: var(--ys)
+

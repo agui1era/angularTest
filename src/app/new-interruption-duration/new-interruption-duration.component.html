@@ -1,0 +1,30 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-6">
+      <mat-form-field>
+        <mat-label>Fecha inicio</mat-label>
+        <input disabled [(ngModel)]="duracionDateHoy" type="datetime-local" matInput>
+      </mat-form-field>
+<!--
+      <mat-form-field>
+        <mat-label>Duración en minutos</mat-label>
+        <input [(ngModel)]="duracionInput" type="text" matInput>
+      </mat-form-field>
+-->
+
+    </div>
+    <div class="col-6">
+      <mat-form-field>
+        <mat-label>Fecha fin</mat-label>
+        <input (change)="calcularDuracion()" [(ngModel)]="duracionDate" type="datetime-local" matInput>
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <p>Duración {{duracionCalculo}} min{{duracionCalculo > 1 ? 's' : ''}}</p>
+    </div>
+    <div class="col-6">
+      <button [disabled]="duracionCalculo <= 0" mat-raised-button color="primary" style="float: right" (click)="openCreateInt()">Continuar</button>
+      <button *ngIf="esteTurno.horafin == null"  mat-raised-button color="primary" style="float: right;margin-right: 5px;" (click)="sinDuracion();openCreateInt()">Duración indefinida</button>
+    </div>
+  </div>
+</div>

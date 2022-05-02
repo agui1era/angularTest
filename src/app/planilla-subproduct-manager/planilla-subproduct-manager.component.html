@@ -1,0 +1,26 @@
+<div >
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h1>Descargar Planilla de ejemplo<a href="assets/PlanillaSubproductos.csv" download><mat-icon>download_file</mat-icon></a></h1>
+      </div>
+
+      <div class="col-12">
+        <h1>Subir Planilla</h1>
+      </div>
+      <div class="col-6">
+        <label class="btn btn-default p-0">
+          <input type="file" name="myFile"  (change)="selectFile($event)" />
+        </label>
+      </div>
+
+      <div class="col-6">
+        <button class="btn btn-success btn-sm" [disabled]="!selectedFiles" (click)="upload()">
+          Subir
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

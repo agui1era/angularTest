@@ -1,0 +1,161 @@
+﻿<div class="mainn">
+  <div class="row">
+    <div class="col-6">
+      <div class="cnt">
+        <mat-card>
+          <h1>Inicialización de la fábrica</h1>
+          <form [formGroup]="formDatosEmpresa" action="">
+            <mat-form-field>
+              <input (blur)="updateSettings('nombreempresa')" formControlName="nombreempresa" matInput type="text"
+                     placeholder="Nombre de la fábrica">
+            </mat-form-field>
+            <mat-form-field>
+              <input (blur)="updateSettings('pais')" formControlName="pais" matInput type="text"
+                     placeholder="Pais de la fábrica">
+            </mat-form-field>
+            <mat-form-field>
+              <input (blur)="updateSettings('thingsboardurl')" formControlName="thingsboardurl" matInput type="url"
+                     placeholder="Dashboard URL">
+            </mat-form-field>
+
+            <p style="color: rgba(0, 0, 0, 0.38)">Logo Empresa</p>
+            <input type="file" (change)="handleUpload($event)">
+            <!--<img src="{{inputFoto}}" height="75" alt="">-->
+
+
+          </form>
+          <hr>
+          <div class="row mt-3">
+            <div class="col-12">
+              <h2 style="float: left">Horarios</h2>
+              <button class="fR" mat-raised-button style="background: #2FA84F;color: white"
+                      (click)="createHandHourItem()">
+                Agregar horario
+              </button>
+            </div>
+
+            <!--  <div class="col-12">
+                <h4>Días habilitados</h4>
+
+                <div class="row">
+                  <div class="col-2" *ngFor="let day of allDaysPermitidos">
+                    <mat-checkbox (change)="cambiarDia(day)" [(ngModel)]="day.permitido">{{day.nombre}}</mat-checkbox>
+                  </div>
+
+                </div>
+
+              </div>-->
+            <div class="col-12 ">
+              <fieldset *ngFor="let handHour of currentHandHour" [hidden]="handHour.borrado">
+                <div class="delete">
+                  <button (click)="deleteHandHour(handHour.id)" mat-icon-button class="btn-danger">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <mat-form-field>
+                      <input disabled matInput type="text" [(ngModel)]="handHour.nombre"
+                             placeholder="Nombre de la jornada laboral">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-6">
+                    <mat-form-field>
+                      <input disabled matInput type="text" [(ngModel)]="handHour.horasdelturno"
+                             placeholder="Total de horas">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-6">
+                    <mat-form-field>
+                      <input disabled matInput type="time" [(ngModel)]="handHour.horainicio" placeholder="Hora inicio">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-6">
+                    <mat-form-field>
+                      <input disabled matInput type="time" [(ngModel)]="handHour.horafin" placeholder="Hora fin">
+                    </mat-form-field>
+                  </div>
+                  <div *ngFor="let day of allDaysPermitidos" class="col-3">
+                    <mat-checkbox disabled [ngModel]="buscarDia(day,handHour)">{{day.nombre}}</mat-checkbox>
+                  </div>
+
+                  <!--   <div class="col-3 offset-9">
+                       <button mat-raised-button style="color: white;background: #2FA84F" (click)="editHandHour(handHour)">
+                         Guardar
+                       </button>
+
+                     </div>-->
+                </div>
+
+              </fieldset>
+
+
+            </div>
+
+
+          </div>
+
+
+        </mat-card>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="cnt">
+        <mat-card>
+          <h1>
+            Información de la fábrica
+          </h1>
+          <div style="width: 100%; display: flex;justify-content:center">
+            <img src="{{inputFoto}}" height="75" alt="">
+          </div>
+
+          <mat-list>
+            <mat-list-item>
+              <div class="row" style="width: 100%">
+
+                <div class="col-6"><strong>Nombre de la fábrica </strong></div>
+                <div class="col-6">{{formDatosEmpresa.controls.nombreempresa.value}}</div>
+
+              </div>
+            </mat-list-item>
+
+            <mat-divider>
+
+            </mat-divider>
+            <mat-list-item>
+              <div class="row" style="width: 100%">
+
+                <div class="col-6"><strong>Pais de la fábrica </strong></div>
+                <div class="col-6">{{formDatosEmpresa.controls.pais.value}}</div>
+
+              </div>
+            </mat-list-item>
+
+            <mat-divider>
+
+            </mat-divider>
+            <mat-list-item>
+              <div class="row" style="width: 100%">
+
+                <div class="col-6"><strong>Dashboard URL </strong></div>
+                <div class="col-6">{{formDatosEmpresa.controls.thingsboardurl.value}}</div>
+
+              </div>
+            </mat-list-item>
+
+            <mat-divider>
+
+            </mat-divider>
+
+
+            <mat-divider>
+
+            </mat-divider>
+          </mat-list>
+
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

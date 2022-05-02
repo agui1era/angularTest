@@ -1,0 +1,121 @@
+﻿<!--
+<div class="container-fluid max">
+    &lt;!&ndash;<div class="alert alert-info">
+        <strong>Normal User</strong> - U: user P: user<br />
+        <strong>Administrator</strong> - U: admin P: admin
+    </div>&ndash;&gt;
+    <div class="card">
+        <h4 class="card-header">Software MES</h4>
+        <div class="card-body">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                    <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                        <div *ngIf="f.username.errors.required">Username is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                        <div *ngIf="f.password.errors.required">Password is required</div>
+                    </div>
+                </div>
+                <button [disabled]="loading" class="btn btn-primary">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    Entrar
+                </button>
+                <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+            </form>
+        </div>
+    </div>
+</div>
+-->
+
+
+<div class="mainContent" style="height: 100%">
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" action="">
+        <fieldset>
+          <div class="image">
+            <div>
+              <img src="assets/logo.svg" alt="">
+            </div>
+          </div>
+          <div class="notImage">
+            <mat-progress-bar *ngIf="loading" color="warn" mode="indeterminate"></mat-progress-bar>
+
+            <span style="height: 50px"></span>
+
+            <!-- <mat-form-field>
+
+               <div style="margin-bottom:-30px;">
+                 <mat-icon style="color:white;margin-top:-2px" matPrefix></mat-icon>
+               </div>
+               <span matPrefix>
+                 <mat-icon style="color: white" matPrefix>search</mat-icon>
+               </span>
+               <input matInput type="text" formControlName="username" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
+                      placeholder="Nombre de usuario (correo electronico)*">
+
+
+
+             </mat-form-field>-->
+
+            <mat-form-field class="example-full-width" >
+
+              <div style="margin-bottom:-30px;">
+                <mat-icon style="color:white;margin-top:-2px" matPrefix></mat-icon>
+              </div>
+              <span matPrefix>
+                <mat-icon style="color: white" matPrefix>email</mat-icon>
+              </span>
+
+              <mat-label style="color: white">Nombre de usuario (correo electronico)</mat-label>
+              <input style="color: white" matInput type="email"  formControlName="username" [errorStateMatcher]="matcher"
+                   required  >
+              <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                Please enter a valid email address
+              </mat-error>
+              <mat-error *ngIf="emailFormControl.hasError('required')">
+                Email is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width" >
+
+
+              <span matPrefix>
+                <mat-icon style="color: white" matPrefix>lock</mat-icon>
+              </span>
+
+              <mat-label  style="color: white">Contraseña</mat-label>
+              <input  style="color: white" matInput [type]="hide ? 'password' : 'text'"   formControlName="password"
+                     >
+              <mat-icon style="color: white;cursor: pointer" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+
+            </mat-form-field>
+
+
+<!--
+            <mat-form-field>
+              <input matInput type="password" formControlName="password" class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Contraseña">
+            </mat-form-field>-->
+<!--
+            <div class="recoveryPass">
+              <button type="button" mat-button>¿Olvidó la contraseña?</button>
+            </div>-->
+            <div class="entrar">
+              <button [disabled]="loading || loginForm.invalid" mat-raised-button>Entrar</button>
+            </div>
+
+          </div>
+        </fieldset>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

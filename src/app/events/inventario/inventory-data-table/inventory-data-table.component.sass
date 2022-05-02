@@ -1,0 +1,45 @@
+.cardHeader
+  display: block
+  mat-card-title
+    text-transform: capitalize
+    text-align: center
+    font-size: 2rem
+  mat-card-subtitle
+    text-align: center
+    font-size: 1rem
+    margin: 5px
+.cardContent
+  max-height: 230px
+  min-height: 230px
+  overflow-y: scroll
+  p
+    text-align: center
+.searchBar
+  margin: 0 10px
+  display: flex
+  justify-content: space-between
+  z-index: 10
+
+mat-card
+  background: #E3E5E6
+.openAddMenu
+  position: fixed
+  bottom: 0
+  margin: auto
+  width: fit-content
+  left: 0
+  right: 0
+  z-index: 200
+
+  div
+    cursor: pointer
+    display: flex
+    background: black
+    color: white
+    width: 140%
+    justify-content: center
+    padding-top: 5px
+    p
+      font-size: 1.3rem
+  div:hover
+    transform: scale(1.1)

@@ -1,0 +1,48 @@
+<app-mi-loader *ngIf="loading" ></app-mi-loader>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      Planificación de las máquinas
+    </div>
+
+    <div class="col-12" *ngIf="isLoaded">
+    <!--  <ngx-ts
+        [items]="items"
+        [periods]="periods"
+        [sections]="sections"
+        [events]="events"
+        [showBusinessDayOnly]="false"
+        [allowDragging]="true"
+        [locale]="'es'"
+        [text]="textoCalCustom"
+      ></ngx-ts>-->
+      <ngx-ts
+        [items]="items"
+        [periods]="periods"
+        [sections]="sections"
+        [events]="events"
+        [showBusinessDayOnly]="false"
+        [allowDragging]="true"
+        [locale]="'es'"
+        [text]="textoCalCustom"
+        [showCurrentTime]="true"
+      ></ngx-ts>
+    </div>
+    <div class="col-12 mt-3">
+      <button mat-raised-button color="primary"
+              (click)="abrirCrearParada(1,
+              ['Cambio de horario',
+              'Capacitaciones',
+              'Falta de planificación productiva',
+              'Pruebas de lineas',
+              'Motivo fuerza mayor'])">Perdidas de capacidad productiva</button>
+    </div>
+    <div class="col-12 mt-2">
+      <button mat-raised-button color="primary"
+              (click)="abrirCrearParada(2,
+              ['Feriados o festivos',
+              'Mantenimiento preventivo',
+              'Restricciones'])">Perdidas legales</button>
+    </div>
+  </div>
+</div>

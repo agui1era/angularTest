@@ -1,0 +1,27 @@
+<div class="container" [ngClass]="selected ? 'selected' : ''">
+  <div class="row">
+    <div class="col-12" >
+     <div style="margin: auto;width:fit-content">
+       <circle-progress
+         [percent]="percent"
+         [radius]="45"
+         [outerStrokeWidth]="11"
+         [innerStrokeWidth]="11"
+         [outerStrokeColor]="'#2FA84F'"
+         [innerStrokeColor]="'#46ec6f'"
+         [unitsColor]="'#2FA84F'"
+         titleColor="#2FA84F"
+         [unitsFontSize]="'28'"
+         [titleFontSize]="'28'"
+         [showSubtitle]="false"
+         [animation]="true"
+         [animationDuration]="300"
+         [space]="-11"
+       ></circle-progress>
+     </div>
+    </div>
+    <div class="col-12">
+      <p align="center">{{label}}</p>
+    </div>
+  </div>
+</div>

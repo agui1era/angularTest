@@ -1,0 +1,74 @@
+.searchBar
+  margin: 0 10px
+  display: flex
+  justify-content: space-between
+  z-index: 10
+table
+  text-align: left
+  position: relative
+  border-collapse: collapse
+
+th, td
+  padding: 0.25rem
+
+tr.red th
+  background: red
+  color: white
+
+tr.green th
+  background: green
+  color: white
+
+tr.purple th
+  background: purple
+  color: white
+
+th
+  background: #c3c3c3
+  position: sticky
+  top: 0 /* Don't forget this, required for the stickiness */
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4)
+
+
+
+
+.cardHeader
+  display: block
+  mat-card-title
+    text-transform: capitalize
+    text-align: center
+    font-size: 2rem
+  mat-card-subtitle
+    text-align: center
+    font-size: 1rem
+    margin: 5px
+.cardContent
+  max-height: 230px
+  min-height: 230px
+  overflow-y: scroll
+  p
+    text-align: center
+
+mat-card
+  background: #E3E5E6
+.openAddMenu
+  position: fixed
+  bottom: 0
+  margin: auto
+  width: fit-content
+  left: 0
+  right: 0
+  z-index: 200
+
+  div
+    cursor: pointer
+    display: flex
+    background: black
+    color: white
+    width: 140%
+    justify-content: center
+    padding-top: 5px
+    p
+      font-size: 1.3rem
+  div:hover
+    transform: scale(1.1)

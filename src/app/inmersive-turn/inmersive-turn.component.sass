@@ -1,0 +1,262 @@
+body
+  overflow: hidden !important
+h4
+  margin: 0
+  padding: 0
+::-webkit-scrollbar
+  width: 5px
+  background: transparent
+  height: 5px
+.vLine
+  width: 1px
+  height: 5vh
+  background: #ffffff
+  position: absolute
+  margin-left: 5vw
+  left: var(--le)
+  top: -7%
+.l15::before
+  content: '15'
+  font-size: 0.8rem
+  color: white
+  margin-left: 2px
+  top: -30%
+  bottom: 0
+  left: 0
+  right: 0
+.l30::before
+  content: '30'
+  font-size: 0.8rem
+  margin-left: 2px
+
+  color: white
+  top: -30%
+  bottom: 0
+  left: 0
+  right: 0
+.l45::before
+  content: '45'
+  font-size: 0.8rem
+  margin-left: 2px
+  color: white
+  top: -30%
+  bottom: 0
+  left: 0
+  right: 0
+/* Track */
+::-webkit-scrollbar-track
+  background: transparent
+
+
+/* Handle */
+::-webkit-scrollbar-thumb
+  background: #919699
+
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover
+  background: transparent
+
+
+
+.full-screen
+  height: 100vh
+  width: 100vw
+  position: fixed
+
+.screen
+  background: black
+  top: 0
+  left: 0
+  z-index: 100002
+  height: 100%
+
+
+*
+  color: white
+
+.contentTabs, .contentMain,
+.contentDown1, .contentUp1,
+.contentUp2
+  //border: solid 1px white
+
+div.contentMain
+  height: 93vh
+  animation: suFade 1200ms ease-in
+
+.contentTabs
+  //border-top: 1px solid white
+
+  height: 8vh
+  width: 100%
+  display: flex
+  overflow-x: scroll
+
+.contentUp1, .contentUp2
+  height: 35vh
+.contentDown1
+  overflow-y: auto
+  max-height: 50vh
+  min-height: 50vh
+  border-top: #E3E5E6 solid 10px
+  border-bottom: #E3E5E6 solid 10px
+  border-radius: 10px
+
+.aTab
+  width: 300px
+  padding-top: 10px
+  z-index: 500
+  div
+    width: 85%
+    margin: auto
+    display: flex
+    height: 100%
+    align-items: center
+    justify-content: center
+    padding: 0 14px
+    border-top-left-radius: 7px
+    border-top-right-radius: 7px
+
+    cursor: pointer
+
+    p
+      margin: 0 3px
+      color: white
+      padding: 0
+
+.mat-icon
+  font-size: 19px
+
+
+.cifrasProd
+  display: flex
+  padding: 11px 15px
+  justify-content: space-between
+
+.actual
+  display: flex
+  align-items: center
+  h1
+    font-size: 1rem
+    margin: 0 6px
+    padding: 0
+  small
+    font-size: 1.5rem
+
+.porcentaje
+  h1
+    font-size: 1.5rem
+    margin: 0 6px
+    padding: 0
+    color: green
+.infoMisc
+  display: flex
+  padding: 10px 3px
+  div
+
+    p
+      padding: 0
+      font-size: 2.3rem
+      margin: 0
+      height: fit-content
+      text-align: center
+    img
+      width: 10rem
+
+.celeste
+  background-color: #5d7bff
+.azul
+  background-color: #3f51b5
+.morado
+  background-color: var(--laPrimary)
+.rojo
+  background-color: #f44336
+.naranjo
+  background-color: #ff7400
+.amarillo
+  background-color: #b6ab00
+.verde
+  background-color: #1a8000
+
+
+
+.reanudoDiv
+  margin: auto
+  width: 500px
+  height: 97px
+  background: red
+  display: flex
+  animation: hacerZoomPiola 2s linear infinite
+
+  align-items: center
+  justify-content: center
+  border-radius: 4px
+  cursor: pointer
+  p
+    color: white
+    text-transform: uppercase
+    font-size: 14px
+    letter-spacing: 0.75px
+    font-weight: 500
+.datosParadaEnCurso
+  color: white
+.botones
+  display: flex
+.ordenesP
+  margin: 0
+  text-align: center
+.agregarP
+  padding: 12px 23px
+  text-align: center
+  font-size: 2rem
+  border-radius: 19px
+  color: white
+  background-color: var(--laPrimary)
+  cursor: pointer
+.agregarP:hover
+  text-decoration: none
+.hidden
+  display: none !important
+  visibility: hidden
+  position: absolute !important
+  right: 0
+.black
+  animation: suFade 0.6s ease-in-out
+
+  h4
+    animation: suFade 0.6s ease-in-out
+
+  *
+    color: black
+.aa
+  h4
+    animation: suFade 0.6s ease-in-out !important
+.ee
+  animation: suFade 0.6s ease-in-out
+
+.eliminar
+  color: white !important
+  font-weight: bold !important
+  background: red
+  width: fit-content
+  padding: 0 7px
+  text-decoration: underline
+  cursor: pointer
+.eliminar:hover
+  text-decoration: none
+  background: white
+  color: red !important
+.botonesChart
+  position: absolute
+  bottom: 0
+  left: -12px
+  button
+    width: 25px
+    background: #464646
+    color: black
+    border-radius: 3px
+    border: none
+  .activo
+    background: #E3E5E6
+
+

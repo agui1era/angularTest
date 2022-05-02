@@ -1,0 +1,41 @@
+
+image: ubuntu:20.04
+# When using dind, it's wise to use the overlayfs driver for
+# improved performance.
+
+stages:
+  - build
+  - docker
+
+variables:
+  DOCKER_DRIVER: overlay
+services:
+- docker:dind
+build:
+  stage: build
+  script:
+  - echo "Creando imagen"
+  - apt update
+  - apt install -y curl
+  - curl -sL https://deb.nodesource.com/setup_14.x | bash -
+  - apt install -y nodejs
+  - apt install -y apt-transport-https ca-certificates curl software-properties-common
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+  - apt update
+  - apt install -y docker-ce
+  - npm install
+  - npm install -g @angular/cli
+  - ng build --prod
+  - cp -R /builds/agui1era/mes_front/dist/angular-role-based-authorization-example/  /builds/agui1era/mes_front/htmlRender/files
+  - cp  /builds/agui1era/mes_front/dist/angular-role-based-authorization-example/index.html /builds/agui1era/mes_front/htmlRender
+  - cd /builds/agui1era/mes_front/htmlRender
+  - docker login --username agui1era --password imagina12
+  - service docker start
+  - apt install sudo
+  - useradd fruit
+  - usermod -aG sudo fruit
+  - su fruit
+  - sudo docker build  -t  agui1era/rendermes .
+  - sudo docker push agui1era/rendermes
+

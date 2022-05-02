@@ -1,0 +1,59 @@
+<mat-chip-list aria-label="Fish selection" *ngIf="this.data.info.necesitaconfirmacion && !isOperator">
+  <p ><b>Necesita confirmación</b></p>
+  <mat-chip style="cursor: pointer" (click)="inEdit = !inEdit;editar()" color="accent" selected>{{inEdit ?'Cancelar':"Editar"}}</mat-chip>
+  <mat-chip style="cursor: pointer" (click)="confirmar()" color="primary" selected>Confirmar</mat-chip>
+</mat-chip-list>
+<div style="float: right">
+  <button (click)="closeModal()" class="btn btn-danger btn-sm" mat-icon-button>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<h2 align="center">{{esBajaVelocidad?'Velocidad baja':'Información de la parada'}}</h2>
+
+<p *ngIf="!inEdit && !esBajaVelocidad"><strong>Nombre: </strong>{{this.data.info.tipo_parada.nombre}}</p>
+<p *ngIf="inEdit"><strong>Nombre: </strong>
+  <mat-form-field>
+    <input [(ngModel)]="selectedName" matInput type="text">
+  </mat-form-field>
+</p>
+<p *ngIf="!inEdit && !esBajaVelocidad" [ngStyle]="this.data.info.tipo_parada.idcategoriaparada_categoriadeparada ?
+'':{'color':'red'}
+">
+  <strong style="color: rgba(0,0,0,.87) !important;">Categoria: </strong>
+  {{this.data.info.tipo_parada.idcategoriaparada_categoriadeparada?.nombre ?
+  data.info.tipo_parada.idcategoriaparada_categoriadeparada?.nombre :
+  'Sin categorizar'
+  }}
+  <button
+    *ngIf="data.info.tipo_parada.nombre == 'Maquina sin producir' && data.info.tipo_parada.idcategoriaparada == null"
+    mat-raised-button color="primary"
+    (click)="openDetentions(this.data)">Asignar
+  </button>
+</p>
+<p *ngIf="inEdit" [ngStyle]="this.data.info.tipo_parada.idcategoriaparada_categoriadeparada ?
+'':{'color':'red'}
+">
+  <strong style="color: rgba(0,0,0,.87) !important;">Categoría: </strong>
+  <mat-form-field>
+    <mat-label>Categorías</mat-label>
+    <mat-select [(ngModel)]="selectedCat">
+      <mat-option [value]="cat.id" *ngFor="let cat of categorias">
+        {{cat.nombre}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</p>
+<p><strong>Hora Inicio: </strong>{{this.data.info.horainicio | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+<p><strong>Duracion: </strong>{{this.data.info.duracion / 60 | number: '1.0-0'}} minutos</p>
+<p *ngIf="esBajaVelocidad"><strong>Cantidad esperada: </strong>{{((otObj?.idsubproducto_subproducto?.velprod / 60) * minutos.length) | number:'1.0-0'}}</p>
+<p *ngIf="esBajaVelocidad"><strong>Cantidad hecha: </strong>{{cantidad}}</p>
+<p *ngIf="esBajaVelocidad"><strong>Diferencia: </strong>{{((otObj?.idsubproducto_subproducto?.velprod / 60) * minutos.length - cantidad) | number:'1.0-0' }}</p>
+<p><strong>Comentarios: </strong>{{this.data.info.comentario}}</p>
+<mat-checkbox color="warn" [(ngModel)]="oculto">Ocultar del tablero</mat-checkbox>
+
+<!--
+<p><strong>Mantencion: </strong>{{this.data.info.mantencions[0] | json}}</p>
+-->
+

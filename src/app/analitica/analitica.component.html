@@ -1,0 +1,604 @@
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-8 mt-3">
+      <div class="container-fluid">
+        <mat-form-field appearance="outline" class="mr-2">
+          <mat-label>
+            Máquina
+          </mat-label>
+          <mat-select [(ngModel)]="selectedMachine">
+            <mat-option>
+              Todo
+            </mat-option>
+            <mat-option *ngFor="let m of allMachines"
+                        value="{{m.id}}">
+              {{m.nombre}}
+
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="mr-2">
+          <mat-label>
+            Tipo
+          </mat-label>
+          <mat-select [(ngModel)]="selectedTipo">
+            <mat-option value="diario">
+              Diario
+            </mat-option>
+            <mat-option value="semanal">
+              Semanal
+            </mat-option>
+            <mat-option value="mensual">
+              Mensual
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="mr-2">
+          <mat-label>
+            Fecha
+          </mat-label>
+          <input matInput type="date" [(ngModel)]="selectedDate">
+        </mat-form-field>
+        <div class="btnBuscar">
+          <button mat-icon-button (click)="buscar()">
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="col-12">
+
+      <mat-tab-group>
+        <mat-tab label="Eficiencia">
+          <div class="container-fluid">
+
+            <div class="row" style="padding-right:2%">
+              <div class="col-12">
+               <div class="aBarGraph">
+                 <div class="contentGrapBar">
+                   <ngx-charts-bar-vertical-stacked
+                     [scheme]="{
+  domain: ['#367BF5','#94baff']
+}"
+                     [view]="[1300,300]"
+                     [roundDomains]="true"
+                     [results]="listaOLES"
+                     [gradient]="false"
+                     [xAxis]="true"
+                     [yAxis]="false"
+                     barPadding="60"
+                     [rotateXAxisTicks]="false"
+                     [showGridLines]="true"
+                     [legend]="false"
+                     [showXAxisLabel]="false"
+                     [showYAxisLabel]="false"
+                     [xAxisLabel]="'false'"
+                     [yAxisLabel]="'false'">
+                   </ngx-charts-bar-vertical-stacked>
+                 </div>
+               </div>
+              </div>
+
+              <div class="col-12">
+                <p class="titleEfic">
+                  Overall Line Effectiveness
+                </p>
+              </div>
+              <div class="col-12">
+                <div class="cajaAntesCajaEfic">
+                  <div class="cajaIndicadoresEfic" [ngStyle]="{width:180+(80*19)+'px'}">
+                    <div class="indicadoresEficHeaders">
+                      <p style="color:white">fecha</p>
+                      <p>
+                        % OLE
+                      </p>
+                      <p>
+                        % OLE LOSS
+                      </p>
+                      <p>
+                        Unutilized Capacity
+                      </p>
+                      <p>
+                        Volumen Cargado
+                      </p>
+                      <p class="vlu">
+                        Manufacturing Performance
+                      </p>
+                      <p class="vlu">
+                        Shared Performance
+                      </p>
+                    </div>
+                    <div *ngFor="let mInd of indicadoresListaOLE" class="indicadorData">
+
+                      <p>
+                        {{mInd?.maquina?.nombre}}
+                      </p>
+                      <p>
+                        {{mInd?.OEE || 0}}%
+                      </p>
+                      <p>
+                        {{100 - mInd?.OEE || 0}}%
+                      </p>
+                      <p>
+                        {{mInd?.UC || 0}}
+                      </p>
+                      <p>
+                        {{mInd?.VC || 0}}
+                      </p>
+                      <p>
+                        {{mInd?.MP || 0}}
+                      </p>
+                      <p>
+                        {{mInd?.SP || 0}}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12" style="margin-top: 50px">
+                <div class="row">
+                  <div class="col-4">
+                    <p class="titleEfic" style="margin-top: 0">
+                      Grafico MPL
+                    </p>
+                  </div>
+                  <div class="col-8">
+                    <div class="row">
+                      <div class="col-4">
+                        <div class="cajaBoton" (click)="graficoPareto = true">
+                          <div class="contentBtn">
+
+                            <p>
+                              <svg width="20" height="19" viewBox="0 0 20 19" fill="none"
+                                   xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                  d="M15.45 12.73L20 4.86V16.55V18.55H0V0.55H2V13.09L7.5 3.55L14 7.33L18.24 4.76837e-08L19.97 1L14.74 10.05L8.23 6.3L2.31 16.55H4.57L8.96 8.99L15.45 12.73Z"
+                                  fill="#78909C"/>
+                              </svg>
+                              80/20
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="cajaBoton" (click)="cambiarParadas('PDL');graficoPareto=false">
+                          <div class="contentBtn">
+
+                            <p>
+                              <svg width="20" height="19" viewBox="0 0 20 19" fill="none"
+                                   xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                  d="M15.45 12.73L20 4.86V16.55V18.55H0V0.55H2V13.09L7.5 3.55L14 7.33L18.24 4.76837e-08L19.97 1L14.74 10.05L8.23 6.3L2.31 16.55H4.57L8.96 8.99L15.45 12.73Z"
+                                  fill="#78909C"/>
+                              </svg>
+                              Paradas PDL
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="cajaBoton" (click)="cambiarParadas('MPL');graficoPareto=false">
+                          <div class="contentBtn">
+                            <p>
+                              <svg width="20" height="19" viewBox="0 0 20 19" fill="none"
+                                   xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                  d="M15.45 12.73L20 4.86V16.55V18.55H0V0.55H2V13.09L7.5 3.55L14 7.33L18.24 4.76837e-08L19.97 1L14.74 10.05L8.23 6.3L2.31 16.55H4.57L8.96 8.99L15.45 12.73Z"
+                                  fill="#78909C"/>
+                              </svg>
+                              Paradas MPL
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mt-3">
+                <div *ngIf="graficoPareto" class="col-12">
+                  <div style="max-width: 80vw;min-width: 80vw;height: 60vh" [chart]="chart"></div>
+                </div>
+              </div>
+              <div class="col-12 mt-5" *ngIf="!graficoPareto">
+                <div style="width:85%;height:40vh;margin: auto">
+                  <ngx-charts-line-chart
+                    [scheme]="{
+    domain: ['#f53636','#b2ff94','#160079','#94baff']
+  }"
+                    [legend]="false"
+                    [showXAxisLabel]="false"
+                    [showYAxisLabel]="false"
+                    [xAxis]="true"
+                    [yAxis]="true"
+                    [xAxisLabel]="false"
+                    [yAxisLabel]="false"
+                    [timeline]="false"
+                    [results]="lasParadas"
+                  >
+                  </ngx-charts-line-chart>
+                </div>
+
+              </div>
+
+              <div class="col-12">
+                <p class="titleEfic">
+                  Time Loss
+                </p>
+              </div>
+              <div class="col-12">
+                <div class="col-12">
+                  <div class="cajaAntesCajaEfic">
+                    <div class="cajaIndicadoresEfic" [ngStyle]="{width:180+(80*19)+'px'}">
+                      <div class="indicadoresEficHeaders">
+                        <p style="color:white">fecha</p>
+                        <p>
+                          Tiempo Total
+                        </p>
+                        <p>
+                          Perdidas Legales
+                        </p>
+                        <p>
+                          Tiempo Disponible
+                        </p>
+                        <p>
+                          UCL
+                        </p>
+                        <p>
+                          Tiempo disponible Cargado
+                        </p>
+                        <p>
+                          Tiempo Idle
+                        </p>
+                        <p>
+                          Tiempo Cargado
+                        </p>
+                        <p>
+                          PDL
+                        </p>
+                        <p>
+                          Tiempo operacional
+                        </p>
+                        <p>
+                          MPL
+                        </p>
+                        <p>
+                          VOT
+                        </p>
+                      </div>
+                      <div class="indicadorData" *ngFor="let mInd of indicadoresListaOLE">
+
+                        <p>
+                          {{mInd?.maquina?.nombre}}
+                        </p>
+                        <p>
+                          {{mInd?.TT || 0}}
+                        </p>
+                        <p>
+                          {{mInd?.PL || 0}}
+                        </p>
+
+                        <p>
+                          {{mInd?.TD || 0}}
+                        </p>
+
+                        <p>
+                          {{mInd?.UCL || 0}}
+                        </p>
+
+                        <p>
+                          {{mInd?.TDC || 0}}
+                        </p>
+
+                        <p>
+                          {{mInd?.TI || 0}}
+                        </p>
+
+                        <p>
+                          {{mInd?.TC || 0}}
+                        </p>
+
+                        <p>
+                          {{mInd?.PDL || 0}}
+                        </p>
+
+                        <p>
+                          {{mInd?.TO || 0}}
+                        </p>
+
+                        <p>
+                          {{mInd?.MPL || 0}}
+                        </p>
+                        <p>
+                          {{mInd?.VOT || 0}}
+                        </p>
+
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <p class="titleEfic">
+                  Capacidad
+                </p>
+              </div>
+              <div class="col-12">
+                <div class="col-12">
+                  <div class="cajaAntesCajaEfic">
+                    <div class="cajaIndicadoresEfic" [ngStyle]="{width:180+(80*19)+'px'}">
+                      <div class="indicadoresEficHeaders">
+                        <p style="color:white">fecha</p>
+                        <p>
+                          Asset Utilization
+                        </p>
+                        <p>
+                          UCU
+                        </p>
+                        <p>
+                          CCU
+                        </p>
+
+
+                      </div>
+
+                      <div *ngFor="let mInd of indicadoresListaOLE" class="indicadorData">
+                        <p>
+                          {{mInd?.maquina?.nombre}}
+                        </p>
+
+                        <p>
+                          {{mInd?.AU || 0}}
+                        </p>
+
+                        <p>
+                          {{mInd?.UCU || 0}}
+                        </p>
+
+                        <p>
+                          {{mInd?.CCU || 0}}
+                        </p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+              <div class="col-12 mt-5"></div>
+            </div>
+
+
+            <!--
+
+              <div class="col-12" *ngIf="indicadoresListResp.length>0">
+                <div class="row">
+                  <div class="col-3">
+                    <mat-form-field>
+                      <mat-label>
+                        Tipo
+                      </mat-label>
+                      <mat-select (selectionChange)="seleccionarTipo()" [(ngModel)]="tipoSeleccionado">
+                        <mat-option value="diario">
+                          Diario
+                        </mat-option>
+                        <mat-option value="semanal">
+                          semanal
+                        </mat-option>
+                        <mat-option value="mensual">
+                          mensual
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-3">
+                    <mat-form-field>
+                      <mat-label>
+                        Fechas
+                      </mat-label>
+                      <mat-select [(ngModel)]="fechaSelected">
+                        <mat-option [value]="aFecha" *ngFor="let aFecha of fechasDisponibles">
+                          {{aFecha | date :"dd/MM/yyyy"}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-3">
+                    <mat-form-field>
+                      <mat-label>
+                        Maquinas
+                      </mat-label>
+                      <mat-select [(ngModel)]="maquinaSelected">&lt;!&ndash;
+                        <mat-option value="">Todas</mat-option>&ndash;&gt;
+                        <mat-option [value]="obj.maquina?.id" *ngFor="let obj of maquinasDisponibles">
+                          {{obj.maquina?.nombre}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-3">
+                    <mat-form-field>
+                      <mat-label>
+                        Productos
+                      </mat-label>
+                      <mat-select>&lt;!&ndash;
+                        <mat-option value="">Todos</mat-option>&ndash;&gt;
+                        <mat-option [value]="obj.producto?.id" *ngFor="let obj of productosDisponibles">
+                          {{obj.producto?.nombre}}
+                        </mat-option>
+
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-12" *ngIf="indicadoresListResp.length>0">
+                <div class="tablaDatos">
+                 &lt;!&ndash; <p class="tablaTitle">Indicadores</p>&ndash;&gt;
+                  <div class="parDeDatos" *ngFor="let pdd of dataParDeDatos">
+                    <p>{{pdd.maquina.nombre}}: </p>
+                    <p>{{pdd.name}}: </p>
+                    <p> {{pdd.valor}}%</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12" *ngIf="indicadoresListResp.length==0">
+               <p style="color:red">No existen datos registrados</p>
+              </div>
+            -->
+
+          </div>
+
+        </mat-tab>
+        <mat-tab label="Mantenimiento">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12 mt-5 mb-5">
+                <div style="width:fit-content;height:17vh;margin: auto">
+                  <ngx-charts-line-chart
+                    [scheme]="{
+    domain: ['#f53636','#b2ff94','#160079','#94baff']
+  }"
+                    [legend]="false"
+                    [showXAxisLabel]="false"
+                    [showYAxisLabel]="false"
+                    [xAxis]="true"
+                    [yAxis]="true"
+                    [xAxisLabel]="false"
+                    [yAxisLabel]="false"
+                    [timeline]="false"
+                    [results]="lasMants"
+                  >
+                  </ngx-charts-line-chart>
+                </div>
+
+              </div>
+
+              <div class="col-12 mb-5">
+                <div class="cajaAntesCajaEfic">
+                  <div class="cajaIndicadoresEfic" [ngStyle]="{width:180+(80*19)+'px'}">
+                    <div class="indicadoresEficHeaders">
+                      <p style="color:white">fecha</p>
+                      <p>
+                        Tiempo de mantenimiento </p>
+                      <p>
+                        Falla equipo
+                      </p>
+                      <p>
+                        % Tiempo mantenimiento
+                      </p>
+                      <p>
+                        % Tiempo Falla
+                      </p>
+                      <p style="color:#367BF5">
+                        Tiempo total
+                      </p>
+
+                    </div>
+                    <div class="indicadorData" *ngFor="let mMant of listaIndicadoresMant">
+                      <p>
+                        {{mMant.maquina.nombre}}
+                      </p>
+                      <p>
+                        {{mMant.tiempoMant || 0}}
+                      </p>
+
+                       <p>
+                         {{mMant.fallaTime || 0 | number:'1.0-0'}}
+
+                       </p>
+
+
+                      <p>
+                        {{mMant.tiempoMantPorcentaje || 0 | number:"1.0-1"}}
+                      </p>
+
+                      <p>
+                        {{mMant.tiempoFallaPorcentaje || 0 | number:"1.0-1"}}
+
+                      </p>
+                      <p>
+                        {{mMant.tiempoTotal || 0 }}
+
+                      </p>
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 mt-3">
+                <div class="cajaAntesCajaEfic">
+                  <div class="cajaIndicadoresEfic" [ngStyle]="{width:180+(80*19)+'px'}">
+                    <div class="indicadoresEficHeaders">
+                      <p style="color:white">fecha</p>
+                      <p>
+                        % Tiempo mant OEE
+                      </p>
+                      <p>
+                        % Tiempo de falla OEE
+                      </p>
+                      <p>
+                        % OEE Loss
+                      </p>
+                    </div>
+                    <div class="indicadorData" *ngFor="let mMant of listaIndicadoresMant">
+                      <p>
+                        {{mMant.maquina.nombre}}
+                      </p>
+                      <p>
+                        0
+                      </p>
+                      <p>
+                        0
+                      </p>
+                      <p>
+                        0
+                      </p>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mt-5">
+                <div style="width:fit-content;height:17vh;margin: auto">
+                  <ngx-charts-line-chart
+                    [scheme]="{
+    domain: ['#f53636','#b2ff94','#160079','#94baff']
+  }"
+                    [legend]="false"
+                    [showXAxisLabel]="false"
+                    [showYAxisLabel]="false"
+                    [xAxis]="true"
+                    [yAxis]="true"
+                    [xAxisLabel]="false"
+                    [yAxisLabel]="false"
+                    [timeline]="false"
+                    [results]="lasParadas"
+                  >
+                  </ngx-charts-line-chart>
+                </div>
+
+              </div>
+
+              <div class="col-12 mt-5"></div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+
+    </div>
+  </div>
+</div>

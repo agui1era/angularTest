@@ -1,0 +1,64 @@
+<app-btn-cerrar-modal></app-btn-cerrar-modal>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12">
+      <p><b>Mantención: </b> {{data.element.idinterrupcion_interrupcion?.tipo_parada?.nombre }}</p>
+
+    </div>
+    <div class="col-8">
+
+      <p><b>Estado:</b>
+        <span *ngIf="!data.element.fecharealizada">
+          Sin comenzar
+        </span>
+        <span *ngIf="!data.element.fecharealizadafin && data.element.fecharealizada">
+          Comenzado
+        </span>
+        <span *ngIf="data.element.fecharealizadafin">
+          Terminada
+        </span>
+
+      </p>
+    </div>
+    <div class="col-4">
+      <p><b>Planta:</b> {{data.element.idinterrupcion_interrupcion?.tipo_parada?.paradamaquinas[0]?.machineData?.idproceso_proceso?.idplanta_plantum?.nombre}}</p>
+    </div>
+    <div class="col-8">
+      <div class="row">
+        <div class="col-4">
+          <p><b>Fecha realizada:</b> {{data.element?.fecharealizada | date:'dd/MM/yy HH:mm'}}</p>
+        </div>
+        <div class="col-4">
+          <p><b>Fecha finalizada:</b> {{data.element?.fecharealizadafin | date:'dd/MM/yy HH:mm'}}</p>
+        </div>
+        <div class="col-4">
+          <p><b>Duración:</b> {{data.element.duracionRealCalculo | number:'1.0-0'}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <p><b>Proceso:</b>{{data.element.idinterrupcion_interrupcion?.tipo_parada?.paradamaquinas[0]?.machineData?.idproceso_proceso?.nombre}}</p>
+    </div>
+    <div class="col-8">
+      <div class="row">
+        <div class="col-6">
+          <p><b>Hora Inicio propuesta:</b> {{data.element.fechaprogramada | date: "dd/MM/yyyy HH:mm"}}</p>
+        </div>
+        <div class="col-6">
+          <p><b>Duracion Propuesta:</b> {{data.element.duracionCalculo}} Minuto{{data.element.duracionCalculo > 1 ? 's':''}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <p><b>Maquina:</b> {{data.element.idinterrupcion_interrupcion?.tipo_parada?.paradamaquinas[0]?.machineData?.nombre || 'Sin definir'}}</p>
+    </div>
+    <div class="col-8">
+      <p><b>Comentario: </b> {{data.element.idinterrupcion_interrupcion?.comentario}}</p>
+    </div>
+    <div class="col-4">
+     <button mat-raised-button color="primary" [disabled]="data.element.fecharealizadafin" (click)="openInventoryMenu(data.element)">Ver inventario</button>
+    </div>
+
+
+  </div>
+</div>

@@ -1,0 +1,196 @@
+<div class="mainn">
+  <div class="row">
+    <div [ngClass]="editing ? 'col-6':'col-12'">
+      <div class="cnt">
+        <mat-card>
+          <div class="formulario">
+            <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+              <fieldset>
+                <legend>Crear una categoria de parada</legend>
+                <div class="row mt-2">
+
+                  <div class="col-12">
+                    <mat-form-field>
+                      <input  matInput formControlName="nombre" type="text" placeholder="Nombre">
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="f.nombre.invalid && f.nombre.touched " style="margin: 0" class=" col-12">
+                    <app-error-form textAlert="Nombre requerido"
+                    ></app-error-form>
+                  </div>
+                  <div class="col-12">
+                    <label for="">Color</label>
+                    <input formControlName="color" type="color" class="form-control" placeholder="Nombre">
+                  </div>
+                  <div *ngIf="f.color.invalid && f.color.touched " style="margin: 0" class=" col-12">
+                    <app-error-form textAlert="Color requerido"
+                    ></app-error-form>
+                  </div>
+                </div>
+                <div class="row mt-2">
+
+                  <div class="col-12">
+                    <mat-form-field>
+                      <mat-select formControlName="tipo" placeholder="Tipo">
+                        <mat-option value="programada">Programada</mat-option>
+                        <mat-option value="no programada">No programada</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                  </div>
+                  <div class="col-12">
+                    <mat-form-field>
+                      <mat-select formControlName="clase" placeholder="Clase">
+                        <mat-option value="MPL">MPL</mat-option>
+                        <mat-option value="PDL">PDL</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                  </div>
+                  <div style="padding: 0 38px;" class="col-12">
+                    <input formControlName="requiereInventario" class="form-check-input" type="checkbox" value=""
+                           id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                      Podria requerir inventario
+                    </label>
+                  </div>
+                  <div style="padding: 0 38px;" class="col-12">
+                    <input formControlName="alertacritica" class="form-check-input" type="checkbox" value=""
+                           id="defaultCheck2">
+                    <label
+                      matTooltip="Si alerta crítica esta activada, las paradas de esta categoría tendrán prioridad de visualización y necesitaran ser confirmadas cuando las genere un Operador."
+                      class="form-check-label" for="defaultCheck2">
+                      Alerta crítica
+                    </label>
+                  </div>
+                </div>
+
+                <div class="row justify-content-between mt-3" style="padding-left: 15px;padding-right: 15px">
+
+                  <div *ngIf="!editing" (click)="limpiar()" class="btn btn-primary ">limpiar</div>
+
+                  <button [disabled]="isLoading || this.dataForm.invalid"
+                          class="btn btn-success ">{{editing ? 'Guardar' : 'Agregar'}}
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"
+                          aria-hidden="true"></span>
+                  </button>
+
+                </div>
+
+
+              </fieldset>
+
+            </form>
+          </div>
+
+        </mat-card>
+      </div>
+    </div>
+    <div class="col-6" *ngIf="editing">
+      <div class="cnt">
+        <mat-card>
+          <div class="paradas">
+            <div class="row">
+              <div class="col-12">
+                <h1>Paradas de la categoria
+                  <button (click)="createDetention()" type="button" mat-raised-button
+                          style="background: #2FA84F;color: white">agregar
+                  </button>
+                </h1>
+              </div>
+            </div>
+
+            <div style="max-height: 400px;overflow-y: auto" class="example-container mat-elevation-z8">
+              <table mat-table [dataSource]="allDetentionsList">
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="nombre">
+                  <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                  <td mat-cell *matCellDef="let element">
+                    <p *ngIf="!element.isEdit"> {{element.nombre}} </p>
+                    <mat-form-field *ngIf="element.isEdit">
+                      <input matInput [(ngModel)]="element.nombre" type="text">
+                    </mat-form-field>
+
+
+                  </td>
+
+                </ng-container>
+                <!-- Position Column -->
+                <ng-container matColumnDef="editar">
+                  <th mat-header-cell *matHeaderCellDef>Editar</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button *ngIf="!element.isEdit;"
+                            (click)="element.isEdit = true;element.respaldoNom = element.nombre" mat-icon-button>
+                      <mat-icon style="color: #2FA84F">edit</mat-icon>
+                    </button>
+                    <div style="display: flex">
+                      <button *ngIf="element.isEdit" (click)="editDetention(element)" color="accent" mat-icon-button
+                              aria-label="Example icon button with a vertical three dot icon">
+                        <mat-icon style="color: yellowgreen">check</mat-icon>
+                      </button>
+                      <button (click)="element.isEdit = !element.isEdit;element.nombre = element.respaldoNom"
+                              *ngIf="element.isEdit" color="warn"
+                              mat-icon-button
+                              aria-label="Example icon button with a vertical three dot icon">
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </div>
+
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="delete">
+                  <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button (click)="deleteDetention(element.id)" mat-icon-button>
+                      <mat-icon style="color: crimson">delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="inv">
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td [hidden]="!element.idcategoriaparada_categoriadeparada?.requiereInventario" mat-cell
+                      *matCellDef="let element">
+                    <button style="background: #335696;color: white" (click)="viewInventory(element)" mat-raised-button>
+                      Inventario
+                    </button>
+                  </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+            </div>
+
+
+            <!--   <div class="row">
+                 <div class="col-4" *ngFor="let par of allDetentionsList">
+                   <div class="aParada">
+                     <div class="delete">
+                       <button mat-icon-button class="btn-danger">
+                         <mat-icon>close</mat-icon>
+                       </button>
+                     </div>
+                     <div class="row">
+                       <div class="col-12">
+                         <mat-form-field>
+                           <input (blur)="editDetention(par)"  matInput type="text" [(ngModel)]="par.nombre">
+                         </mat-form-field>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>-->
+
+
+          </div>
+
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+

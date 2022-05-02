@@ -1,0 +1,160 @@
+<!--
+<mat-form-field>
+  <input matInput placeholder="Mermas del turno" type="number" [(ngModel)]="data.mermas">
+</mat-form-field>
+<button   mat-raised-button class="btn-accept fR" >Guardar</button>
+--><!--
+<app-btn-cerrar-modal></app-btn-cerrar-modal>-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <p class="titleScr">
+        Resumen Scrap
+      </p>
+    </div>
+    <div class="col-12">
+      <div class="row">
+
+        <div class="col-4">
+          <div class="divCajaScrap">
+            <p class="tituloCajaScrap">
+              Scrap supervisor
+            </p>
+            <div class="cajaScrap ama">
+              <p class="valorScrap">
+                {{scrapSupervisor}}
+              </p>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="col-4">
+          <div class="divCajaScrap">
+            <p class="tituloCajaScrap">
+              Scrap sensor
+            </p>
+            <div class="cajaScrap azul">
+              <p class="valorScrap">
+                {{scrapSensor}}
+              </p>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-4">
+          <div class="divCajaScrap">
+            <p class="tituloCajaScrap">
+              Re-trabajo
+            </p>
+            <div class="cajaScrap verd">
+              <p class="valorScrap">
+                {{reTrabajo}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 mt-3">
+      <div class="row">
+        <div class="col-8">
+
+          <div class="mermasTurno">
+            <div class="row">
+              <div class="col-12" *ngFor="let mot of mermasDelaOT">
+                <p (click)="eliminarMerma(mot.id)" style="color: red;cursor: pointer;margin:0">X</p>
+
+                <div class="row">
+
+                  <div class="col-6">
+
+                    <mat-form-field>
+
+                      <mat-label>
+                        Tipo de merma
+                      </mat-label>
+                    <mat-select [(ngModel)]="mot.idmerma">
+                      <mat-option *ngFor="let cat of tiposMermas" value="{{cat.id}}"  >{{cat.nombre}} </mat-option>
+                    </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-6">
+                    <mat-form-field class="cant">
+                      <mat-label>Cantidad</mat-label>
+                      <input  [(ngModel)]="mot.cantidad" matInput type="number">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <p style="color: green;cursor: pointer;font-size:18px" (click)="this.crearMermaOT(undefined,undefined)">+</p>
+        </div>
+        <div class="col-4">
+          <div class="divCajaScrap">
+            <p class="tituloCajaScrap">
+              Scrap Total
+            </p>
+            <div class="cajaScrap ama">
+              <p class="valorScrap">
+                {{scrapTotal}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <p class="titleResiduos">
+        Agregar Packaging waste (kg)
+      </p>
+    </div>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-4">
+          <button (click)="asignarResiduos()" class="cajaResiduos">
+            <p class="valorResiduos">
+              Asociar
+            </p>
+          </button>
+        </div>
+        <div class="col-4">
+          <div class="cajaResiduos">
+            <input [(ngModel)]="residuosOT" class="valorResiduos"/>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-12 mt-5">
+      <div class="row">
+        <div class="col-6">
+          <div style="width:fit-content;margin:auto">
+            <button matDialogClose class="cancelBtn">
+              <p>
+
+                Cancelar
+              </p>
+            </button>
+          </div>
+        </div>
+        <div class="col-6">
+          <div style="width:fit-content;margin:auto">
+            <button (click)="guardarMermas()" class="acceptBtn">
+              <p>
+
+                Guardar
+              </p>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<div class="unidades" [ngClass]="chico ? 'unidades2':''">
+  <p class="lbl" [ngClass]="titl.length > 10 ? 'letraChica':''">
+    {{titl}}  </p>
+  <p [ngStyle]="{color:color}" class="uni" >
+    {{valor}}
+  </p>
+</div>

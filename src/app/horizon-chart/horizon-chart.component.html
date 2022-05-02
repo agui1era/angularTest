@@ -1,0 +1,25 @@
+<div class="container-fluid">
+  <div class="item">
+    <div class="lbl">
+      <p>{{title1 || "Estimada"}}</p>
+    </div>
+    <div class="chrt">
+
+      <p style="background: #2FA84F;
+border-radius: 2px;color: white">{{name || cant1}}</p>
+    </div>
+  </div>
+  <div class="item">
+    <div class="lbl">
+      <p>{{title2 ||"Real"}}</p>
+    </div>
+    <div class="chrt">
+      <p [ngStyle]="{width:210*this.realW+'px',background:color?'rgba(243,170,24,0.45)':'rgba(234,61,47,0.48)' }" style="z-index:1;padding: 0;
+      position:absolute;right:0;top:0;
+      background: rgba(234,61,47,0.48);
+border-radius: 2px;"></p>
+      <p [ngStyle]="cant2 ? {color:'black'}:{}" style="border-radius: 2px;z-index:100 !important;">{{name|| cant2}}</p>
+
+    </div>
+  </div>
+</div>

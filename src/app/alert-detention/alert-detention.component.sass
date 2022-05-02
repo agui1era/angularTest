@@ -1,0 +1,68 @@
+.categoriaParadaCaja
+  animation: hacerZoomPiola 2s linear infinite
+@keyframes hacerZoomPiola
+  0%
+
+    transform: scale(1)
+  50%
+    border: solid 1px
+    transition: all 1s ease-in
+    box-shadow: 0 0 3px #7e7e7e
+    transform: scale(1.01)
+  100%
+    transform: scale(1)
+
+.aCategoryDetention
+  width: 100%
+  height: 180px
+  display: flex
+  align-items: center
+  cursor: pointer
+  div
+    margin: auto
+    width: 500px
+    height: 97px
+    background: red
+    display: flex
+    align-items: center
+    justify-content: center
+    border-radius: 4px
+    p
+      color: white
+      text-transform: uppercase
+      font-size: 14px
+      letter-spacing: 0.75px
+      font-weight: 500
+.carga
+  position: absolute
+  height: 100%
+  width: 100%
+  top: 0
+  left: 0
+  display: flex
+  align-items: center
+  justify-content: center
+  background: rgba(0,0,0,0.7)
+  z-index: 900
+.reanudoDiv
+  margin: auto
+  width: 500px
+  height: 97px
+  background: red
+  display: flex
+  align-items: center
+  justify-content: center
+  border-radius: 4px
+  animation: hacerZoomPiola 2s linear infinite
+
+  p
+    color: white
+    text-transform: uppercase
+    font-size: 14px
+    letter-spacing: 0.75px
+    font-weight: 500
+.titlee
+  display: flex
+  width: 100%
+  justify-content: space-between
+  align-items: center

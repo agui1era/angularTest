@@ -1,0 +1,34 @@
+@import '../node_modules/@angular/material/theming';
+
+$micolora: (
+  '50': 'e7effe',
+  '100': 'c3d7fc',
+  '200': '9bbdfa',
+  '300': '72a3f8',
+  '400': '548ff7',
+  '500': '367bf5',
+  '600': '3073f4',
+  '700': '2968f2',
+  '800': '225ef0',
+  '900': '164bee',
+  'A100': 'ffffff',
+  'A200': 'ebefff',
+  'A400': 'b8c7ff',
+  'A700': '9eb3ff',
+  contrast: (
+    50: $light-primary-text,
+    100: $light-primary-text,
+    200: $light-primary-text,
+    300: $light-primary-text,
+    400: $light-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $dark-primary-text,
+    800: $dark-primary-text,
+    900: $dark-primary-text,
+    A100: $light-primary-text,
+    A200: $light-primary-text,
+    A400: $light-primary-text,
+    A700: $light-primary-text,
+  )
+);

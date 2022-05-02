@@ -1,0 +1,177 @@
+<div class="mainn">
+  <div class="row">
+    <div [ngClass]="editing ? 'col-6 p0':'col-12'">
+      <div class="cnt">
+        <mat-card>
+          <div class="formulario" [ngStyle]="editing? {width:'100%'}:''">
+            <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+              <fieldset>
+                <legend>{{editing ? 'Editar familia de' : 'Crear familia de'}} Producto
+                  <b><em>{{f.nombre.value ? f.nombre.value : ''}}</em></b></legend>
+                <div class="row mt-2">
+
+                  <div class="col-12">
+                    <mat-form-field>
+                      <input matInput formControlName="nombre" type="text" placeholder="Nombre">
+
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="f.nombre.invalid && f.nombre.touched " style="margin: 0" class=" col-12">
+                    <app-error-form textAlert="Nombre requerido"
+                    ></app-error-form>
+                  </div>
+                  <!-- <div class="col-12">
+                     <mat-form-field>
+                       <input matInput formControlName="formatosdemedida" type="text"  placeholder="Formatos, Ej: ml,l,KG" >
+
+                     </mat-form-field>
+                   </div>-->
+                  <div class="col-12">
+                    <mat-form-field>
+                      <input matInput formControlName="categoria" type="text" placeholder="Categoria">
+
+                    </mat-form-field>
+                  </div>
+                  <!-- <div class="col-12">
+                     <mat-form-field>
+                       <input matInput formControlName="sku" type="text"  placeholder="SKU" >
+
+                     </mat-form-field>
+                   </div>-->
+
+                </div>
+
+
+                <div class="row justify-content-between mt-3" style="padding-left: 15px;padding-right: 15px">
+
+                  <div *ngIf="!editing" (click)="limpiar()" class="btn btn-primary ">limpiar</div>
+
+                  <button [disabled]="isLoading || this.dataForm.invalid"
+                          class="btn btn-success ">{{editing ? 'Guardar' : 'Agregar'}}
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"
+                          aria-hidden="true"></span>
+                  </button>
+
+                </div>
+              </fieldset>
+
+            </form>
+          </div>
+
+        </mat-card>
+      </div>
+    </div>
+    <div class="col-6" *ngIf="editing">
+      <div class="cnt">
+        <mat-card>
+          <div class="paradas">
+            <div class="row">
+              <div class="col-12">
+                <h1>Productos
+                  <button (click)="openCreateSubProduct()" type="button" mat-raised-button
+                          style="float:right;background: #2FA84F;color: white">agregar
+                  </button>
+                </h1>
+              </div>
+              
+            </div>
+
+            <div style="max-height: 400px;overflow-y: auto" class="example-container ">
+              <table mat-table [dataSource]="allObjectslist">
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="nombre">
+                  <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                  <td mat-cell *matCellDef="let element">
+                    <p> {{element.nombre}} </p>
+                  </td>
+
+                </ng-container>
+                <ng-container matColumnDef="unidad">
+                  <th mat-header-cell *matHeaderCellDef>Unidad</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ul>
+                      <li *ngFor="let un of element.unidadD">{{un}}</li>
+                    </ul>
+                  </td>
+
+                </ng-container>
+                <ng-container matColumnDef="formato">
+                  <th mat-header-cell *matHeaderCellDef>Formato</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ul>
+                      <li *ngFor="let un of element.formatoD">{{un}}</li>
+                    </ul>
+                  </td>
+
+                </ng-container>
+                <ng-container matColumnDef="condicion">
+                  <th mat-header-cell *matHeaderCellDef>Condición</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ul>
+                      <li *ngFor="let un of element.condicionD">{{un}}</li>
+
+                    </ul>
+
+                  </td>
+
+                </ng-container>
+                <ng-container matColumnDef="sku">
+                  <th mat-header-cell *matHeaderCellDef>SKU</th>
+                  <td mat-cell *matCellDef="let element">
+                    <p>{{element.sku}}</p>
+
+                  </td>
+
+                </ng-container>
+                <ng-container matColumnDef="velprod">
+                  <th mat-header-cell *matHeaderCellDef>Velocidad Producción / H</th>
+                  <td mat-cell *matCellDef="let element">
+                    <p>{{element.velprod}}</p>
+
+                  </td>
+
+                </ng-container>
+              <!--  <ng-container matColumnDef="stdprod">
+                  <th mat-header-cell *matHeaderCellDef>Estándar P.</th>
+                  <td mat-cell *matCellDef="let element">
+                    <p>{{element.stdprod}}</p>
+
+                  </td>
+
+                </ng-container>-->
+                <!-- Position Column -->
+                <ng-container matColumnDef="editar">
+                  <th mat-header-cell *matHeaderCellDef>Editar</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button *ngIf="!element.isEdit;" (click)="editSubObject(element)" mat-icon-button>
+                      <mat-icon style="color: #2FA84F">edit</mat-icon>
+                    </button>
+
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="eliminar">
+                  <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button (click)="deleteSubObject(element.id)" mat-icon-button>
+                      <mat-icon style="color: crimson">delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+            </div>
+
+
+          </div>
+
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+

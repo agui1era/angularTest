@@ -1,0 +1,121 @@
+<div *ngIf="!openAdd" class="searchBar mr-3">
+  <div>
+    <mat-form-field class="mr-2">
+      <mat-select [(ngModel)]="filtro" placeholder="Filtrar">
+        <mat-option value="nombre">Nombre</mat-option>
+        <mat-option value="categoria">Categoria</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="mr-1">
+      <mat-label>Buscar</mat-label>
+      <!-- <span matPrefix>+1 &nbsp;</span>-->
+      <input [(ngModel)]="keyWord" type="text" matInput placeholder="palabra clave">
+      <mat-icon (click)="busqueda()" style="cursor: pointer" matSuffix>search</mat-icon>
+    </mat-form-field>
+    <button (click)="limpiarFiltros()" mat-icon-button>
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+  <div class="cambiarVista">
+    <mat-icon (click)="vista = 'mosaico'">grid_view</mat-icon>
+    <mat-icon (click)="vista = 'tabla'">view_list</mat-icon>
+    <mat-icon (click)="abrirSubidaMasiva()">file_upload</mat-icon>
+
+  </div>
+</div>
+
+
+<div *ngIf="!openAdd" class="mt-2">
+  <div *ngIf="dataList.length > 0">
+    <div *ngIf="vista == 'mosaico'">
+      <div *ngIf="!openAdd" class="container-fluid">
+        <div class="row">
+          <div class="col-4 mt-3" *ngFor="let obj of dataList;let i = index">
+            <mat-card>
+            <!--  <mat-card-header class="cardHeader">
+                <mat-card-title>{{entityName}}</mat-card-title>
+                &lt;!&ndash; <mat-card-subtitle>{{obj.nombre}}</mat-card-subtitle>&ndash;&gt;
+              </mat-card-header>-->
+              <mat-card-content class="cardContent">
+                <div *ngFor="let key of keys()">
+                  <p *ngIf="showField(key)">{{key}}:
+                    {{key == 'createdAt' || key == 'updatedAt' ? toReadableDate(obj[key]) :
+                      key == 'color' ? '' : obj[key] === false ? 'no' : obj[key] === true ? 'si' :
+                        obj[key] }}
+                  </p>
+                  <div *ngIf="key == 'color'"
+                       [ngStyle]="{margin:'auto',width:'auto',height:'10px',background:obj[key]}">
+                  </div>
+                </div>
+              </mat-card-content>
+              <mat-card-actions>
+                <button class="btn btn-primary btn-block" (click)="enviar(obj)">Editar</button>
+                <button class="btn btn-danger btn-block" (click)="delete(obj)">Eliminar</button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div *ngIf="vista == 'tabla'">
+      <table *ngIf="dataList.length>0" class="table table-sm table-bordered">
+        <thead>
+        <tr>
+          <th scope="col" [hidden]="th == 'selected'|| th == 'foto' || th == 'createdAt' || th == 'updatedAt'"
+              *ngFor="let th of keys()">{{th}}</th>
+          <th style="width: 10px">Editar</th>
+          <th style="width: 10px">Borrar</th>
+        </tr>
+        </thead>
+        <tr *ngFor="let obj of dataList;let i = index">
+          <td [hidden]="key == 'selected'|| key == 'foto' || key == 'createdAt' || key == 'updatedAt'"
+              *ngFor="let key of keys()">
+            {{key == 'createdAt' || key == 'updatedAt' ? toReadableDate(obj[key]) : obj[key] }}
+          </td>
+          <td>
+            <button (click)="enviar(obj)" class="btn btn-success btn-sm">Editar</button>
+          </td>
+          <td>
+            <button (click)="delete(obj)" class="btn btn-danger btn-sm">Borrar</button>
+          </td>
+
+
+        </tr>
+
+      </table>
+
+    </div>
+  </div>
+  <div *ngIf="dataList.length == 0">
+    <p style="background: var(--plomop);padding: 7px 3px" >Agrega un <b style="color: #1f497d;text-decoration: underline;cursor: pointer" (click)="openMenuAdd()">{{entityName}}</b></p>
+  </div>
+</div>
+
+<div *ngIf="isLoading" style="position: absolute;margin: auto;left: 0;right: 0;top: 50%" class="spinner-border"
+     role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+
+
+<div class="openAddMenu">
+  <div *ngIf="!openAdd" (click)="openMenuAdd()">
+    <!--<mat-icon>
+      add
+    </mat-icon>
+    <p>Agregar {{entityName}}</p>-->
+    <p>
+      Crear familia de producto
+    </p>
+  </div>
+  <div *ngIf="openAdd" (click)="openMenuAdd()">
+    <mat-icon>
+      arrow_back
+    </mat-icon>
+    <p>Volver</p>
+  </div>
+</div>
+
+<app-product-manager (hide)="changeHide($event)" *ngIf="openAdd"></app-product-manager>
+

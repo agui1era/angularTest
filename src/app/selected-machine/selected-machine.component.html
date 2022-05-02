@@ -1,0 +1,375 @@
+<!--
+<div (click)="cerrarVistaProd()" *ngIf="isActiveTurn" class="botonCerrar">
+  <mat-icon>close</mat-icon>
+</div>
+-->
+
+
+<app-mi-loader *ngIf="loading"></app-mi-loader>
+
+<div class="content">
+
+  <!--<button *ngIf="!isActiveTurn && (isActiveTurnObj | json) != '{}' " (click)="isActiveTurn = true" class="btn mt-5 btn-success initTurn">Volver turno maquina</button>
+  <button *ngIf="(isActiveTurnObj | json) == '{}'" (click)="initTurn()" class="btn mt-5 btn-success initTurn">Tomar turno maquina</button>
+  <div *ngIf="(isActiveTurnObj | json) == '{}'" class="col-12">
+    <div class="mt-5" style="margin: auto;width: fit-content">
+      <button style="width: 300px"  class="btn btn-primary btn-block" [routerLink]="'/procesos/'+ (+this.machineObj?.idproceso_proceso?.idplanta)" >Volver</button>
+    </div>
+  </div>-->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-2">
+            <mat-form-field>
+              <mat-label>Estado</mat-label>
+              <mat-select (openedChange)="selectEstado()" [(ngModel)]="selectedEstado">
+                <mat-option [value]="''">Todos</mat-option>
+                <mat-option [value]="'Comenzar'">Sin comenzar</mat-option>
+                <mat-option [value]="'Pausado'">Pausadas</mat-option>
+                <mat-option [value]="'Comenzado'">En curso</mat-option>
+                <mat-option [value]="'Terminado'">Terminadas</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div><div class="col-2">
+            <mat-form-field>
+              <mat-label>Números de serie</mat-label>
+        <!--      <mat-select (openedChange)="selectSerie()" [(ngModel)]="selectedSerie">
+                <mat-option [value]="''">Todas</mat-option>
+                <mat-option *ngFor="let s of allSeries" [value]="s">{{s}}</mat-option>
+              </mat-select>-->
+              <input type="text" (keyup)="selectSerie()" [(ngModel)]="selectedSerie" matInput  [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete" >
+                <mat-option *ngFor="let s of allSeries" [value]="s">{{s}}</mat-option>
+
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="col-4" style="display: flex">
+            <mat-form-field>
+              <mat-label>Fechas</mat-label>
+              <mat-date-range-input [comparisonEnd]="buscar()"  (keyup)="buscar()"  [rangePicker]="picker">
+                <input [(ngModel)]="desde" matStartDate placeholder="Desde">
+                <input [(ngModel)]="hasta" matEndDate placeholder="Hasta">
+              </mat-date-range-input>
+              <mat-datepicker-toggle   matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker  [touchUi]="true" #picker></mat-date-range-picker>
+            </mat-form-field>
+            <!--<mat-icon style="cursor: pointer" (click)="buscar()">search</mat-icon>
+-->
+          </div>
+        </div>
+
+      </div>
+      <!--<div *ngIf="(isActiveTurnObj | json) == '{}'" class="col-12">
+        <div  >
+          <button mat-icon-button
+                  [routerLink]="'/maquinas/'+ (+this.machineObj?.idproceso)"><mat-icon>arrow_back</mat-icon>
+          </button>
+        </div>
+      </div>-->
+      <div class="col-12 mt-2" >
+        <div class="row">
+
+      <!--    <div class="col-2" *ngIf="isInitiatedTurn && productoTurnoActivo?.idordendetrabajo_ordendetrabajo">
+            <button (click)="initTurn()" class="btn btn-success">Ir al turno</button>
+          </div>
+-->
+          <div class="col-2" *ngIf="isInitiatedTurn">
+            <p><b>Produciendo actualmente: </b> {{productoTurnoActivo?.idsubproducto_subproducto?.nombre || 'Sin orden actualmente'}}</p>
+          </div>
+          <div class="col-2" *ngIf="isInitiatedTurn">
+            <p><b>Unidades actuales: </b> {{totalProdPtActivo}}</p>
+          </div>
+
+          <div class="col-4" *ngIf="isInitiatedTurn">
+            <p><b>Orden de trabajo en turno: </b> {{productoTurnoActivo?.idordendetrabajo_ordendetrabajo?.nombre || 'Sin orden acualmente'}}</p>
+          </div>
+          <div class="col-2"  >
+            <button *ngIf="isInitiatedTurn && productoTurnoActivo?.idordendetrabajo_ordendetrabajo == null" (click)="sumarProd()" mat-raised-button>Sumar producción</button>
+          </div>
+          <div  [ngClass]="isInitiatedTurn ? 'col-2':'col-12'">
+            <button (click)="openCreateMaintenance()" style="border: none;width:fit-content;padding:0 13px;float: right" class="ml-5 fig mat-elevation-z5">
+              <div>
+                <div style="padding-left: 5px;margin-right: 9px">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M19.3333 11.3332H11.3333V19.3332H8.66663V11.3332H0.666626V8.6665H8.66663V0.666504H11.3333V8.6665H19.3333V11.3332Z"
+                      fill="white"/>
+                  </svg>
+
+                </div>
+                <div class="action">
+                  <p>
+                    Crear
+                  </p>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mt-2">
+        <table mat-table [dataSource]="allOrdenesDeTrabajo">
+
+
+          <ng-container matColumnDef="op">
+            <th mat-header-cell *matHeaderCellDef> OP</th>
+            <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="serie">
+            <th mat-header-cell *matHeaderCellDef> Serie</th>
+            <td mat-cell *matCellDef="let element"> {{element.codigo}} </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="asignado">
+            <th mat-header-cell *matHeaderCellDef> Asignado</th>
+            <td mat-cell *matCellDef="let element"> {{element.maq?.nombre}} </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="sku">
+            <th mat-header-cell *matHeaderCellDef> SKU</th>
+            <td mat-cell *matCellDef="let element"> {{element.idsubproducto_subproducto?.sku}} </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef> Nombre</th>
+            <td mat-cell *matCellDef="let element"> {{element.idsubproducto_subproducto?.nombre}} </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="cantidadE">
+            <th mat-header-cell *matHeaderCellDef> Producción esperada</th>
+            <td mat-cell *matCellDef="let element"> {{element.cantidadesperada}} </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="progreso">
+            <th mat-header-cell *matHeaderCellDef> Progreso</th>
+            <td mat-cell *matCellDef="let element"> {{element.progreso  | number: '1.0-0'}}%  </td>
+          </ng-container>
+
+          <ng-container matColumnDef="operador">
+            <th mat-header-cell *matHeaderCellDef> Operador</th>
+            <td mat-cell *matCellDef="let element">
+              <p *ngFor="let iniciador of element.iniciadorots">{{iniciador.creador}}</p>
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="accion">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <!--<button *ngIf="element.estado != 'Comenzar' && element.estado != 'Pausado'" class="btnAccion" [ngClass]="element.estado == 'Comenzar' ? 'comenzar':element.estado == 'Pausado' ?
+              'pausado' : element.estado == 'Comenzado' ? 'comenzado':element.estado">
+                {{element.estado == 'Comenzar' ? 'Comenzar' : element.estado == 'Pausado' ?
+                'Pausada' : element.estado == "Comenzado" ? "Terminar" : element.estado}}
+              </button>-->
+              <button (click)="terminarPausarOT(element)" *ngIf="element.estado == 'Comenzado'" class="btnAccion comenzado" >
+                Terminar
+              </button>
+              <button disabled *ngIf="element.estado == 'Terminado'" class="btnAccion terminado" >
+                Terminado
+              </button>
+              <button (click)="comenzado ? yaComenzadoAlert():initTurnOT(element.id)" *ngIf="element.estado == 'Comenzar' || element.estado == null" class="btnAccion comenzar" >
+                Comenzar
+              </button>
+              <button (click)="comenzado ? yaComenzadoAlert():terminarReanudarOT(element)" *ngIf="element.estado == 'Pausado'" class="btnAccion pausado" >
+                Pausado
+              </button>
+
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="ver">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button  (click)="verOT(element)" mat-icon-button>
+                <mat-icon  >visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="editar">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button color="accent" (click)="editar(element)"  mat-icon-button>
+                <mat-icon >edit</mat-icon>
+
+              </button>
+            </td>
+          </ng-container>
+
+<!--
+          <ng-container matColumnDef="eliminar">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <mat-icon style="cursor: pointer">delete</mat-icon>
+            </td>
+          </ng-container>-->
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+
+      </div>
+    </div>
+  </div>
+
+
+  <!--
+  <p>{{machineObj | json}}</p>
+  -->
+  <!--
+  <button *ngIf="isActiveTurn" (click)="endTurn()" class="btn btn-danger btn-xl">Terminar turno maquina</button>
+  -->
+
+  <app-inmersive-turn *ngIf="isActiveTurn"></app-inmersive-turn>
+
+
+  <!-- <div [hidden]="vista != 'prod'" *ngIf="isActiveTurn" class="tablaProd">
+     <button (click)="createProducTurn()" class="btn btn-success">agregar produccion</button>
+
+     <div>
+       <div class="btn-group btn-group-toggle" data-toggle="buttons">
+         <label class="btn btn-secondary" [ngClass]="vista == 'prod' ? 'active':''">
+           <input (click)="vistaProd()" type="radio" name="options" id="option1" autocomplete="off" checked> Vista prod
+         </label>
+         <label class="btn btn-secondary" [ngClass]="vista == 'tabla' ? 'active':''">
+           <input (click)="vistaTabla()" type="radio" name="options" id="option3" autocomplete="off"> Vista tabla
+         </label>
+       </div>
+     </div>
+     <div class="exitTablaProd" (click)="exitTablaProd()">
+       <mat-icon >
+         close
+       </mat-icon>
+     </div>
+
+     <div class="tabla mt-5">
+       <div class="headers">
+         <div class="aHeder">
+           <p>producto</p>
+         </div>
+         <div class="aHeder">
+           <p>Formato</p>
+         </div>
+         <div class="aHeder">
+           <p>condicion</p>
+         </div>
+         <div class="aHeder">
+           <p>serie</p>
+         </div>
+         <div class="horas">
+           <div
+             *ngFor="let hour of horas()"
+             class="aHeder aHour">
+             <p>{{hour}}</p>
+           </div>
+         </div>
+         <div class="aHeder">
+           <p>Total</p>
+         </div>
+         &lt;!&ndash; <div class="aHeder">
+            <p>Mermas</p>
+          </div>&ndash;&gt;
+
+
+       </div>
+       <div class="body" style="position: relative" *ngFor="let obj of productTurnList">
+         <button (click)="deleteProductionByProductTurn(obj.id)" style="position: absolute;top:-35px;right: 0"
+                 class="btn btn-danger btn-block">X
+         </button>
+         <div class="aData">
+           <select (change)="updateProductTurnProducto($event.target.value,obj.id)" [(ngModel)]="obj.idproducto" name=""
+                   id="">
+             <option value="{{prod.idproducto_producto.id}}"
+                     *ngFor="let prod of machineProducts">{{prod.idproducto_producto.nombre}}</option>
+           </select>
+         </div>
+         <div class="aData">
+
+           <input style="width: 30%" (change)="updateProductTurnFormatoUnidad( $event.target.value,obj.id)" step=".01"
+                  type="number" [(ngModel)]="obj.formatounidad">
+           <select (change)="updateProductTurnFormato( $event.target.value,obj.id)" [(ngModel)]="obj.formato" name="">
+             <option value="{{formato}}"
+                     *ngFor="let formato of obj.idproducto_producto ? obj.idproducto_producto.formatosdemedida.split(','):[]">{{formato}}</option>
+           </select>
+         </div>
+
+         <div class="aData">
+           <input (blur)="updateProductTurnCondicion($event.target.value,obj.id)" [(ngModel)]="obj.condicion" type="text">
+
+         </div>
+         <div class="aData">
+           <input (blur)="updateProductTurnSerie($event.target.value,obj.id)" [(ngModel)]="obj.serie" type="text">
+         </div>
+
+         <div class="hourHands">
+           <div class="aData" *ngFor="let hourInput of horas()">
+             <mat-form-field >
+
+               <input  matInput type="number" placeholder="cantidad" (blur)="addProduction(hourInput,$event.target.value,obj)" *ngIf="obj.horas"
+                       [(ngModel)]="obj.horas[hourInput].cantidad" />
+               <span matSuffix>{{obj.formato}}</span>
+
+             </mat-form-field>
+
+           </div>
+         </div>
+
+         <div class="aData">
+           <p>{{this.hoursSum(obj)}}</p>
+         </div>
+
+         &lt;!&ndash; <div class="aData">
+            <mat-form-field>
+              <input matInput placeholder="mermas" (blur)="updateProductTurnMermas($event.target.value,obj.id)"
+                     [(ngModel)]="obj.mermas" type="text">
+            </mat-form-field>
+
+
+          </div>&ndash;&gt;
+
+
+       </div>
+     </div>
+
+   </div>
+ -->
+  <!-- <div *ngIf="vista == 'tabla'" class="container">
+     <button (click)="getAllProduction(isActiveTurnObj.idturno)">refrescar</button>
+     <table class="table table-borderless">
+       <thead>
+       <tr>
+         <th scope="col">Hora</th>
+         <th scope="col">Producto</th>
+         <th scope="col">Cantidad</th>
+         <th scope="col">Mermas</th>
+         <th scope="col">Formato</th>
+         <th scope="col">Condicion</th>
+       </tr>
+       </thead>
+       <tbody>
+       <tr *ngFor="let productionObj of allProductionList">
+         <td>{{productionObj.hora}}</td>
+         <td>{{productionObj.idprodturn_productoturno.idproducto_producto.nombre}}</td>
+         <td>{{productionObj.cantidad}}</td>
+         <td>{{productionObj.idprodturn_productoturno.mermas}}</td>
+         <td>{{productionObj.idprodturn_productoturno.formatounidad}}{{productionObj.idprodturn_productoturno.formato}}</td>
+         <td>{{productionObj.idprodturn_productoturno.condicion}}</td>
+       </tr>
+       </tbody>
+     </table>
+   </div>
+ -->
+</div>

@@ -1,0 +1,4 @@
+<mat-form-field>
+  <input [disabled]="this.data.idturno_turno.horafin != null" matInput placeholder="Velocidad del turno" type="number" [(ngModel)]="inputVelocidad">
+</mat-form-field>
+<button *ngIf="this.data.idturno_turno.horafin == null" (click)="cambiarVelocidad()" mat-raised-button style="background: green;color:white">Guardar</button>

@@ -1,0 +1,33 @@
+<div [ngClass]="activo ? 'activo':''" [ngStyle]="{transform: 'scale('+chico+')'}">
+  <mwl-gauge
+    class="LaN"
+    [max]="100"
+    [dialStartAngle]="-90"
+    [dialEndAngle]="-90.001"
+    [animated]="true"
+    [animationDuration]="1"
+    [value]="valu"
+
+  >
+  </mwl-gauge>
+
+  <p class="gpercent" style="color: black">%</p>
+  <p class="glabel" style="color: black"   [ngStyle]="nt ? {bottom:'30px'}:''">{{label}}</p>
+</div>
+
+<!--
+<div>
+  <mwl-gauge
+    class="sevenV"
+    [max]="100"
+    [dialStartAngle]="-90"
+    [dialEndAngle]="-90.001"
+    [value]="valu"
+    [animated]="true"
+    [animationDuration]="1"
+  >
+  </mwl-gauge>
+  <p class="gpercent">%</p>
+  <p class="glabel">OEE</p>
+</div>
+-->

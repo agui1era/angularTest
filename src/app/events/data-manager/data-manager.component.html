@@ -1,0 +1,80 @@
+<!--<nav class="navbar navbar-expand navmain">
+
+  <div class="navItem">
+    <div>
+      <mat-icon>
+        precision_manufacturing
+      </mat-icon>
+      <p>
+        Planta
+      </p>
+    </div>
+
+  </div>
+
+
+</nav>-->
+<nav class="navbar navbar-expand navmain">
+
+  <div (click)="selectMenu(menuItem.name)"  *ngFor="let menuItem of menuList" class="navItem" >
+    <div [ngClass]="menuSelected == menuItem.name ? 'act':''" >
+     <!-- <mat-icon class="mr-2">
+        {{menuItem.logo}}
+      </mat-icon>-->
+      <p [ngStyle]="
+        menuItem.name.length >= 15 ? {'font-size':'0.75rem'}:menuItem.name.length > 10 ? {'font-size':'0.85rem'}:''
+">
+        {{menuItem.name}}
+      </p>
+    </div>
+  </div>
+
+</nav>
+<div class="container-fluido">
+
+  <div class="row justify-content-end">
+  <!--  <div class="col-5">
+      <select  class="custom-select">
+        <option value="machine">Maquinas</option>
+        <option selected value="users" >Usuarios</option>
+        <option value="plant">Plantas</option>
+        <option value="process">Procesos</option>
+        <option value="inventory">Inventarios</option>
+        <option value="product">Productos</option>
+        <option value="categoryDetention">Categorias de parada</option>
+      </select>
+
+      <app-machine-manager *ngIf="menuSelected == 'machine'"></app-machine-manager>
+      <app-users-manager *ngIf="menuSelected == 'users'"></app-users-manager>
+      <app-plant-manager *ngIf="menuSelected == 'plant'"></app-plant-manager>
+      <app-process-manager *ngIf="menuSelected == 'process'"></app-process-manager>
+      <app-product-manager *ngIf="menuSelected == 'product'"></app-product-manager>
+      <app-inventory-manager *ngIf="menuSelected == 'inventory'"></app-inventory-manager>
+      <app-category-detention-data-manager
+        *ngIf="menuSelected == 'categoryDetention'"></app-category-detention-data-manager>
+    </div>-->
+   <!-- <div class="dataTable col-7">
+      <app-user-data-table *ngIf="menuSelected == 'Usuarios'"></app-user-data-table>
+      <app-machine-data-table *ngIf="menuSelected == 'Maquinas'"></app-machine-data-table>
+      <app-plant-data-table *ngIf="menuSelected == 'Plantas'"></app-plant-data-table>
+      <app-process-data-table *ngIf="menuSelected == 'Procesos'"></app-process-data-table>
+      <app-inventory-data-table *ngIf="menuSelected == 'Inventarios'"></app-inventory-data-table>
+      <app-product-data-table *ngIf="menuSelected == 'Productos'"></app-product-data-table>
+      <app-category-detention-data-table
+        *ngIf="menuSelected == 'Categoria de parada'"></app-category-detention-data-table>
+    </div>-->
+    <div class="col-12">
+      <app-ajustes-empresa-manager *ngIf="menuSelected == 'Empresa'"></app-ajustes-empresa-manager>
+      <app-user-data-table *ngIf="menuSelected == 'Usuarios'"></app-user-data-table>
+      <app-machine-data-table *ngIf="menuSelected == 'Maquinas'"></app-machine-data-table>
+      <app-plant-data-table *ngIf="menuSelected == 'Plantas'"></app-plant-data-table>
+      <app-sensor-data-table *ngIf="menuSelected == 'Sensor'"></app-sensor-data-table>
+      <app-process-data-table *ngIf="menuSelected == 'Procesos'"></app-process-data-table>
+      <app-inventory-data-table *ngIf="menuSelected == 'Repuestos'"></app-inventory-data-table>
+      <app-product-data-table [preset]="presetObject" *ngIf="menuSelected == 'Productos'"></app-product-data-table>
+      <app-merma-data-table [preset]="presetObject" *ngIf="menuSelected == 'Mermas'"></app-merma-data-table>
+      <app-category-detention-data-table
+        *ngIf="menuSelected == 'Categoria de parada'"></app-category-detention-data-table>
+    </div>
+  </div>
+</div>

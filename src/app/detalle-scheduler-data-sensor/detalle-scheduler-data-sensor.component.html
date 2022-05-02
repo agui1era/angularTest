@@ -1,0 +1,13 @@
+<div style="float: right">
+  <button mat-dialog-close class="btn btn-danger btn-sm" mat-icon-button><mat-icon >close</mat-icon></button>
+</div>
+<h2 align="center">Telemetría del sensor</h2>
+<div *ngIf="data">
+
+  <p><strong>Fecha:</strong> {{this.data.timestamp | date:'dd/M/yyyy HH:mm'}}</p>
+  <p><strong>Datos de produccion:</strong> {{this.data.produccion}}</p>
+
+</div>
+<div *ngIf="data == undefined">
+  <p style="color: crimson" ><strong>NO EXISTEN DATOS DE SENSOR PARA ESTE MINUTO</strong></p>
+</div>

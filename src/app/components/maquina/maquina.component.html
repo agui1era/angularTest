@@ -1,0 +1,20 @@
+﻿<div style="width: 80vw">
+  <div class="row justify-content-end" >
+    <div class="col-2">
+      <button *ngIf="view != 'addMachine'" (click)="elegir('addMachine')" class="btn btn-success">Agregar</button>
+      <button *ngIf="view == 'addMachine'" (click)="elegir('kpis')" class="btn btn-danger">Cancelar</button>
+    </div>
+  </div>
+  <ul class="nav nav-tabs nav-fill" *ngIf="view != 'addMachine'" >
+    <li class="nav-item">
+      <a (click)="elegir('kpis')" [ngClass]="view == 'kpis' ? 'nav-link active':'nav-link'" >kpis</a>
+    </li>
+    <li class="nav-item">
+      <a (click)="elegir('config')" [ngClass]="view == 'config' ? 'nav-link active':'nav-link'" >configuracion</a>
+    </li>
+  </ul>
+  <app-maquinalabelkpis *ngIf="view == 'kpis'" ></app-maquinalabelkpis>
+  <app-maquinalabelconfig *ngIf="view == 'config'" ></app-maquinalabelconfig>
+  <app-agregar-maquina *ngIf="view == 'addMachine'" ></app-agregar-maquina>
+
+</div>

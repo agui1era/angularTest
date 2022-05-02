@@ -1,0 +1,71 @@
+<!--
+<div class=" seleccion">
+  <div class="row">
+    <div *ngFor="let obj of entitiesList" class="col-4">
+      <mat-card [routerLink]="['/procesos', obj.id]" class="aItem"><p>{{obj.nombre}}</p></mat-card>
+    </div>
+  </div>
+
+
+</div>
+
+-->
+<div class="turnSelect">
+  <h1>Seleccion de turno</h1>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-4 mt-3" *ngFor="let obj of entitiesList;let i = index">
+      <mat-card  [routerLink]="['/procesos', obj.id]">
+        <mat-card-content class="cardContent">
+          <mat-card-title>
+            {{obj.nombre}}
+          </mat-card-title>
+          <div class="cant">
+            <p>{{obj.maquinas}}</p>
+            <p>Máquinas</p>
+          </div>
+        </mat-card-content>
+        <div class="linea"></div>
+        <div class="infoCnt mt-4">
+          <div class="row">
+            <div class="col-6">
+              <div class="row">
+                <div class="col-9">
+                  <p>Operativas</p>
+                </div>
+                <div class="col-3">
+                  <p>{{obj.operativas || 0}}</p>
+                </div>
+                <div class="col-9">
+                  <p>Detenidas</p>
+                </div>
+                <div class="col-3">
+                  <p>{{obj.detenidas || 0}}</p>
+                </div>
+                <div class="col-9">
+                  <p>Mantención</p>
+                </div>
+                <div class="col-3">
+                  <p>{{obj.mantenciones || 0}}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <app-indicador-vista-empresa chico="0.7" label="OEE" [valu]="obj.oee?.oee || 0"
+                                           style="position:absolute;top:-70px;margin-left: -50px;width: 84px;height: 84px ">
+
+              </app-indicador-vista-empresa>
+            </div>
+
+
+          </div>
+        </div>
+
+      </mat-card>
+
+    </div>
+  </div>
+
+</div>

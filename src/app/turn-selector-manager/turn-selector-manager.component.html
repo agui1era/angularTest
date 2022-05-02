@@ -1,0 +1,168 @@
+<div class="container-fluid tod" style="    display: flex;
+    align-items: center;">
+  <div class="row">
+    <div class="col-12 tod2">
+      <div class="row">
+        <div class="col-10 offset-1">
+          <div class="row controles">
+            <!--  <div *ngIf="!isOperator"  class="col-3" style="padding: 0">
+                <mat-checkbox (change)="cambioTurnos()" [(ngModel)]="turnosTerminados" class="lacheck" >Mostrar turnos terminados</mat-checkbox>
+                  <select *ngIf="false" [disabled]="isOperator" (change)="cambiarMaquina()" [(ngModel)]="machineSelected" class="custom-sele"  >
+                    <option [selected]="machineSelected == m.id" *ngFor="let m of machines" value="{{m.id}}">{{m.nombre}}</option>
+                  </select>
+              </div>-->
+            <div class="col-11">
+              <!-- <div  [ngClass]="isOperator ? 'col-8':'col-5'" style="padding: 0">-->
+              <div class="infoFecha">
+                <div style="display: flex;justify-content: space-between">
+                  <mat-form-field style="position: absolute;z-index: -99999" class="hidden" appearance="fill">
+                    <input (dateInput)="cambiarFechaTurnosElegidos($event)"
+                           style="position: absolute;z-index: -9;display: none" matInput [matDatepicker]="picker">
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+
+                  <h2 class="turnoTitl ">
+                    <!--Miercoles 29.04.2020 - turno mañana-->
+                    {{turnosDeMaquina[posTurno]?.horainicio | date:'EEEE dd.MM.yyyy'}}
+                  </h2>
+                  <mat-icon style="cursor: pointer" (click)="picker.open()">
+                    date_range
+                  </mat-icon>
+                </div>
+
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-4">
+                  <p><b>Turno</b></p>
+
+                </div>
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-3">
+                      <!--     <button [disabled]="turnosDeMaquina.length <= 1" (click)="cambiarTurno('adelante')" mat-icon-button>
+                             <
+                           </button>-->
+                      <p (click)="cambiarTurno('adelante')" class="butonVerde"><</p>
+                    </div>
+                    <div class="col-6">
+                      <p><b>
+                        {{turnosDeMaquina[posTurno]?.idhorario_horario?.nombre}}
+                      </b>
+                      </p>
+                    </div>
+                    <div class="col-3">
+                      <!--  <button [disabled]="turnosDeMaquina.length <= 1" (click)="cambiarTurno('atras')" mat-mini-fab>
+                          >
+                        </button>-->
+                      <p *ngIf="turnosDeMaquina[posTurno]?.horafin != null" (click)="cambiarTurno('atras')"
+                         class="butonVerde"> > </p>
+
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-4">
+                  <p><b>Estado</b></p>
+                </div>
+                <div class="col-6">
+                  <p><strong [ngClass]="turnosDeMaquina[posTurno]?.horafin ? 'terminado' : ''"
+                             *ngIf="turnosDeMaquina[posTurno]?.horafin">Terminado</strong>
+                  </p>
+                  <p><strong *ngIf="!turnosDeMaquina[posTurno]?.horafin">En curso</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-4">
+                  <p><b>Máquina</b></p>
+                </div>
+                <div class="col-8">
+                  <p><b>
+                    {{esteTurno.idmaquina_maquina?.nombre}}
+                  </b></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-4">
+                  <p><b>Modalidad</b></p>
+                </div>
+                <div class="col-8">
+                  <p><b>
+                    {{esteTurno.idmaquina_maquina?.conSensor ? 'Automatica' : 'Manual'}}
+                  </b></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-4">
+                  <p><b>Sensor</b></p>
+                </div>
+                <div class="col-8">
+                  <p class="sensoresP">
+                    <b *ngFor="let sen of sensoresMaquina"><span>
+                     {{sen.idcategoriasensor_categoriasensor.nombre}} {{sen.idreferencia}}{{sensoresMaquina.length > 1 ? ', ':''}}
+                    </span></b>
+                  </p>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-4">
+                  <p><b>Operador</b></p>
+                </div>
+                <div class="col-8">
+                  <p style="text-transform: capitalize" class="operadoresP">
+                    <b *ngFor="let ope of operadoresMaquina">
+                      <span>{{ope.idoperador_operador.nombre}} {{ope.idoperador_operador.apellido}} {{operadoresMaquina.length > 1 ? ', ':''}}</span>
+                    </b></p>
+                </div>
+              </div>
+            </div>
+            <!--  <div class="col-2" style="padding: 0">
+                <div class="flechas ml-1" >
+                  <button [disabled]="turnosDeMaquina.length <= 1" (click)="cambiarTurno('adelante')" mat-mini-fab style="background: rgba(75,75,75,0);width: 30px;height: 30px" >
+                    <mat-icon style="font-size: 1.1rem;color:white">  navigate_before</mat-icon>
+                  </button>
+                  <button [disabled]="turnosDeMaquina.length <= 1" (click)="cambiarTurno('atras')" mat-mini-fab style="background: rgba(75,75,75,0);width: 30px;height: 30px" >
+                    <mat-icon style="font-size: 1.1rem;color:white">   navigate_next</mat-icon>
+                  </button>
+                </div>
+              </div>-->
+            <!--<div class="col-2">
+
+            </div>-->
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+    <!--<div class="col-2">
+      <div class="flechas">
+        <mat-icon>
+          navigate_before
+        </mat-icon>
+        <mat-icon>
+          navigate_next
+
+        </mat-icon>
+      </div>
+    </div>-->
+  </div>
+</div>

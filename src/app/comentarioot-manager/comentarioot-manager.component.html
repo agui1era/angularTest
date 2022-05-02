@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h2>Agregar un comentario</h2>
+    </div>
+    <div class="col-12">
+      <form action="" (ngSubmit)="agregarComentario()">
+        <mat-form-field>
+          <mat-label>Comentario</mat-label>
+          <textarea type="text" matInput [(ngModel)]="inputComentario" [ngModelOptions]="{standalone: true}"></textarea>
+        </mat-form-field>
+      </form>
+    </div>
+    <div class="col-12">
+      <button (click)="agregarComentario()"  mat-raised-button color="primary">Agregar</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="caja">
+  <div class="jead">
+    <p>Notificaciones</p>
+  </div>
+  <div class="cuerpo">
+    <div (mouseover)=" noti.fechaleido == null ?  leer(noti):''" class="aNoti" [ngClass]="noti.fechaleido == null ? 'sinLeer':'noLeido'" *ngFor="let noti of misNotificaciones">
+      <div class="row">
+        <div class="col-10">
+          <em>{{noti.tiempoRelativo}}</em>
+          <p>{{noti.idnotificacion_notificacion.idtiponotificacion_tiponotificacion?.info}}</p>
+
+        </div>
+
+        <div class="col-2">
+          <mat-icon *ngIf="noti.fechaleido != null">
+            drafts
+          </mat-icon>
+          <mat-icon *ngIf="noti.fechaleido == null">
+            markunread
+          </mat-icon>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

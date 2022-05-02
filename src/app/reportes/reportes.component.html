@@ -1,0 +1,2247 @@
+<app-mi-loader text="Analizando toda la información de la empresa..." *ngIf="loading"></app-mi-loader>
+<!--<div class="controless">
+
+  <mat-form-field class="ml-2" appearance="outline"
+                  style=";width: 120px;height: 65px;font-size: 0.67rem">
+    <mat-label>Lapso</mat-label>
+
+    <mat-select style="color: #78909C" [(ngModel)]="selectedTime"
+                placeholder="Lapso">
+      <mat-option value="turn">Ultimo turno</mat-option>
+      <mat-option value="week">Semana pasada</mat-option>
+      <mat-option value="month">Ultimo mes</mat-option>
+      <mat-option value="other">Otro</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="selectedTime == 'other'" class="ml-2" appearance="outline"
+                  style=";width: 120px;height: 65px;font-size: 0.67rem">
+    <mat-label>Desde</mat-label>
+    <input [(ngModel)]="otraFecha[0]" matInput placeholder="Desde" type="datetime-local">
+
+  </mat-form-field>
+  <mat-form-field *ngIf="selectedTime == 'other'" class="ml-2" appearance="outline"
+                  style=";width: 120px;height: 65px;font-size: 0.67rem">
+    <mat-label>Hasta</mat-label>
+    <input [(ngModel)]="otraFecha[1]" matInput placeholder="Hasta" type="datetime-local">
+  </mat-form-field>
+
+  <mat-form-field class="ml-2" appearance="outline"
+                  style=";width: 120px;height: 65px;font-size: 0.67rem">
+    <mat-label>Planta</mat-label>
+    <mat-select (openedChange)="selecPlanta()" [(ngModel)]="plantSelected" style="color: #78909C"
+                placeholder="Planta">
+      <mat-option *ngFor="let planta of allPlantas" value="{{planta.id}}">{{planta.nombre}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="ml-2" appearance="outline"
+                  style=";width: 120px;height: 65px;font-size: 0.67rem">
+    <mat-label>Proceso</mat-label>
+
+    <mat-select (openedChange)="selecProcess()" [disabled]="plantSelected == ''" [(ngModel)]="procSelected"
+                style="color: #78909C" placeholder="Proceso">
+      <mat-option *ngFor="let proc of allProcesos" value="{{proc.id}}">{{proc.nombre}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="ml-2" appearance="outline"
+                  style=";width: 120px;height: 65px;font-size: 0.67rem">
+    <mat-label>Maquina</mat-label>
+
+    <mat-select [disabled]="procSelected == ''" [(ngModel)]="machSelected" style="color: #78909C" placeholder="Maquina">
+      <mat-option *ngFor="let maqu of alMachines" value="{{maqu.id}}">{{maqu.nombre}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  &lt;!&ndash;  <mat-form-field class="ml-2" appearance="fill"
+                    style=";width: 120px;height: 65px;font-size: 0.67rem">
+      <mat-label>Subproducto</mat-label>
+
+      <mat-select [(ngModel)]="spSelected" style="color: #78909C" placeholder="Subproducto">
+        <mat-option *ngFor="let sp of subproducts" value="{{sp.id}}">{{sp.nombre}}</mat-option>
+
+      </mat-select>
+    </mat-form-field>&ndash;&gt;
+
+
+ &lt;!&ndash; <button [disabled]="selectedTime == ''" (click)="buscar()">
+    <mat-icon>
+      search
+    </mat-icon>
+  </button>
+  <button (click)="downloadPDF()">
+    <mat-icon>
+      download
+      download
+    </mat-icon>
+  </button>
+  <button (click)="planillasMenu()">
+    <mat-icon>
+      description
+    </mat-icon>
+  </button>&ndash;&gt;
+</div>-->
+<!--<div class="container-fluid" *ngIf="!busco">
+  <h3>Seleccione los filtros y presione
+    <mat-icon>
+      search
+    </mat-icon>
+  </h3>
+  <p style="color: crimson">{{errorMessage}} </p>
+</div>-->
+
+<div class="container-fluid mt-3">
+  <div class="row">
+
+    <div class="col-12">
+      <app-filtro-normie (leFilter)="aplicarFiltro($event)" (imprimir)="downloadPDF()" (descargar)="descargarData()"></app-filtro-normie>
+      <div [hidden]="true">
+        <angular2csv #csvComponent [data]="csvData" filename="MES-Monitoreo" [options]="csvOptions"></angular2csv>
+      </div>
+    </div><!--
+    <div class="col-12" *ngIf="!comienzaBusqueda">
+      <p>Es necesario seleccionar almenos 1 filtro</p>
+    </div>-->
+    <div class="col-12" id="allData">
+      <mat-tab-group *ngIf="comienzaBusqueda">
+        <mat-tab label="Producción">
+
+          <div class="row mt-4" style="padding:0 17px">
+
+            <div class="col-7 pt-3" style="  background: #f6f6f6;">
+              <p class="titlReporte ml-4">
+                Unidades totales por OT
+              </p>
+
+              <div class="ajustarScroll" style="--w: 100%;--h:34vh;--ys:auto;--xs:hidden">
+               <!-- <table class="laTable">
+                  <tr>
+                    <th>
+                      Máquina
+                    </th>
+                    <th>
+                      Planificado / Un.
+                    </th>
+                    <th>
+                      Producido
+                    </th>
+                    <th>
+                      Faltante / Un.
+                    </th>
+                  </tr>
+                  <tr *ngFor="let maqi of ordenesDeTrabajoListPorMaquina">
+                    <td style="display: flex;align-items: center">
+                      &lt;!&ndash;<div class="circle"></div>&ndash;&gt;
+                      {{maqi.maq.nombre}}
+                    </td>
+                    <td>{{maqi.cantidadesperada}}</td>
+                    <td>{{maqi.cantidadactual}}</td>
+                    <td>{{maqi.cantidadesperada - maqi.cantidadactual}}</td>
+                  </tr>
+                </table>-->
+                <ag-grid-angular
+                                 style="width: 100%; height: 33vh;"
+                                 class="ag-theme-alpine"
+                                 [rowData]="rowData"
+                                 [columnDefs]="columnDefs"
+                >
+                </ag-grid-angular>
+              </div>
+
+            </div>
+            <div class="col-5">
+              <p class="titlReporte ">
+                Progreso de OT
+              </p>
+              <div class="ajustarScroll" style="--w: 100%;--h:34vh;--ys:auto;--xs:hidden">
+
+                <div *ngFor="let ot of ordenesDeTrabajoList">
+                  <app-ot-progress nombreMaquina="{{ot.maq.nombre}}"
+                                   nombreOt="{{ot.nombre}}"
+                                   fechaOT="{{ot.horainicio}}"
+                                   cant="{{ot.progreso}}"
+                                   [alerta]="ot.estado == 'Pausado'"
+                  ></app-ot-progress>
+                </div>
+              </div>
+              <!-- <app-ot-progress cant="45"></app-ot-progress>
+               <app-ot-progress [alerta]="true"></app-ot-progress>-->
+            </div>
+            <div class="col-12">
+              <div class="progresoMaquinasOT">
+                <div class="row">
+                  <div class="col-4" *ngFor="let maqi of ordenesDeTrabajoListPorMaquina">
+                    <div class="cajaProgresoMaqOT">
+                      <div style="display: flex;justify-content: space-evenly">
+                        <div>
+                          <p class="tittleProgresoMaqOT">
+                            {{maqi.maq.nombre}}
+                          </p>
+                          <p class="subtittleProgresoMaqOT">
+                            {{maqi.cantidadactual}} de un total de {{maqi.cantidadesperada}}
+                          </p>
+                        </div>
+                        <div>
+                          <circle-progress
+                            [percent]="maqi.cantidadactual / maqi.cantidadesperada * 100"
+                            [radius]="30"
+                            [outerStrokeWidth]="6"
+                            [innerStrokeWidth]="6"
+                            [outerStrokeColor]="'#147AD6'"
+                            [innerStrokeColor]="'#7388A95A'"
+                            [unitsColor]="'#000'"
+                            titleColor="#000"
+                            [unitsFontSize]="'22'"
+                            [titleFontSize]="'22'"
+                            [showSubtitle]="false"
+                            [animation]="true"
+                            [animationDuration]="300"
+                            [space]="-6"
+                          ></circle-progress>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mt-5"></div>
+          </div>
+
+        </mat-tab>
+        <mat-tab label="Calidad">
+          <div class="container-fluid">
+            <div class="row mt-4">
+              <div class="col-5">
+                <div class="row">
+                  <!-- <div class="col-12">
+                     <div [chart]="chart"></div>
+                   </div>-->
+                  <div class="col-12">
+                    <app-dona-chart
+                      totaltotalText="Rechazo Por Máquina"
+                      [tableLabel]="'Máquina'"
+                      [esLegend]="false"
+                      [series]="mermaDonaPorMaquina "
+                      [colorr]="mermaDonaPorMaquinaColor"
+                      [totaltotal]="mermasTotales"
+                    ></app-dona-chart>
+                  </div>
+                  <div class="col-12">
+                    <app-dona-chart
+                      [tableLabel]="'Tipo'"
+                      totaltotalText="Tipo de Rechazo"
+                      [esLegend]="false"
+                      [series]="mermaDonaPorTipo"
+                      [colorr]="mermaDonaPorTipoColor"
+                      [totaltotal]="mermasTotales "
+                    ></app-dona-chart>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-7">
+                <div class="row">
+                  <!-- <div class="col-12">
+                     <p
+                       style="font-family: 'Roboto';font-style: normal;font-weight: 400;font-size: 14.121px;line-height: 21px;display: flex;align-items: center;text-align: center;letter-spacing: 0.388329px;color: #3E4345;">
+                       Motivos de Scrap
+                     </p>
+                   </div>-->
+                  <div class="col-12">
+                    <div class="row">
+                      <div class="col-4" *ngFor="let tipoMer of mermaDataList.mermasPorTipo">
+                        <div class="cajaMotivo">
+                          <svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path [ngStyle]="{fill:tipoMer.color}"
+                                  d="M25 14.5C25 14.88 24.79 15.21 24.47 15.38L16.57 19.82C16.41 19.94 16.21 20 16 20C15.79 20 15.59 19.94 15.43 19.82L7.53 15.38C7.21 15.21 7 14.88 7 14.5V5.5C7 5.12 7.21 4.79 7.53 4.62L15.43 0.18C15.59 0.0600001 15.79 0 16 0C16.21 0 16.41 0.0600001 16.57 0.18L24.47 4.62C24.79 4.79 25 5.12 25 5.5V14.5Z"
+                            />
+                          </svg>
+
+                          <p>{{tipoMer?.merma?.nombre}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 m-3 pr-3">
+                    <ngx-charts-bar-vertical-stacked
+                      [scheme]="mermasBarraColores"
+                      [results]="mermasBarraTipoList"
+                      [gradient]="false"
+                      [xAxis]="false"
+                      [yAxis]="true"
+                      barPadding="20"
+                      [legend]="false"
+                      [showXAxisLabel]="false"
+                      [showYAxisLabel]="false"
+                      [xAxisLabel]="'false'"
+                      [yAxisLabel]="'false'"
+                      (select)="onSelect($event)">
+                    </ngx-charts-bar-vertical-stacked>
+                  </div>
+                  <!--<div class="col-12">
+                    <mat-form-field appearance="outline" class="fR">
+                      <mat-label>Operador</mat-label>
+                      <mat-select>
+                        <mat-option value="1">Ope</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>-->
+                  <div class="col-12">
+                    <div class="row">
+                      <div class="col-3">
+                        <div class="cajitaDato">
+                          <p>Producido </p>
+                          <p>{{totalDeLaProduccionOTS}}</p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="cajitaDato">
+                          <p>Rechazo</p>
+                          <p>{{mermasTotales}}</p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="cajitaDato2">
+                          <p>Desecho empaque</p>
+                          <p>{{totalDeResiduos}}</p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="cajitaDato2">
+                          <p>Desecho por Ajustes </p>
+                          <p>{{todosLosMermasAjustes}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-12 mt-5">
+                <div class="row">
+                  <div class="col-8">
+                    <p style="font-family: 'Quicksand';
+     font-style: normal;
+     font-weight: 500;
+     font-size: 34px;
+     line-height: 42px;
+     display: flex;
+     align-items: center;
+     letter-spacing: 0.25px;
+     color: rgba(0, 0, 0, 0.87);">
+                      Producido y rechazado por fecha
+                    </p>
+                  </div>
+
+                  <div class="col-2">
+                    <div class="cajaMotivo mt-4">
+                      <svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path [ngStyle]="{fill:'#367BF5'}"
+                              d="M25 14.5C25 14.88 24.79 15.21 24.47 15.38L16.57 19.82C16.41 19.94 16.21 20 16 20C15.79 20 15.59 19.94 15.43 19.82L7.53 15.38C7.21 15.21 7 14.88 7 14.5V5.5C7 5.12 7.21 4.79 7.53 4.62L15.43 0.18C15.59 0.0600001 15.79 0 16 0C16.21 0 16.41 0.0600001 16.57 0.18L24.47 4.62C24.79 4.79 25 5.12 25 5.5V14.5Z"
+                              fill="#919699"/>
+                      </svg>
+
+                      <p>Producido</p>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="cajaMotivo mt-4">
+                      <svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path [ngStyle]="{fill:'#D8E6FD'}"
+                              d="M25 14.5C25 14.88 24.79 15.21 24.47 15.38L16.57 19.82C16.41 19.94 16.21 20 16 20C15.79 20 15.59 19.94 15.43 19.82L7.53 15.38C7.21 15.21 7 14.88 7 14.5V5.5C7 5.12 7.21 4.79 7.53 4.62L15.43 0.18C15.59 0.0600001 15.79 0 16 0C16.21 0 16.41 0.0600001 16.57 0.18L24.47 4.62C24.79 4.79 25 5.12 25 5.5V14.5Z"
+                              fill="#919699"/>
+                      </svg>
+
+                      <p>Rechazo</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 pl-4">
+                <ngx-charts-bar-vertical-stacked
+                  [scheme]="{
+         domain: ['#367BF5','#94baff','#31461b','#6d6e72']
+       }"
+
+                  [results]="mermasBarraScrapYProducido"
+                  [gradient]="false"
+                  [xAxis]="true"
+                  [yAxis]="true"
+                  barPadding="20"
+                  [legend]="false"
+                  [showXAxisLabel]="false"
+                  [showYAxisLabel]="false"
+                  [xAxisLabel]="'false'"
+                  [yAxisLabel]="'false'"
+                  (select)="onSelect($event)">
+                </ngx-charts-bar-vertical-stacked>
+              </div><!--
+        <div class="col-12">
+          <p class="basicbasicTitle ">
+            Stock por Grupo de productos
+          </p>
+        </div>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-7">
+              <ngx-charts-bar-vertical-stacked
+                [scheme]="{
+         domain: ['#367BF5','#94baff']
+       }"
+                [results]="stockPorMaquinas"
+                [gradient]="false"
+                [xAxis]="false"
+                [yAxis]="true"
+                barPadding="20"
+                [legend]="false"
+                [showXAxisLabel]="false"
+                [showYAxisLabel]="false"
+                [xAxisLabel]="'false'"
+                [yAxisLabel]="'false'"
+                (select)="onSelect($event)">
+              </ngx-charts-bar-vertical-stacked>
+            </div>
+            <div class="col-5">
+              <app-dona-chart
+                totaltotalText="Total Tons"
+                [esLegend]="false"
+                [series]="stockDonaPorMaquina"
+                [colorr]="{domain:['#73700c','#730c65','#316b63']}"
+                [totaltotal]="stockTotal"
+              ></app-dona-chart>
+            </div>
+          </div>
+        </div>
+-->
+             <!-- <div class="col-12 mt-5">
+                <div class="nuevaTabl">
+                  <div class="losTH">
+                    <p>
+                      Fecha
+                    </p>
+                    <p>
+                      Maquina
+                    </p>
+                    &lt;!&ndash;  <p>
+                        Operador
+                      </p>&ndash;&gt;
+                    <p>
+                      Problema
+                    </p>
+                    &lt;!&ndash;  <p>
+                        Accion
+                      </p>
+                      <p>
+                        Responsable
+                      </p>&ndash;&gt;
+                    <p>
+                      Scrap
+                    </p>
+                  </div>
+                  <div *ngFor="let tm of todosLosTurnoMermas" class="losTD">
+                    <p>{{tm?.createdAt | date: 'dd/MM/yyyy'}}</p>
+                    <p>{{tm?.otData?.maq?.nombre}}</p>
+                    <p>{{tm?.idmerma_merma?.nombre}}</p>
+                    <p>{{tm?.cantidad}}</p>
+                    &lt;!&ndash;   <p>-</p>
+                       <p>Ricardo neira</p>
+                       <p>{{tm.cantidad}}</p>&ndash;&gt;
+                  </div>
+                </div>
+
+              </div>-->
+              <div class="col-12 mt-4">
+
+
+                <div class="row">
+                  <div class="col-7">
+
+                    <p style="font-family: 'Quicksand';
+     font-style: normal;
+     font-weight: 500;
+     font-size: 34px;
+     line-height: 42px;
+     display: flex;
+     align-items: center;
+     letter-spacing: 0.25px;
+     color: rgba(0, 0, 0, 0.87);">
+                      Eficiencia sensor de rechazo
+                    </p>
+                  </div>
+                  <div class="col-2">
+                    <div class="cajaMotivo mt-4">
+                      <svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          [ngStyle]="{fill:'#367BF5'}"
+                          d="M25 14.5C25 14.88 24.79 15.21 24.47 15.38L16.57 19.82C16.41 19.94 16.21 20 16 20C15.79 20 15.59 19.94 15.43 19.82L7.53 15.38C7.21 15.21 7 14.88 7 14.5V5.5C7 5.12 7.21 4.79 7.53 4.62L15.43 0.18C15.59 0.0600001 15.79 0 16 0C16.21 0 16.41 0.0600001 16.57 0.18L24.47 4.62C24.79 4.79 25 5.12 25 5.5V14.5Z"
+                          />
+                      </svg>
+
+                      <p>Real</p>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="cajaMotivo mt-4">
+                      <svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          [ngStyle]="{fill:'#D8E6FD'}"
+                          d="M25 14.5C25 14.88 24.79 15.21 24.47 15.38L16.57 19.82C16.41 19.94 16.21 20 16 20C15.79 20 15.59 19.94 15.43 19.82L7.53 15.38C7.21 15.21 7 14.88 7 14.5V5.5C7 5.12 7.21 4.79 7.53 4.62L15.43 0.18C15.59 0.0600001 15.79 0 16 0C16.21 0 16.41 0.0600001 16.57 0.18L24.47 4.62C24.79 4.79 25 5.12 25 5.5V14.5Z"
+                          fill="#919699"/>
+                      </svg>
+                      <p>Falsos positivos</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 pl-5">
+                <ngx-charts-bar-vertical-stacked
+                  [scheme]="{
+         domain: ['#367BF5','#94baff']
+       }"
+                  [results]="singleData"
+                  [gradient]="false"
+                  [xAxis]="false"
+                  [yAxis]="true"
+                  barPadding="20"
+                  [legend]="false"
+                  [showXAxisLabel]="false"
+                  [showYAxisLabel]="false"
+                  [xAxisLabel]="'false'"
+                  [yAxisLabel]="'false'"
+                  (select)="onSelect($event)">
+                </ngx-charts-bar-vertical-stacked>
+              </div>
+              <div class="col-12 mt-5"></div>
+
+            </div>
+          </div>
+
+          <!-- <mat-tab-group>
+             <mat-tab label="Eficiencia">
+               <app-analitica></app-analitica>
+             </mat-tab>
+             <mat-tab label="Stock" [disabled]="true"> Content 2</mat-tab>
+             <mat-tab label="Mantenimiento" [disabled]="true"> Content 3</mat-tab>
+             <mat-tab label="Huella de carbono" [disabled]="true"> Content 3</mat-tab>
+           </mat-tab-group>-->
+        </mat-tab>
+
+        <mat-tab label="Pendientes">
+
+          <div class="container-fluid">
+            <div class="row mt-4">
+              <div class="col-5 pt-3" style="background: #f6f6f6">
+                <p class="titlReporte3 ml-1" style="font-size: 30px">
+                  Ordenes de trabajo pendientes
+                </p>
+
+                <div class="ajustarScroll" style="--w: 100%;--h:42vh;--ys:auto;--xs:hidden">
+                  <table class="laTable">
+                    <tr>
+                      <th>
+                        Máquina
+                      </th>
+                      <th>
+                        Fecha planificada
+                      </th>
+                      <th>
+                        OT
+                      </th>
+                      <th>
+                        Tiempo atraso
+                      </th>
+                    </tr>
+                    <tr *ngFor="let maqi of resumenOtPendings">
+                      <td style="display: flex;align-items: center">
+                        <!--<div class="circle"></div>-->
+                        {{maqi.idmaquina_maquina.nombre}}
+                      </td>
+                      <td>{{maqi.horainicio | date: 'dd/MM/yyyy'}}</td>
+                      <td>{{maqi.nombre}}</td>
+                      <td>{{maqi.atraso}}</td>
+                    </tr>
+                  </table>
+                </div>
+
+              </div>
+              <div class="col-7">
+                <div class="row">
+                  <div class="col-12 mb-5">
+                    <div style="width:75%;margin:auto">
+                      <app-dona-chart
+                        totaltotalText="Total de OT"
+                        [tableLabel]="'Ordenes de trabajo'"
+                        [esLegend]="false"
+                        [series]="resumenOtPendingsDona"
+                        [colorr]="{domain:['#367BF5','#EA3D2F']}"
+                        [totaltotal]="totalDelasOTPendingsYNo"
+                      ></app-dona-chart>
+                    </div>
+                  </div>
+                  <div class="col-6" *ngFor="let maqi of resumenOtPendingsMaquinas">
+                    <div class="cajaProgresoMaqOT">
+                      <div style="display: flex">
+                        <div>
+                          <p class="tittleProgresoMaqOT">
+                            {{maqi.nombre}}
+                          </p>
+                          <p class="subtittleProgresoMaqOT">
+                            {{maqi.actual}} de un total de {{maqi.total}}
+                          </p>
+                        </div>
+                        <div>
+                          <circle-progress
+                            [percent]="maqi.actual / maqi.total * 100"
+                            [radius]="30"
+                            [outerStrokeWidth]="6"
+                            [innerStrokeWidth]="6"
+                            [outerStrokeColor]="'#147AD6'"
+                            [innerStrokeColor]="'#7388A95A'"
+                            [unitsColor]="'#000'"
+                            titleColor="#000"
+                            [unitsFontSize]="'22'"
+                            [titleFontSize]="'22'"
+                            [showSubtitle]="false"
+                            [animation]="true"
+                            [animationDuration]="300"
+                            [space]="-6"
+                          ></circle-progress>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-5 pt-3" style="background: #f6f6f6">
+                <p class="titlReporte3"  style="font-size: 30px">
+                  Mantenimientos pendientes
+                </p>
+
+                <div class="ajustarScroll" style="--w: 100%;--h:40vh;--ys:auto;--xs:hidden">
+                  <table class="laTable">
+                    <tr>
+                      <th>
+                        Máquina
+                      </th>
+                      <th>
+                        Fecha planificada
+                      </th>
+                      <th>
+                        Mantenimiento
+                      </th>
+                      <th>
+                        Tiempo atraso
+                      </th>
+                    </tr>
+                    <tr *ngFor="let maqi of resumenMantPendings">
+                      <td style="display: flex;align-items: center">
+                        <!--   <div class="circle"></div>-->
+                        {{maqi.maquina.nombre}}
+                      </td>
+                      <td>{{maqi.fechaprogramada | date: 'dd/MM/yyyy'}}</td>
+                      <td>{{maqi.nombre}}</td>
+                      <td>{{maqi.atraso}}</td>
+                    </tr>
+                  </table>
+                </div>
+
+              </div>
+              <div class="col-7">
+                <div class="row">
+                  <div class="col-12 mb-5">
+                    <div style="width:75%;margin:auto">
+                      <app-dona-chart
+                        totaltotalText="Total de Mant"
+                        [tableLabel]="'Máquina'"
+                        [esLegend]="false"
+                        [series]="resumenMantPendingsDona"
+                        [colorr]="resumenMantPendingsDonaColors"
+                        [totaltotal]="totalDelasMantPendingsYNo"
+                      ></app-dona-chart>
+                    </div>
+                  </div>
+                  <div class="col-6" *ngFor="let maqi of resumenMantPendingsMaquinas">
+                    <div class="cajaProgresoMaqOT">
+                      <div style="display: flex">
+                        <div>
+                          <p class="tittleProgresoMaqOT">
+                            {{maqi.nombre}}
+                          </p>
+                          <p class="subtittleProgresoMaqOT">
+                            {{maqi.mants}} de un total de {{totalDelasMantPendingsYNo}}
+                          </p>
+                        </div>
+                        <div>
+                          <circle-progress
+                            [percent]="maqi.mants / totalDelasMantPendingsYNo * 100"
+                            [radius]="30"
+                            [outerStrokeWidth]="6"
+                            [innerStrokeWidth]="6"
+                            [outerStrokeColor]="'#147AD6'"
+                            [innerStrokeColor]="'#7388A95A'"
+                            [unitsColor]="'#000'"
+                            titleColor="#000"
+                            [unitsFontSize]="'22'"
+                            [titleFontSize]="'22'"
+                            [showSubtitle]="false"
+                            [animation]="true"
+                            [animationDuration]="300"
+                            [space]="-6"
+                          ></circle-progress>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </mat-tab>
+
+      </mat-tab-group>
+
+    </div>
+
+  </div>
+</div>
+<!--
+<div class="container-fluid" style="padding-right: 5px" id="allData" *ngIf="true">
+
+
+  <div class="row">
+
+    &lt;!&ndash; <div id="indicadores" class="col-12 indicadores">
+       <div class="indicadoresDiv">
+         <app-progreso-chart [percent]="produccionProgreso" [selected]="selectedVista == 'progreso'"  (click)="selectVista('progreso')" label="Producción"></app-progreso-chart>
+         <app-progreso-chart [percent]="scrapProgreso" [selected]="selectedVista == 'scrap'" (click)="selectVista('scrap')" label="Scrap"></app-progreso-chart>
+ &lt;!&ndash;
+         <app-progreso-chart (click)="selectVista('eficiencia')" label="Eficiencia"></app-progreso-chart>
+
+         <app-progreso-chart label="Stock" (click)="selectVista('stock')"></app-progreso-chart>
+         <app-progreso-chart label="Mantenimiento" (click)="selectVista('mantenimiento')"></app-progreso-chart>
+         <app-progreso-chart label="Huella carbono"></app-progreso-chart>
+ &ndash;&gt;
+
+         &lt;!&ndash;     <app-indicador style="margin-left: -60px" (click)="activar('oee')" [activo]="dialActivo == 'oee'"
+                             [valu]="allReporteData?.oee?.oeeP" label="OEE"></app-indicador>
+              <app-indicador style="margin-left: -60px" (click)="activar('calidad')" [activo]="dialActivo == 'calidad'"
+                             [valu]="allReporteData?.oee?.calidadP" label="Calidad"></app-indicador>
+              <app-indicador style="margin-left: -60px" (click)="activar('rendimiento')"
+                             [activo]="dialActivo == 'rendimiento'" [valu]="allReporteData?.oee?.rendimientoP"
+                             label="Rendimiento"></app-indicador>
+              <app-indicador style="margin-left: -60px" (click)="activar('disponibilidad')"
+                             [activo]="dialActivo == 'disponibilidad'" [valu]="allReporteData?.oee?.disponibilidadP"
+                             label="Disponibilidad"></app-indicador>&ndash;&gt;
+       </div>
+     </div>&ndash;&gt;
+    &lt;!&ndash; <div class="col-12">
+       <app-barra-eventos [duracion]="allReporteData?.oee?.duracion"
+                          [totalEventos]="allReporteData?.oee?.totalEventos"
+       ></app-barra-eventos>
+     </div>&ndash;&gt;
+    <div class="dataGraph mt-5 mr-2 ml-2">
+      &lt;!&ndash;   <div id="oee" [hidden]="dialActivo != 'oee' && dialActivo != 'foto'">
+           <div class="row">
+             <div class="col-2">
+               <div class="cajaC">
+                 <app-cuadro-info-reportes
+                   titl="Unidades totales"
+                   [valor]="allReporteData?.oee?.unidadesTotales || 0"
+                 ></app-cuadro-info-reportes>
+               </div>
+
+             </div>
+             <div class="col-10">
+               <div class="cajaC">
+                 <ngx-charts-area-chart
+                   [scheme]="{domain: ['#5AA454', '#ff6d13', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']}"
+                   [legend]="false"
+                   [legendTitle]="''"
+                   [showXAxisLabel]="true"
+                   [showYAxisLabel]="false"
+                   [xAxis]="true"
+                   [yAxis]="true"
+                   [xAxisLabel]="'Tiempo'"
+                   [yAxisLabel]="'Valor'"
+                   [timeline]="true"
+                   [results]="[{ 'name': 'OEE',
+               'series': allReporteData?.oee?.oeeCharts?.series || [{
+                         name: '0',
+                         value: 8940000
+           }]}]">
+                 </ngx-charts-area-chart>
+               </div>
+             </div>
+           </div>
+           <div class="cajaCP">
+             <div class="row1">
+               <app-cuadro-info-reportes
+                 titl="Esperadas"
+                 [valor]="allReporteData?.oee?.unidadesEsperadas || 0"
+                 color="#2FA84F"
+                 [chico]="true"
+               ></app-cuadro-info-reportes>
+
+               <app-cuadro-info-reportes
+                 titl="Mermas"
+                 [valor]="allReporteData?.oee?.mermas || 0"
+                 [chico]="true"
+               ></app-cuadro-info-reportes>
+
+               <app-cuadro-info-reportes
+                 titl="Velocidad prom"
+                 [valor]="allReporteData?.oee?.velNominal || 0"
+                 color="#2FA84F"
+                 [chico]="true"
+               ></app-cuadro-info-reportes>
+
+               <app-cuadro-info-reportes
+                 titl="Velocidad real"
+                 [valor]="(allReporteData?.oee?.velReal || 0) | number:'1.0-1'"
+                 [chico]="true"
+               ></app-cuadro-info-reportes>
+
+               <app-cuadro-info-reportes
+                 titl="Uso real"
+                 [valor]="allReporteData?.oee?.uso ? allReporteData?.oee?.uso + '%':0 +'%'"
+                 color="#F3AA18"
+                 [chico]="true"
+               ></app-cuadro-info-reportes>
+
+             </div>
+           </div>
+           <div class="row mt-2">
+             <div class="col-6">
+               <div class="cajaCP">
+                 <ngx-charts-bar-vertical
+                   [scheme]="{domain: ['#069697']}"
+                   [results]="allReporteData?.oee?.mtbfCharts?.series || [{
+                         name: '0',
+                         value: 1
+           }]"
+                   [gradient]="false"
+                   [xAxis]="true"
+                   [yAxis]="true"
+                   [legend]="false"
+                   [showXAxisLabel]="false"
+                   [showYAxisLabel]="true"
+                   [xAxisLabel]="'Tiempo'"
+                   [yAxisLabel]="'MTBF'">
+                 </ngx-charts-bar-vertical>
+               </div>
+             </div>
+             <div class="col-6">
+               <div class="cajaCP">
+                 <ngx-charts-bar-vertical
+                   [scheme]="{domain: ['#EA3D2F']}"
+                   [results]="allReporteData?.oee?.mttrCharts?.series || [{
+                         name: '0',
+                         value: 1
+           }]"
+                   [gradient]="false"
+                   [xAxis]="true"
+                   [yAxis]="true"
+                   [legend]="false"
+                   [showXAxisLabel]="false"
+                   [showYAxisLabel]="true"
+                   [xAxisLabel]="'Tiempo'"
+                   [yAxisLabel]="'MTTR'">
+                 </ngx-charts-bar-vertical>
+               </div>
+             </div>
+             <div class="col-12">
+               <div class="cajaC">
+                 <ngx-charts-bar-vertical
+                   [barPadding]="30"
+                   [scheme]="{domain: ['#b076f6']}"
+                   [results]="allReporteData?.oee?.sensorSeries || [{
+                         name: '0',
+                         value: 1
+           }]"
+                   [gradient]="false"
+                   [xAxis]="true"
+                   [yAxis]="true"
+                   [legend]="false"
+                   [showXAxisLabel]="false"
+                   [showYAxisLabel]="true"
+                   [xAxisLabel]="'Tiempo'"
+                   [yAxisLabel]="'Cantidad'">
+                 </ngx-charts-bar-vertical>
+               </div>
+             </div>
+             <div class="col-12">
+               <div [chart]="chart"></div>
+             </div>
+           </div>
+
+
+         </div>
+         <div id="calidad" [style]="dialActivo != 'calidad' && dialActivo != 'foto' ? {display: 'none'}:{}">
+           <div class="container-fluid mt-4">
+             <div class="row">
+               <div class="col-6">
+                 <div>
+                   <app-dona-chart
+                     [series]="[
+                     {name:'Produccion aceptada',value:allReporteData?.calidad?.prodAceptada || 0,color:'#367BF5'},
+                     {name:'Mermas',value:allReporteData?.calidad?.mermas || 0,color:'#EA3D2F'}
+                     ]"
+                     [totaltotal]="allReporteData?.calidad?.prodTotal || 0"
+                   ></app-dona-chart>
+                 </div>
+               </div>
+               <div class="col-6">
+                 <div style="margin-top: 105px">
+                   <app-tabla-reportes
+                     [records]="[
+                   {name:' Produccion Aceptada',value:allReporteData?.calidad?.prodAceptada || 0,colorRecord:'#367BF5'},
+                   {name:'Mermas',value:allReporteData?.calidad?.mermas || 0,colorRecord:'#EA3D2F'}
+                   ]"
+                   ></app-tabla-reportes>
+                 </div>
+
+               </div>
+
+               <div class="col-12">
+                 <div style="width:900px;margin:auto">
+                   <ngx-charts-area-chart
+                     [view]="[900,300]"
+                     [scheme]="{domain: [ '#ff6d13', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']}"
+                     [legend]="false"
+                     [showXAxisLabel]="false"
+                     [showYAxisLabel]="false"
+                     [xAxis]="true"
+                     [yAxis]="true"
+                     [legendTitle]="''"
+
+                     [xAxisLabel]="'Tiempo'"
+                     [yAxisLabel]="'Valor'"
+                     [timeline]="true"
+                     [results]="[{ 'name': 'Calidad',
+               'series': allReporteData?.oee?.calidadCharts?.series || [{
+                         name: '0',
+                         value: 8940000
+           }]}]">
+                   </ngx-charts-area-chart>
+                 </div>
+
+               </div>
+             </div>
+           </div>
+         </div>
+         <div id="rendimiento" [hidden]="dialActivo != 'rendimiento'  && dialActivo != 'foto'">
+           <div class="row">
+             <div class="col-6">
+               <div class="prodTotall">
+                 <p class="titl">Produccion Total
+                   &lt;!&ndash; <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M15.2 20.8H16.8V19.2H15.2V20.8ZM16 8C14.9494 8 13.9091 8.20693 12.9385 8.60896C11.9679 9.011 11.086 9.60028 10.3431 10.3431C8.84285 11.8434 8 13.8783 8 16C8 18.1217 8.84285 20.1566 10.3431 21.6569C11.086 22.3997 11.9679 22.989 12.9385 23.391C13.9091 23.7931 14.9494 24 16 24C18.1217 24 20.1566 23.1571 21.6569 21.6569C23.1571 20.1566 24 18.1217 24 16C24 14.9494 23.7931 13.9091 23.391 12.9385C22.989 11.9679 22.3997 11.086 21.6569 10.3431C20.914 9.60028 20.0321 9.011 19.0615 8.60896C18.0909 8.20693 17.0506 8 16 8ZM16 22.4C12.472 22.4 9.6 19.528 9.6 16C9.6 12.472 12.472 9.6 16 9.6C19.528 9.6 22.4 12.472 22.4 16C22.4 19.528 19.528 22.4 16 22.4ZM16 11.2C15.1513 11.2 14.3374 11.5371 13.7373 12.1373C13.1371 12.7374 12.8 13.5513 12.8 14.4H14.4C14.4 13.9757 14.5686 13.5687 14.8686 13.2686C15.1687 12.9686 15.5757 12.8 16 12.8C16.4243 12.8 16.8313 12.9686 17.1314 13.2686C17.4314 13.5687 17.6 13.9757 17.6 14.4C17.6 16 15.2 15.8 15.2 18.4H16.8C16.8 16.6 19.2 16.4 19.2 14.4C19.2 13.5513 18.8629 12.7374 18.2627 12.1373C17.6626 11.5371 16.8487 11.2 16 11.2Z"
+                        fill="#C6CACC"/>
+                    </svg>&ndash;&gt;
+                 </p>
+                 &lt;!&ndash;   {name:' Producto B',value:800,colorRecord:'#2FA84F'},
+                    {name:' Producto C',value:500,colorRecord:'#367BF5'},
+                    {name:' Producto D',value:200,colorRecord:'#EA3D2F'}
+             &ndash;&gt;
+                 &lt;!&ndash; <p class="subTitl">Basados en la cantidad de ampollas</p>&ndash;&gt;
+                 &lt;!&ndash;    <app-dona-chart
+                       [series]="[{
+                       name:'PRESERVAT Stimula x12 BLISTER',
+                       colorRecord:'#82059c',
+                       color:'#82059c',
+                       percentVsEstimada:1,
+                       value:0
+                       }]"
+                       [colorr]="{domain:['#73700c']}"
+                       [totaltotal]="100 "
+                     ></app-dona-chart>&ndash;&gt;
+
+                 <div class="row">
+                   <div class="col-12">
+                     <app-dona-chart
+                       [series]="allReporteData?.rendimiento?.table || []"
+                       [colorr]="allReporteData?.rendimiento?.color || {domain:[]}"
+                       [totaltotal]="allReporteData?.rendimiento?.prodTotal || 0 "
+                     ></app-dona-chart>
+                     <app-tabla-reportes
+                       [records]="allReporteData?.rendimiento?.table"
+                     ></app-tabla-reportes>
+                   </div>
+                   <div class="col-12">
+                     <div style="width: 70%;border:1px solid black">
+                       <ngx-charts-area-chart
+                         [scheme]="{domain: [  '#7aa3e5', '#a8385d', '#aae3f5']}"
+                         [legend]="false"
+                         [legendTitle]="''"
+                         [showXAxisLabel]="false"
+                         [showYAxisLabel]="false"
+                         [xAxis]="true"
+                         [yAxis]="true"
+                         [xAxisLabel]="'Tiempo'"
+                         [yAxisLabel]="'Valor'"
+                         [timeline]="true"
+                         [results]="[{ 'name': 'Rendimiento',
+                'series': allReporteData?.oee?.rendimientoCharts?.series || [{
+                          name: '0',
+                          value: 8940000
+            }]}]">
+                       </ngx-charts-area-chart>
+                     </div>
+                   </div>
+                 </div>
+
+
+                 &lt;!&ndash;    <app-dona-chart
+                   [series]="allReporteData?.rendimiento?.table"
+                   [totaltotal]="allReporteData?.rendimiento?.prodTotal || 0 "
+                 ></app-dona-chart>&ndash;&gt;
+
+               </div>
+             </div>
+             <div class="col-6">
+               <div class="prodvsprod">
+                 <p>
+                   Producción Estimada vs Producción Real
+                 </p>
+                 <div class="row">
+                   &lt;!&ndash;  <app-horizon-chart
+                       [realW]="((allReporteData?.rendimiento?.prodReal * 100) / allReporteData?.rendimiento?.prodTotal) / 100 || 0  "
+                       [name]="allReporteData?.rendimiento?.table?.name || ''">
+
+                     </app-horizon-chart>
+             &ndash;&gt;
+                   <div *ngFor="let p of allReporteData?.rendimiento?.table" class="col-12 mt-4">
+                     <app-horizon-chart [realW]="p.percentVsEstimada" [name]="p.name"></app-horizon-chart>
+                   </div>
+                 </div>
+
+               </div>
+             </div>
+
+           </div>
+
+         </div>
+         <div id="disponibilidad" [hidden]="dialActivo != 'disponibilidad'  && dialActivo != 'foto'">
+
+
+           <div class="container-fluid">
+             <div class="row">
+               <div class="col-12 mt-4">
+                 <div class="row">
+                   &lt;!&ndash;   <div class="col-6">
+                        <div class="cajaCG">
+                          <p style="font-family: Roboto;
+                           font-style: normal;
+                           font-weight: 500;
+                           font-size: 20px;
+                           line-height: 28px;
+                           letter-spacing: 0.15px;
+                           ">
+                            Categorias de Paradas
+                          </p>
+
+                          <ngx-charts-bar-horizontal
+                            [barPadding]="50"
+                            [showXAxisLabel]="false"
+                            [showYAxisLabel]="true"
+                            [yAxisLabel]="''"
+                            [xAxis]="false"
+                            [scheme]="allReporteData?.disponibilidad?.catsColors?.colorScheme || {domain:[]}"
+                            [yAxis]="true"
+                            [results]="allReporteData?.disponibilidad?.cats"
+                            [showDataLabel]="true"
+                          >
+                          </ngx-charts-bar-horizontal>
+
+                        </div>
+
+                      </div>&ndash;&gt;
+                   <div class="col-12">
+                     <div class="fitContentAuto">
+                       <p style="font-family: Roboto;
+                      font-style: normal;
+                      font-weight: 500;
+                      font-size: 20px;
+                      line-height: 28px;
+                      letter-spacing: 0.15px;
+                      ">
+                         Paradas Por Categoria
+                       </p>
+
+
+                       <ngx-charts-bar-vertical
+                         [barPadding]="30"
+                         [showXAxisLabel]="true"
+                         [showYAxisLabel]="true"
+                         [yAxisLabel]="'Paradas'"
+                         [xAxis]="true"
+                         [yAxis]="true"
+                         [results]="allReporteData?.disponibilidad?.cats"
+                         [scheme]="allReporteData?.disponibilidad?.catsColors?.colorScheme || {domain:[]}"
+
+                       ></ngx-charts-bar-vertical>
+
+                     </div>
+                   </div>
+                 </div>
+               </div>
+
+               <div class="col-12">
+                 <div class="row">
+                   <div class="col-6">
+                     <div class="cajaCG">
+                       <p style="
+                        font-family: Quicksand;
+                        font-style: normal;
+                        font-weight: 500;
+                        font-size: 24px;
+                        line-height: 30px;
+                        ">
+                         Ranking Paradas </p>
+
+                       <ngx-charts-pie-chart
+                         [legend]="false"
+                         [legendTitle]="''"
+                         [results]="allReporteData?.disponibilidad?.paradas"
+                         [labels]="true"
+                         [animations]="true"
+                         [gradient]="true"
+                         [doughnut]="true"
+                         [explodeSlices]="false"
+                         [scheme]="allReporteData?.disponibilidad?.paradasColors?.colorScheme || {domain:[]}"
+
+                       ></ngx-charts-pie-chart>
+
+                     </div>
+                   </div>
+                   <div class="col-6">
+                     <div class="cajaCG">
+                       <ngx-charts-number-card
+                         [scheme]="allReporteData?.disponibilidad?.paradasColors?.colorScheme || {domain:[]}"
+
+                         [results]="allReporteData?.disponibilidad?.paradas"
+                       ></ngx-charts-number-card>
+
+                     </div>
+                   </div>
+                 </div>
+               </div>
+               <div class="col-12">
+                 <div class="fitContentAuto">
+                   <ngx-charts-area-chart
+                     [scheme]="{domain: ['#a8385d', '#aae3f5']}"
+                     [legend]="false"
+                     [legendTitle]="''"
+                     [showXAxisLabel]="false"
+                     [showYAxisLabel]="false"
+                     [xAxis]="true"
+                     [yAxis]="true"
+                     [xAxisLabel]="'Tiempo'"
+                     [yAxisLabel]="'Valor'"
+                     [timeline]="true"
+                     [results]="[{ 'name': 'Disponibilidad',
+                'series': allReporteData?.oee?.disponibilidadCharts?.series || [{
+                          name: '0',
+                          value: 8940000
+            }]}]">
+                   </ngx-charts-area-chart>
+                 </div>
+               </div>
+             </div>
+           </div>
+
+           &lt;!&ndash; <div class="col-12 mt-5 mb-2">
+              <div class="row">
+                <div class="col-6 mb-2">
+                  <ngx-charts-bar-horizontal
+                    [showXAxisLabel]="false"
+                    [showYAxisLabel]="true"
+                    [yAxisLabel]="'Categoria de paradas'"
+                    [xAxis]="false"
+                    [yAxis]="true"
+                    [results]="categoriasDeParadas"
+                    [showDataLabel]="true"
+                  >
+                  </ngx-charts-bar-horizontal>
+                </div>
+                <div class="col-6 mb-2">
+
+                  <ngx-charts-bar-vertical
+                    [showXAxisLabel]="true"
+                    [showYAxisLabel]="true"
+                    [yAxisLabel]="'Paradas'"
+                    [xAxisLabel]="'Categoria de paradas'"
+                    [xAxis]="true"
+                    [yAxis]="true"
+                    [results]="categoriasDeParadas"
+
+                  ></ngx-charts-bar-vertical>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-6 mt-4">
+              <ngx-charts-pie-chart
+                [legend]="true"
+                [results]="paradasLista"
+                [labels]="true"
+                [animations]="true"
+                [gradient]="true"
+                [doughnut]="true"
+                [explodeSlices]="false"
+
+              ></ngx-charts-pie-chart>
+            </div>
+            <div class="col-6 mt-4">
+              <ngx-charts-number-card
+
+                [results]="paradasLista"
+              ></ngx-charts-number-card>
+            </div>&ndash;&gt;
+         </div>
+   &ndash;&gt;
+      &lt;!&ndash;<div class="row" *ngIf="selectedVista == 'progreso'" style="padding:0 17px">
+        <div class="col-7">
+          <p class="titlReporte ml-4">
+            Planificación
+          </p>
+          <table class="laTable">
+            <tr>
+              <th>
+                Lineas de producción
+              </th>
+              <th>
+                Planificado / Un.
+              </th>
+              <th>
+                Producido
+              </th>
+              <th>
+                Gap / Un.
+              </th>
+            </tr>
+            <tr *ngFor="let maqi of ordenesDeTrabajoListPorMaquina">
+              <td style="display: flex;align-items: center">
+                <div class="circle"></div>
+                {{maqi.maq.nombre}}
+              </td>
+              <td>{{maqi.cantidadesperada}}</td>
+              <td>{{maqi.cantidadactual}}</td>
+              <td>{{maqi.cantidadesperada - maqi.cantidadactual}}</td>
+            </tr>
+          </table>
+
+        </div>
+        <div class="col-5">
+          <p class="titlReporte ">
+            Progreso de OT
+          </p>
+          <div *ngFor="let ot of ordenesDeTrabajoList">
+            <app-ot-progress nombreMaquina="{{ot.maq.nombre}}"
+                             nombreOt="{{ot.nombre}}"
+                             fechaOT="{{ot.horainicio}}"
+                             cant="{{ot.progreso}}"></app-ot-progress>
+          </div>
+          &lt;!&ndash; <app-ot-progress cant="45"></app-ot-progress>
+           <app-ot-progress [alerta]="true"></app-ot-progress>&ndash;&gt;
+        </div>
+        <div class="col-12">
+          <div class="progresoMaquinasOT">
+            <div class="row">
+              <div class="col-4" *ngFor="let maqi of ordenesDeTrabajoListPorMaquina">
+                <div class="cajaProgresoMaqOT">
+                  <div style="display: flex;justify-content: space-evenly">
+                    <div>
+                      <p class="tittleProgresoMaqOT">
+                        {{maqi.maq.nombre}}
+                      </p>
+                      <p class="subtittleProgresoMaqOT">
+                        {{maqi.cantidadactual}} de un total de {{maqi.cantidadesperada}}
+                      </p>
+                    </div>
+                    <div>
+                      <circle-progress
+                        [percent]="maqi.cantidadactual / maqi.cantidadesperada * 100"
+                        [radius]="30"
+                        [outerStrokeWidth]="6"
+                        [innerStrokeWidth]="6"
+                        [outerStrokeColor]="'#147AD6'"
+                        [innerStrokeColor]="'#7388A95A'"
+                        [unitsColor]="'#000'"
+                        titleColor="#000"
+                        [unitsFontSize]="'22'"
+                        [titleFontSize]="'22'"
+                        [showSubtitle]="false"
+                        [animation]="true"
+                        [animationDuration]="300"
+                        [space]="-6"
+                      ></circle-progress>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mt-5"></div>
+      </div>&ndash;&gt;
+      <div class="row" *ngIf="selectedVista == 'eficiencia'" style="padding:0 17px">
+
+        &lt;!&ndash;  <div class="col-12">
+            <div class="cente">
+              <ngx-charts-bar-vertical-stacked
+                [scheme]="{
+      domain: ['#367BF5','#94baff']
+    }"
+                [roundDomains]="true"
+                [results]="barraIndicadoresList"
+                [gradient]="false"
+                [xAxis]="true"
+                [yAxis]="false"
+                barPadding="20"
+                [legend]="false"
+                [showXAxisLabel]="false"
+                [showYAxisLabel]="false"
+                [xAxisLabel]="'false'"
+                [yAxisLabel]="'false'"
+                (select)="onSelect($event)">
+              </ngx-charts-bar-vertical-stacked>
+            </div>
+          </div>&ndash;&gt;
+
+        &lt;!&ndash;  <div class="col-12">
+            <p class="titleEfic">
+              Overall Line Effectiveness
+            </p>
+          </div>
+          <div class="col-12">
+            <div class="cajaAntesCajaEfic">
+              <div class="cajaIndicadoresEfic" [ngStyle]="{width:180+(80*19)+'px'}">
+                <div  class="indicadoresEficHeaders">
+                  <p style="color:white">fecha</p>
+                  <p>
+                    % OLE
+                  </p>
+                  <p>
+                    % OLE LOSS
+                  </p>
+                  <p>
+                    Unutilized Capacity
+                  </p>
+                  <p>
+                    Volumen Cargado
+                  </p>
+                  <p class="vlu">
+                    Manufacturing Performance
+                  </p>
+                  <p class="vlu">
+                    Shared Performance
+                  </p>
+                </div>
+                <div *ngFor="let mInd of analiticaIndicadores" class="indicadorData">
+                  <p>
+                    {{mInd?.maq?.nombre}}
+                  </p>
+                  <p>
+                    {{mInd?.indicators?.OLE?.valor}}%
+                  </p>
+                  <p>
+                    {{100 - mInd?.indicators?.OLE?.valor}}%
+                  </p>
+                  <p>
+                    {{mInd?.indicators?.UC?.valor || 0}}
+                  </p>
+                  <p>
+                    {{mInd?.indicators?.VC?.valor || 0}}
+                  </p>
+                  <p>
+                    {{mInd?.indicators?.MP?.valor || 0}}
+                  </p>
+                  <p>
+                    {{mInd?.indicators?.SP?.valor || 0}}
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </div>&ndash;&gt;
+        <div class="col-12" style="margin-top: 2px">
+          <div class="row">
+            <div class="col-4">
+              <p class="titleEfic" style="margin-top: 0">
+                Grafico MPL
+              </p>
+            </div>
+            <div class="col-8">
+              <div class="row">
+                <div class="col-4">
+                  <div class="cajaBoton">
+                    <div class="contentBtn">
+
+                      <p>
+                        <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M15.45 12.73L20 4.86V16.55V18.55H0V0.55H2V13.09L7.5 3.55L14 7.33L18.24 4.76837e-08L19.97 1L14.74 10.05L8.23 6.3L2.31 16.55H4.57L8.96 8.99L15.45 12.73Z"
+                            fill="#78909C"/>
+                        </svg>
+                        80/20
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="cajaBoton">
+                    <div class="contentBtn">
+
+                      <p>
+                        <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M15.45 12.73L20 4.86V16.55V18.55H0V0.55H2V13.09L7.5 3.55L14 7.33L18.24 4.76837e-08L19.97 1L14.74 10.05L8.23 6.3L2.31 16.55H4.57L8.96 8.99L15.45 12.73Z"
+                            fill="#78909C"/>
+                        </svg>
+                        Paradas PDL
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="cajaBoton">
+                    <div class="contentBtn">
+                      <p>
+                        <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M15.45 12.73L20 4.86V16.55V18.55H0V0.55H2V13.09L7.5 3.55L14 7.33L18.24 4.76837e-08L19.97 1L14.74 10.05L8.23 6.3L2.31 16.55H4.57L8.96 8.99L15.45 12.73Z"
+                            fill="#78909C"/>
+                        </svg>
+                        Paradas MPL
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <ngx-charts-line-chart
+            [scheme]="{
+    domain: ['#f53636','#b2ff94','#160079','#94baff']
+  }"
+            [legend]="false"
+            [showXAxisLabel]="false"
+            [showYAxisLabel]="false"
+            [xAxis]="false"
+            [yAxis]="true"
+            [xAxisLabel]="false"
+            [yAxisLabel]="false"
+            [timeline]="false"
+            [results]="multiDD"
+          >
+          </ngx-charts-line-chart>
+
+        </div>
+
+        &lt;!&ndash;
+                <div class="col-12">
+                  <p class="titleEfic">
+                    Time Loss
+                  </p>
+                </div>
+                <div class="col-12">
+                  <div class="col-12">
+                    <div class="cajaAntesCajaEfic">
+                      <div class="cajaIndicadoresEfic" [ngStyle]="{width:180+(80*19)+'px'}">
+                        <div  class="indicadoresEficHeaders">
+                          <p style="color:white">fecha</p>
+                          <p>
+                            Tiempo Total
+                          </p>
+                          <p>
+                            Perdidas Legales
+                          </p>
+                          <p>
+                            Tiempo Disponible
+                          </p>
+                          <p>
+                            UCL
+                          </p>
+                          <p>
+                            Tiempo disponible Cargado
+                          </p>
+                          <p>
+                            Tiempo Idle
+                          </p>
+                          <p>
+                            Tiempo Cargado
+                          </p>
+                          <p>
+                            PDL
+                          </p>
+                          <p>
+                            Tiempo operacional
+                          </p>
+                          <p>
+                            MPL
+                          </p>
+                          <p>
+                            VOT
+                          </p>
+                        </div>
+                        <div *ngFor="let mInd of analiticaIndicadores" class="indicadorData">
+
+                          <p>
+                            {{mInd?.maq?.nombre}}
+                          </p>
+                          <p>
+                            {{mInd?.indicators?.TT?.valor || 0}}
+                          </p>
+                          <p>
+                            {{mInd?.indicators?.PL?.valor || 0}}
+                          </p>
+
+                          <p>
+                            {{mInd?.indicators?.TD?.valor || 0}}
+                          </p>
+
+                          <p>
+                            {{mInd?.indicators?.UCL?.valor || 0}}
+                          </p>
+
+                          <p>
+                            {{mInd?.indicators?.TDC?.valor || 0}}
+                          </p>
+
+                          <p>
+                            {{mInd?.indicators?.TI?.valor || 0}}
+                          </p>
+
+                          <p>
+                            {{mInd?.indicators?.TC?.valor || 0}}
+                          </p>
+
+                          <p>
+                            {{mInd?.indicators?.PDL?.valor || 0}}
+                          </p>
+
+                          <p>
+                            {{mInd?.indicators?.TO?.valor || 0}}
+                          </p>
+
+                          <p>
+                            {{mInd?.indicators?.MPL?.valor || 0}}
+                          </p><p>
+                            {{mInd?.indicators?.VOT?.valor || 0}}
+                          </p>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <p class="titleEfic">
+                    Capacidad
+                  </p>
+                </div>
+                <div class="col-12">
+                  <div class="col-12">
+                    <div class="cajaAntesCajaEfic">
+                      <div class="cajaIndicadoresEfic" [ngStyle]="{width:180+(80*19)+'px'}">
+                        <div class="indicadoresEficHeaders">
+                          <p style="color:white">fecha</p>
+                          <p>
+                            Asset Utilization
+                          </p>
+                          <p>
+                            UCU
+                          </p>
+                          <p>
+                            CCU
+                          </p>
+
+
+                        </div>
+
+                        <div *ngFor="let mInd of analiticaIndicadores" class="indicadorData">
+                          <p>
+                            {{mInd?.maq?.nombre}}
+                          </p>
+
+                          <p>
+                            {{mInd?.indicators?.AU?.valor || 0}}
+                          </p>
+
+                          <p>
+                            {{mInd?.indicators?.UCU?.valor || 0}}
+                          </p>
+
+                          <p>
+                            {{mInd?.indicators?.CCU?.valor || 0}}
+                          </p>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>&ndash;&gt;
+        <div class="col-12 mt-5"></div>
+      </div>
+      &lt;!&ndash; <div class="row" *ngIf="selectedVista == 'scrap'" style="padding:0 17px">
+         <div class="col-5">
+           <div class="row">
+             <div class="col-12">
+               <app-dona-chart
+                 totaltotalText="Scrap Por Máquina"
+                 [tableLabel]="'Máquina'"
+                 [esLegend]="false"
+                 [series]="mermaDonaPorMaquina"
+                 [colorr]="{domain:['#73700c','#730c65','#316b63']}"
+                 [totaltotal]="mermasTotales"
+               ></app-dona-chart>
+             </div>
+             <div class="col-12">
+               <app-dona-chart
+                 [tableLabel]="'Tipo'"
+                 totaltotalText="Tipo de Scrap"
+                 [esLegend]="false"
+                 [series]="mermaDonaPorTipo"
+                 [colorr]="{domain:['#73700c','#730c65','#316b63']}"
+                 [totaltotal]="mermasTotales "
+               ></app-dona-chart>
+             </div>
+           </div>
+
+         </div>
+         <div class="col-7">
+           <div class="row">
+             <div class="col-12">
+               <p
+                 style="font-family: 'Roboto';font-style: normal;font-weight: 400;font-size: 14.121px;line-height: 21px;display: flex;align-items: center;text-align: center;letter-spacing: 0.388329px;color: #3E4345;">
+                 Motivos de Scrap
+               </p>
+             </div>
+             <div class="col-12">
+               <div class="row">
+                 <div class="col-4" *ngFor="let tipoMer of mermaDataList.mermasPorTipo">
+                   <div class="cajaMotivo">
+                     <svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                       <path [ngStyle]="{fill:tipoMer.color}"
+                             d="M25 14.5C25 14.88 24.79 15.21 24.47 15.38L16.57 19.82C16.41 19.94 16.21 20 16 20C15.79 20 15.59 19.94 15.43 19.82L7.53 15.38C7.21 15.21 7 14.88 7 14.5V5.5C7 5.12 7.21 4.79 7.53 4.62L15.43 0.18C15.59 0.0600001 15.79 0 16 0C16.21 0 16.41 0.0600001 16.57 0.18L24.47 4.62C24.79 4.79 25 5.12 25 5.5V14.5Z"
+                       />
+                     </svg>
+
+                     <p>{{tipoMer?.merma?.nombre}}</p>
+                   </div>
+                 </div>
+               </div>
+             </div>
+             <div class="col-12">
+               <ngx-charts-bar-vertical-stacked
+                 [scheme]="mermasBarraColores"
+                 [results]="mermasBarraTipoList"
+                 [gradient]="false"
+                 [xAxis]="false"
+                 [yAxis]="true"
+                 barPadding="20"
+                 [legend]="false"
+                 [showXAxisLabel]="false"
+                 [showYAxisLabel]="false"
+                 [xAxisLabel]="'false'"
+                 [yAxisLabel]="'false'"
+                 (select)="onSelect($event)">
+               </ngx-charts-bar-vertical-stacked>
+             </div>
+             <div class="col-12">
+               <mat-form-field appearance="outline" class="fR">
+                 <mat-label>Operador</mat-label>
+                 <mat-select>
+                   <mat-option value="1">Ope</mat-option>
+                 </mat-select>
+               </mat-form-field>
+             </div>
+             <div class="col-12">
+               <div class="row">
+                 <div class="col-3">
+                   <div class="cajitaDato">
+                     <p>Producido &lt;!&ndash;(kg)&ndash;&gt;</p>
+                     <p>{{totalDeLaProduccionOTS}}</p>
+                   </div>
+                 </div>
+                 <div class="col-3">
+                   <div class="cajitaDato">
+                     <p>Scrap &lt;!&ndash;(kg)&ndash;&gt;</p>
+                     <p>{{mermasTotales}}</p>
+                   </div>
+                 </div>
+                 <div class="col-3">
+                   <div class="cajitaDato">
+                     <p>Packaging waste</p>
+                     <p>1500</p>
+                   </div>
+                 </div>
+                 <div class="col-3">
+                   <div class="cajitaDato">
+                     <p>Ajustes (kg)</p>
+                     <p>1500</p>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+           </div>
+         </div>
+
+         <div class="col-12 mt-5">
+           <div class="row">
+             <div class="col-8">
+               <p style="font-family: 'Quicksand';
+ font-style: normal;
+ font-weight: 500;
+ font-size: 34px;
+ line-height: 42px;
+ display: flex;
+ align-items: center;
+ letter-spacing: 0.25px;
+ color: rgba(0, 0, 0, 0.87);">
+                 Producido y Scrap por fecha
+               </p>
+             </div>
+
+             <div class="col-2" *ngFor="let tipoMer of mermaDataList.mermasPorTipo">
+               <div class="cajaMotivo mt-4">
+                 <svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path [ngStyle]="{fill:tipoMer.color}"
+                         d="M25 14.5C25 14.88 24.79 15.21 24.47 15.38L16.57 19.82C16.41 19.94 16.21 20 16 20C15.79 20 15.59 19.94 15.43 19.82L7.53 15.38C7.21 15.21 7 14.88 7 14.5V5.5C7 5.12 7.21 4.79 7.53 4.62L15.43 0.18C15.59 0.0600001 15.79 0 16 0C16.21 0 16.41 0.0600001 16.57 0.18L24.47 4.62C24.79 4.79 25 5.12 25 5.5V14.5Z"
+                         fill="#919699"/>
+                 </svg>
+
+                 <p>{{tipoMer?.merma?.nombre}}</p>
+               </div>
+             </div>
+           </div>
+         </div>
+         <div class="col-12" style="height:192px">
+           <ngx-charts-bar-vertical-stacked
+             [scheme]="{
+     domain: ['#367BF5','#94baff','#31461b','#6d6e72']
+   }"
+             [results]="mermasBarraScrapYProducido"
+             [gradient]="false"
+             [xAxis]="false"
+             [yAxis]="true"
+             barPadding="20"
+             [legend]="false"
+             [showXAxisLabel]="false"
+             [showYAxisLabel]="false"
+             [xAxisLabel]="'false'"
+             [yAxisLabel]="'false'"
+             (select)="onSelect($event)">
+           </ngx-charts-bar-vertical-stacked>
+         </div>
+         <div class="col-12">
+           <p class="basicbasicTitle ml-3">
+             Stock por Grupo de productos
+           </p>
+         </div>
+         <div class="col-12">
+           <div class="row">
+             <div class="col-7" style="height:192px">
+               <ngx-charts-bar-vertical-stacked
+                 [scheme]="{
+     domain: ['#367BF5','#94baff']
+   }"
+                 [results]="stockPorMaquinas"
+                 [gradient]="false"
+                 [xAxis]="false"
+                 [yAxis]="true"
+                 barPadding="20"
+                 [legend]="false"
+                 [showXAxisLabel]="false"
+                 [showYAxisLabel]="false"
+                 [xAxisLabel]="'false'"
+                 [yAxisLabel]="'false'"
+                 (select)="onSelect($event)">
+               </ngx-charts-bar-vertical-stacked>
+             </div>
+             <div class="col-5">
+               <app-dona-chart
+                 totaltotalText="Total Tons"
+                 [esLegend]="false"
+                 [series]="stockDonaPorMaquina"
+                 [colorr]="{domain:['#73700c','#730c65','#316b63']}"
+                 [totaltotal]="stockTotal"
+               ></app-dona-chart>
+             </div>
+           </div>
+         </div>
+
+         <div class="col-12 mt-5">
+
+           <div class="nuevaTabl">
+             <div class="losTH">
+               <p>
+                 Fecha
+               </p>
+               <p>
+                 Maquina
+               </p>
+               <p>
+                 Operador
+               </p>
+               <p>
+                 Problema
+               </p>
+               <p>
+                 Accion
+               </p>
+               <p>
+                 Responsable
+               </p>
+               <p>
+                 Scrap
+               </p>
+             </div>
+             <div *ngFor="let tm of mermasOrdenesDeTrabajoMermas" class="losTD">
+               <p>{{tm?.createdAt}}</p>
+               <p>{{tm?.idordendetrabajo_ordendetrabajo?.idmaquina}}</p>
+               <p>Chery</p>
+               <p>exceso de geles</p>
+               <p>-</p>
+               <p>Ricardo neira</p>
+               <p>{{tm.cantidad}}</p>
+             </div>
+           </div>
+
+         </div>
+         <div class="col-12">
+
+
+           <div class="row">
+             <div class="col-8">
+
+               <p style="font-family: 'Quicksand';
+ font-style: normal;
+ font-weight: 500;
+ font-size: 34px;
+ line-height: 42px;
+ display: flex;
+ align-items: center;
+ letter-spacing: 0.25px;
+ color: rgba(0, 0, 0, 0.87);">
+                 Eficiencia selección scrap
+               </p>
+             </div>
+             <div class="col-2">
+               <div class="cajaMotivo mt-4">
+                 <svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path
+                     d="M25 14.5C25 14.88 24.79 15.21 24.47 15.38L16.57 19.82C16.41 19.94 16.21 20 16 20C15.79 20 15.59 19.94 15.43 19.82L7.53 15.38C7.21 15.21 7 14.88 7 14.5V5.5C7 5.12 7.21 4.79 7.53 4.62L15.43 0.18C15.59 0.0600001 15.79 0 16 0C16.21 0 16.41 0.0600001 16.57 0.18L24.47 4.62C24.79 4.79 25 5.12 25 5.5V14.5Z"
+                     fill="#919699"/>
+                 </svg>
+
+                 <p>Arrugas</p>
+               </div>
+             </div>
+             <div class="col-2">
+               <div class="cajaMotivo mt-4">
+                 <svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path
+                     d="M25 14.5C25 14.88 24.79 15.21 24.47 15.38L16.57 19.82C16.41 19.94 16.21 20 16 20C15.79 20 15.59 19.94 15.43 19.82L7.53 15.38C7.21 15.21 7 14.88 7 14.5V5.5C7 5.12 7.21 4.79 7.53 4.62L15.43 0.18C15.59 0.0600001 15.79 0 16 0C16.21 0 16.41 0.0600001 16.57 0.18L24.47 4.62C24.79 4.79 25 5.12 25 5.5V14.5Z"
+                     fill="#919699"/>
+                 </svg>
+                 <p>Arrugas</p>
+               </div>
+             </div>
+           </div>
+         </div>
+
+
+         <div class="col-12" style="height:192px">
+           <ngx-charts-bar-vertical-stacked
+             [scheme]="{
+     domain: ['#367BF5','#94baff']
+   }"
+             [results]="singleData"
+             [gradient]="false"
+             [xAxis]="false"
+             [yAxis]="true"
+             barPadding="20"
+             [legend]="false"
+             [showXAxisLabel]="false"
+             [showYAxisLabel]="false"
+             [xAxisLabel]="'false'"
+             [yAxisLabel]="'false'"
+             (select)="onSelect($event)">
+           </ngx-charts-bar-vertical-stacked>
+         </div>
+         <div class="col-12 mt-5"></div>
+
+
+       </div>&ndash;&gt;
+      &lt;!&ndash;  <div class="row" *ngIf="selectedVista == 'stock'">
+      &lt;!&ndash;    <div class="col-12">
+            <p class="basicbasicTitle ml-3">
+              Stock por Grupo de productos
+            </p>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-7" style="height:192px">
+                <ngx-charts-bar-vertical-stacked
+                  [scheme]="{
+      domain: ['#367BF5','#94baff']
+    }"
+                  [results]="stockPorMaquinas"
+                  [gradient]="false"
+                  [xAxis]="false"
+                  [yAxis]="true"
+                  barPadding="20"
+                  [legend]="false"
+                  [showXAxisLabel]="false"
+                  [showYAxisLabel]="false"
+                  [xAxisLabel]="'false'"
+                  [yAxisLabel]="'false'"
+                  (select)="onSelect($event)">
+                </ngx-charts-bar-vertical-stacked>
+              </div>
+              <div class="col-5">
+                <app-dona-chart
+                  totaltotalText="Total Tons"
+                  [esLegend]="false"
+                  [series]="stockDonaPorMaquina"
+                  [colorr]="{domain:['#73700c','#730c65','#316b63']}"
+                  [totaltotal]="stockTotal"
+                ></app-dona-chart>
+              </div>
+            </div>
+          </div>&ndash;&gt;
+          <div class="col-12 mt-5">
+
+            <div class="nuevaTabl">
+              <div class="losTH">
+                <p>
+                  Fecha
+                </p>
+                <p>
+                  Maquina
+                </p>
+                <p>
+                  Operador
+                </p>
+                <p>
+                  Problema
+                </p>
+                <p>
+                  Accion
+                </p>
+                <p>
+                  Responsable
+                </p>
+                <p>
+                  Scrap
+                </p>
+              </div>
+              <div class="losTD">
+                <p>02-03-2022</p>
+                <p>Kiefel</p>
+                <p>Chery</p>
+                <p>exceso de geles</p>
+                <p>-</p>
+                <p>Ricardo neira</p>
+                <p>scrap</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-12">
+            <div class="row">
+              <div class="col-8">
+                <p class="basicbasicTitle">
+                  Producido y Scrap por fecha
+                </p>
+              </div>
+              <div class="col-2">
+                <div class="cajaMotivo mt-4">
+                  <svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M25 14.5C25 14.88 24.79 15.21 24.47 15.38L16.57 19.82C16.41 19.94 16.21 20 16 20C15.79 20 15.59 19.94 15.43 19.82L7.53 15.38C7.21 15.21 7 14.88 7 14.5V5.5C7 5.12 7.21 4.79 7.53 4.62L15.43 0.18C15.59 0.0600001 15.79 0 16 0C16.21 0 16.41 0.0600001 16.57 0.18L24.47 4.62C24.79 4.79 25 5.12 25 5.5V14.5Z"
+                      fill="#919699"/>
+                  </svg>
+
+                  <p>Arrugas</p>
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="cajaMotivo mt-4">
+                  <svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M25 14.5C25 14.88 24.79 15.21 24.47 15.38L16.57 19.82C16.41 19.94 16.21 20 16 20C15.79 20 15.59 19.94 15.43 19.82L7.53 15.38C7.21 15.21 7 14.88 7 14.5V5.5C7 5.12 7.21 4.79 7.53 4.62L15.43 0.18C15.59 0.0600001 15.79 0 16 0C16.21 0 16.41 0.0600001 16.57 0.18L24.47 4.62C24.79 4.79 25 5.12 25 5.5V14.5Z"
+                      fill="#919699"/>
+                  </svg>
+                  <p>Arrugas</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12" style="height:192px">
+            <ngx-charts-bar-vertical-stacked
+              [scheme]="{
+      domain: ['#367BF5','#94baff']
+    }"
+              [results]="singleData"
+              [gradient]="false"
+              [xAxis]="false"
+              [yAxis]="true"
+              barPadding="20"
+              [legend]="false"
+              [showXAxisLabel]="false"
+              [showYAxisLabel]="false"
+              [xAxisLabel]="'false'"
+              [yAxisLabel]="'false'"
+              (select)="onSelect($event)">
+            </ngx-charts-bar-vertical-stacked>
+          </div>
+          <div class="col-12 mt-5">
+
+            <div class="nuevaTabl">
+              <div class="losTH">
+                <p>
+                  Fecha
+                </p>
+                <p>
+                  Maquina
+                </p>
+                <p>
+                  Operador
+                </p>
+                <p>
+                  Problema
+                </p>
+                <p>
+                  Accion
+                </p>
+                <p>
+                  Responsable
+                </p>
+                <p>
+                  Scrap
+                </p>
+              </div>
+              <div class="losTD">
+                <p>02-03-2022</p>
+                <p>Kiefel</p>
+                <p>Chery</p>
+                <p>exceso de geles</p>
+                <p>-</p>
+                <p>Ricardo neira</p>
+                <p>scrap</p>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 mt-5"></div>
+
+        </div>&ndash;&gt;
+      &lt;!&ndash;  <div class="row" *ngIf="selectedVista == 'mantenimiento'">
+
+          <div class="col-12">
+            <ngx-charts-line-chart
+              [scheme]="{
+      domain: ['#f53636','#b2ff94','#160079','#94baff']
+    }"
+              [legend]="false"
+              [showXAxisLabel]="false"
+              [showYAxisLabel]="false"
+              [xAxis]="false"
+              [yAxis]="true"
+              [xAxisLabel]="false"
+              [yAxisLabel]="false"
+              [timeline]="false"
+              [results]="multiDD"
+            >
+            </ngx-charts-line-chart>
+
+          </div>
+
+          <div class="col-12">
+            <div class="col-12">
+              <div class="cajaAntesCajaEfic">
+                <div class="cajaIndicadoresEfic" [ngStyle]="{width:180+(80*19)+'px'}">
+                  <div class="indicadoresEficHeaders">
+                    <p style="color:white">fecha</p>
+                    <p>
+                      Tiempo de mantenimiento                  </p>
+                    <p>
+                      Falla equipo
+                    </p>
+                    <p>
+                      % Tiempo mantenimiento
+                    </p>
+                    <p>
+                      Tiempo total
+                    </p>
+
+                  </div>
+                  <div class="indicadorData" >
+
+                    <p>
+                      Ene
+                    </p>
+                    <p>
+                      1000
+                    </p>
+
+                    <p>
+                      1000
+                    </p>
+
+                    <p>
+                      1000
+                    </p>
+
+                    <p>
+                      1000
+                    </p>
+
+                    <p>
+                      1000
+                    </p>
+
+
+                  </div>
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="col-12">
+              <div class="cajaAntesCajaEfic">
+                <div class="cajaIndicadoresEfic" [ngStyle]="{width:180+(80*19)+'px'}">
+                  <div class="indicadoresEficHeaders">
+                    &lt;!&ndash;<p style="color:white">fecha</p>&ndash;&gt;
+                    <p>
+                      % Tiempo mant OEE
+                    </p>
+                    <p>
+                      % Tiempo de falla OEE
+                    </p>
+                    <p>
+                      % OEE Loss
+                    </p>
+                  </div>
+                  <div class="indicadorData">
+
+                    <p>
+                      1000
+                    </p>
+
+                    <p>
+                      1000
+                    </p>
+
+                    <p>
+                      1000
+                    </p>
+
+
+                  </div>
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <ngx-charts-line-chart
+              [scheme]="{
+      domain: ['#f53636','#b2ff94','#160079','#94baff']
+    }"
+              [legend]="false"
+              [showXAxisLabel]="false"
+              [showYAxisLabel]="false"
+              [xAxis]="false"
+              [yAxis]="true"
+              [xAxisLabel]="false"
+              [yAxisLabel]="false"
+              [timeline]="false"
+              [results]="multiDD"
+            >
+            </ngx-charts-line-chart>
+
+          </div>
+
+          <div class="col-6">
+            <div class="cajaCP">
+              <ngx-charts-bar-vertical
+                [scheme]="{domain: ['#069697']}"
+                [results]="allReporteData?.oee?.mtbfCharts?.series || [{
+                           name: '0',
+                           value: 1
+             }]"
+                [gradient]="false"
+                [xAxis]="true"
+                [yAxis]="true"
+                [legend]="false"
+                [showXAxisLabel]="false"
+                [showYAxisLabel]="true"
+                [xAxisLabel]="'Tiempo'"
+                [yAxisLabel]="'MTBF'">
+              </ngx-charts-bar-vertical>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="cajaCP">
+              <ngx-charts-bar-vertical
+                [scheme]="{domain: ['#EA3D2F']}"
+                [results]="allReporteData?.oee?.mttrCharts?.series || [{
+                           name: '0',
+                           value: 1
+             }]"
+                [gradient]="false"
+                [xAxis]="true"
+                [yAxis]="true"
+                [legend]="false"
+                [showXAxisLabel]="false"
+                [showYAxisLabel]="true"
+                [xAxisLabel]="'Tiempo'"
+                [yAxisLabel]="'MTTR'">
+              </ngx-charts-bar-vertical>
+            </div>
+          </div>
+          <div class="col-12 mt-5"></div>
+
+
+        </div>&ndash;&gt;
+
+    </div>
+  </div>
+</div>
+
+-->
+
+
+
+

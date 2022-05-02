@@ -1,0 +1,49 @@
+<app-btn-cerrar-modal></app-btn-cerrar-modal>
+<div  class="container-fluid">
+  <div class="cc">
+    <div class="row">
+      <div class="col-12">
+        <button class="fR" (click)="openCreateInterruption()" mat-raised-button color="primary">Nueva parada</button>
+      </div>
+      <div class="col-12">
+        <div>
+          <h2 class="textCenter"><b>Trabajos encontrados</b></h2>
+        </div>
+      </div>
+      <div class="col-12">
+        <p><b>Total encontrado:</b>{{total}}</p>
+      </div>
+      <div  class="col-12 ac" [ngClass]="d.idprodturn_productoturno?.idordendetrabajo_ordendetrabajo?.estado " *ngFor="let d of data.listaProds">
+        <div class="row">
+          <div class="col-6">
+            <p><b>Orden: </b>{{d.idprodturn_productoturno?.idordendetrabajo_ordendetrabajo?.nombre || 'sin orden'}}</p>
+
+          </div>
+          <div class="col-6">
+            <p style="text-transform: uppercase"><b>Estado: </b>{{d.idprodturn_productoturno?.idordendetrabajo_ordendetrabajo?.estado|| 'Sin orden'}}</p>
+          </div>
+        </div>
+        <div class="row" *ngIf="d.idprodturn_productoturno?.idordendetrabajo_ordendetrabajo?.nombre">
+          <div class="col-6">
+            <ul>
+              <li><p><b>Producto:</b> {{d.idprodturn_productoturno?.idsubproducto_subproducto?.nombre}}</p></li>
+              <li><p><b>Formato:</b> {{d.idprodturn_productoturno?.formato}}</p></li>
+            </ul>
+          </div>
+          <div class="col-6">
+            <ul>
+              <li><p><b>SKU:</b> {{d.idprodturn_productoturno?.idsubproducto_subproducto?.sku}}</p></li>
+              <li><p><b>Unidad:</b> {{d.idprodturn_productoturno?.formatounidad}}</p></li>
+              <li><p><b>Condicion:</b> {{d.idprodturn_productoturno?.condicion}}</p></li>
+            </ul>
+          </div>
+        </div>
+
+        <p><b>Cantidad: </b>{{d.cantidad}}</p>
+        <p><b>Hora correspondiente: </b>{{d.hora}}</p>
+        <!--<p>{{d | json}}</p>-->
+
+      </div>
+    </div>
+  </div>
+</div>

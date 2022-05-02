@@ -1,0 +1,61 @@
+<app-print-boton></app-print-boton>
+<div class="tod">
+  <div class="cajaRoot">
+
+    <table border="3">
+      <tr>
+        <td>Orden de trabajo</td>
+        <td>{{data.ot?.nombre}}</td>
+      </tr>
+      <tr>
+        <td>Planta</td>
+        <td>{{data.ot?.idplanta_plantum?.nombre}}</td>
+      </tr>
+      <tr>
+        <td>Proceso</td>
+        <td>{{data.ot?.idproceso_proceso?.nombre}}</td>
+      </tr>
+      <tr>
+        <td>Maquina</td>
+        <td>{{data.ot?.maq?.nombre}}</td>
+      </tr>
+      <tr>
+        <td>Producto</td>
+        <td>{{data.ot?.idsubproducto_subproducto?.nombre}}</td>
+      </tr>
+      <tr>
+        <td>SKU</td>
+        <td>{{data.ot?.idsubproducto_subproducto?.sku}}</td>
+      </tr>
+      <tr>
+        <td>Cliente</td>
+        <td>...</td>
+      </tr>
+      <tr>
+        <td>Cantidad esperada</td>
+        <td>{{data.ot?.cantidadesperada}}</td>
+      </tr>
+    </table>
+
+    <div class="fotoQR ">
+      <div class="logoIgr ">
+       <!-- <img src="assets/iGr-6.png" alt="">-->
+        <img src="{{fotoEmpresa}}" alt="">
+      </div>
+      <qrcode qrdata="{{dataQR | json}}" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+
+    </div>
+  </div>
+
+</div>
+<!--<div class="row">
+  <div class="col-5 bor">
+    <img src="" alt="">
+    <img src="" alt="">
+  </div>
+  <div class="col-7 bor">
+    <h2>Nombre: </h2>
+    <h2>Cargo: </h2>
+    <img src="" alt="">
+  </div>
+</div-->

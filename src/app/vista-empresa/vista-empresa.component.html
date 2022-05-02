@@ -1,0 +1,440 @@
+<div (click)="isActiveTurn = false" *ngIf="isActiveTurn" class="botonCerrar">
+  <mat-icon>close</mat-icon>
+</div>
+
+<!--
+<ngx-charts-bar-vertical
+  [view]="[1000,400]"
+  [results]="saleData"
+  [xAxisLabel]="'Products'"
+  [legendTitle]="'Product Sale Chart'"
+  [yAxisLabel]="'Sale'"
+  [legend]="true"
+  [showXAxisLabel]="true"
+  [showYAxisLabel]="true"
+  [xAxis]="true"
+  [yAxis]="true"
+  [gradient]="true">
+</ngx-charts-bar-vertical>
+<ngx-charts-pie-grid
+  [results]="saleData" >
+</ngx-charts-pie-grid>
+<ngx-charts-advanced-pie-chart
+  [results]="saleData"
+  [gradient]="true" >
+</ngx-charts-advanced-pie-chart>
+<ngx-charts-pie-chart
+  [results]="saleData"
+  [legend]="true"
+  [legendTitle]="'Product Sale Report'"
+  [view]="[1000,300]"
+  [labels]="true" >
+</ngx-charts-pie-chart>
+-->
+<app-inmersive-turn *ngIf="isActiveTurn"></app-inmersive-turn>
+<div class="procesosSelect" style="z-index:100001">
+  <mat-form-field appearance="outline">
+    <mat-label>Proceso</mat-label>
+    <mat-select [(ngModel)]="procesoSelected">
+      <mat-option *ngFor="let propro of allProcesos" [value]="propro.id">{{propro.nombre}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<mat-tab-group class="mt-2" (selectedTabChange)="yourFn($event,allPlants)">
+  <mat-tab *ngFor="let planta of allPlants" label="{{planta.nombre}}">
+    <mat-spinner *ngIf="loading">
+    </mat-spinner>
+
+
+    <div class="container-fluid">
+      <div [hidden]="loading || pr.proceso.id != procesoSelected" class="row" *ngFor="let pr of oeeDataPlant.procesos">
+
+        <div class="col-12 col-sm-6 col-xl-3 p0">
+          <div class="cuadroDataP mat-elevation-z4">
+            <div class="row">
+              <div class="col-12"
+              >
+                <div
+                  style="display: flex;justify-content: space-between;">
+                  <p class="prTitle ">Estaciones</p>
+                  <!--<p class="prTitle ">{{pr.proceso.nombre}}</p>-->
+                  <div class="nmaquinas">
+                    <p class="num">{{pr.maquinas.length}}</p>
+                    <p class="maqlbl">Máquinas</p>
+                  </div>
+                </div>
+                <div
+                  style="margin:auto;width: 90%;transform: matrix(1, 0, 0, 1, 0, 0);border: 3.37993px solid #FFFFFF;background: white"
+                >
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="row">
+
+                  <div class="col-6 p0">
+                    <div class="infoProcesoTexts">
+                      <!--     <div style="display: flex;justify-content: space-between">
+                             <h4 class="infProcesoText">Cantidad de maquinas </h4>
+                             <h4 class="infProcesoText">{{pr.maquinas.length}}</h4>
+                           </div>-->
+                      <div style="display: flex;justify-content: space-between">
+                        <h4 class="infProcesoText">Operativas </h4>
+                        <h4 class="infProcesoText">{{pr.operativas}}</h4>
+
+                      </div>
+                      <div style="display: flex;justify-content: space-between">
+                        <h4 class="infProcesoText">Detenidas </h4>
+                        <h4 class="infProcesoText">{{pr.detenidas}}</h4>
+
+                      </div>
+                      <div style="display: flex;justify-content: space-between">
+                        <h4 class="infProcesoText">Mantencion </h4>
+                        <h4 class="infProcesoText">{{pr.mantenciones}}</h4>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 p0 indicadorEmpresa" style="position: relative">
+                    <app-indicador-vista-empresa chico="0.37"
+                                                 style="position:absolute;top:-104px;margin-left: -45px;width: 84px;height: 84px "
+                                                 [valu]="(pr.oee || 0)" label="OEE"></app-indicador-vista-empresa>
+                  </div>
+                </div>
+
+              </div>
+
+
+            </div>
+          </div>
+        </div><!--
+      <div [hidden]="m.oee?.rendimiento == null || m.oee?.calidad == null ||
+           m.oee?.disponibilidad == null" (click)="irAlTurnoMaquina(m)" class="col-12 col-sm-6 col-xl-3"
+           *ngFor="let m of pr.maquinas">-->
+        <div (click)="irAlTurnoMaquina(m.maquina)" class="col-12 col-sm-6 col-xl-3 p0"
+             *ngFor="let m of pr.maquinas"
+             [hidden]="m.maquina.idproceso != procesoSelected"
+        >
+          <div class="cuadroDataM unamaquina" [ngClass]="
+        m.estado == 'operativa' ? 'mDetVerde':
+        m.estado == 'mantenimiento'  ? 'mDetMante':
+        m.estado == 'listaPara'  ? 'mDetPlomo':
+        m.estado == 'detenida' ? 'mDetRojo':
+         m.estado == 'bajavelocidad' ? 'mDetAmarillo':
+         ''">
+            <div class="row">
+
+              <div class="col-12">
+
+                <div class="mDet ">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="maqtitl">
+                        <!--<div class="chek">
+                          <svg *ngIf="m.estado == 'detenida'" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                               xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                  d="M12 0C5.4 0 0 5.4 0 12C0 18.6 5.4 24 12 24C18.6 24 24 18.6 24 12C24 5.4 18.6 0 12 0V0ZM9.6 18L3.6 12L5.28 10.32L9.6 14.64L18.72 5.52L20.4 7.2L9.6 18V18Z"
+                                  fill="#EA3D2F"/>
+                          </svg>
+
+                          <svg *ngIf="m.estado == 'operativa' " width="24" height="24"
+                               viewBox="0 0 24 24"
+                               fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                  d="M12 0C5.4 0 0 5.4 0 12C0 18.6 5.4 24 12 24C18.6 24 24 18.6 24 12C24 5.4 18.6 0 12 0V0ZM9.6 18L3.6 12L5.28 10.32L9.6 14.64L18.72 5.52L20.4 7.2L9.6 18V18Z"
+                                  fill="#2FA84F"/>
+                          </svg>
+                          <svg *ngIf=" m.estado == 'mantenimiento'" width="24" height="24"
+                               viewBox="0 0 23 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                  d="M11.6234 0.638428C5.72952 0.638428 0.907227 5.06609 0.907227 10.4777C0.907227 15.8892 5.72952 20.3169 11.6234 20.3169C17.5174 20.3169 22.3397 15.8892 22.3397 10.4777C22.3397 5.06609 17.5174 0.638428 11.6234 0.638428V0.638428ZM9.4802 15.3973L4.12209 10.4777L5.62236 9.10017L9.4802 12.6423L17.6245 5.16448L19.1248 6.54197L9.4802 15.3973V15.3973Z"
+                                  fill="#5E6366"/>
+                          </svg>
+
+                        </div>-->
+
+                        <div style="width: 100%;">
+                          <!-- <h2 [ngStyle]="m.maquina.nombre.length >7 ? {'font-size':'0.9rem'}:{}"
+                               class="ml-2 detHeaderMaq">
+                             {{m.maquina.nombre}}
+                           </h2>-->
+                          <div style="display: flex">
+                            <p class="maqNameItem">
+                              {{m.maquina.nombre}}
+                            </p>
+
+                            <!-- <h2 *ngIf="m.estado == 'detenida'" class="ml-2 detHeaderMaqDet">
+                               Alerta parada
+                             </h2>-->
+
+                          </div>
+
+
+                          <!-- <div class="operadores">
+                             <h4>Encargado:    </h4>
+                             <p ></p>
+                           </div>-->
+                          <!-- <h2 *ngIf="m.estado == 'mantenimiento'" class="ml-2 detHeaderMaqMant">
+                             MANTENCIÓN
+                           </h2>-->
+                        </div>
+                        <div>
+                          <div class="imgMaqModo">
+                            <img *ngIf="m.maquina.conSensor" src="assets/modoAuto.png" alt="">
+                            <img *ngIf="!m.maquina.conSensor" src="assets/modoManual.png" alt="">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style="width:100%">
+                      <p class="maqNameItemP">
+                      <span style="text-transform: capitalize"
+                            *ngFor="let op of m.lastTurn?.lastTurn[0].detturoperadors">
+                            {{op.idoperador_operador.nombre}} {{op.idoperador_operador.apellido}}
+                        - {{m.lastTurn.lastTurn[0].detturoperadors > 1 ? ',' : ''}}
+                          </span>
+                        <span *ngIf="m?.lastTurn?.lastTurn[0].detturoperadors == 0">
+                            No especificado
+                          </span>
+                      </p>
+                    </div>
+                    <div style="width: 90%;border: 3px solid #FFFFFF;margin: auto">
+
+                    </div>
+                    <!--  <div class="col-6 p0">
+                        <h2 *ngIf="m.inDetention" class="detHeaderMaq">
+                          Alerta parada
+                        </h2>
+                        <h2 [ngStyle]="{'font-size':'0.5rem'}" *ngIf="m.inMaintenance" class="detHeaderMaq">
+                          MÁQUINA EN MANTENCIÓN
+                        </h2>
+                      </div>-->
+                  </div>
+
+                </div>
+              </div>
+              <!--       <div *ngIf="m.oee?.rendimiento == null || m.oee?.calidad == null ||
+                    m.oee?.disponibilidad == null" class="col-12">
+                       <h4 align="center">Sin datos para medir</h4>
+                     </div>-->
+
+              <!--  <div class="col-12">
+                  &lt;!&ndash;  <div *ngIf="m.oee?.rendimiento != null && m.oee?.calidad != null &&
+                              m.oee?.disponibilidad != null         " class="col-12">
+                  &ndash;&gt;
+                  <div class="indicadores">
+
+                    <div class="row">
+                      <div class="col-12">
+
+                        <app-indicador-vista-empresa [bl]="true" chico="0.47"
+                                                     style="position:absolute;top:-84px;margin-left: -70px;width: 84px;height: 84px "
+                                                     [valu]="(m.oee || 0)"
+                                                     label="OEE"></app-indicador-vista-empresa>
+                        <app-indicador-vista-empresa [bl]="true" [chico]="getChicodo() ?0.35: 0.27"
+                                                     [ngStyle]="getChicodo() ? {right:'210px'}:{right:'173px'}"
+
+                                                     style="position:absolute;right:173px;top:-84px;margin-left: -60px;width: 84px;height: 84px "
+                                                     [valu]="(m.disponibilidad || 0 )" label="Dispo"
+                                                     laLetra="1.8"></app-indicador-vista-empresa>
+
+                        <app-indicador-vista-empresa [bl]="true" [chico]="getChicodo() ?0.35: 0.27"
+                                                     [ngStyle]="getChicodo() ? {right:'147px'}:{right:'123px'}"
+
+                                                     style="position:absolute;right:123px;top:-84px;margin-left: -60px;width: 84px;height: 84px "
+                                                     [valu]="(m.calidad || 0) " label="Cal"
+                                                     laLetra="2.2"></app-indicador-vista-empresa>
+                        <app-indicador-vista-empresa [bl]="true" [chico]="getChicodo() ?0.35: 0.27"
+                                                     [ngStyle]="getChicodo() ? {right:'80px'}:{right:'73px'}"
+
+                                                     style="position:absolute;right:73px;top:-84px;margin-left: -60px;width: 84px;height: 84px "
+                                                     [valu]="(m.rendimiento ||0)" label="Rend"
+                                                     laLetra="1.8"></app-indicador-vista-empresa>
+
+                      </div>
+                      <div class="col-12">
+                        <div style="margin-top: 95px;" class="infomaqtextbody">
+                          <p>Acumulado paradas </p>
+                          <p>{{m.acumulado || 0}} min</p>
+                        </div>
+                        &lt;!&ndash; <div class="infomaqtextbody">
+                           <p>Mantención promagada</p>
+                           <p>10 min</p>
+                         </div>&ndash;&gt;
+                      </div>
+                    </div>
+                  </div>
+
+                  &lt;!&ndash; <ngx-charts-bar-horizontal
+                     [view]="[220,150]"
+                     [scheme]="colorScheme"
+                     [showXAxisLabel]="true"
+                     [showYAxisLabel]="true"
+                     [xAxis]="true"
+                     [yAxis]="true"
+                     [results]="[
+                 {name:'OEE',value:m.oee?.oee},
+                 {name:'Disponibilidad',value:m.oee?.disponibilidad},
+                 {name:'Calidad',value:m.oee?.calidad},
+                 {name:'Rendimiento',value:m.oee?.rendimiento}              ]"
+                     [showDataLabel]="true"
+
+                   >
+                   </ngx-charts-bar-horizontal>&ndash;&gt;
+                </div>-->
+
+              <div class="col-12">
+                <div class="grafico">
+                  <ngx-charts-line-chart
+                    [legend]="false"
+                    [showXAxisLabel]="false"
+                    [showYAxisLabel]="false"
+                    [xAxis]="false"
+                    [yAxis]="true"
+                    [timeline]="false"
+                    [xAxisLabel]="'Tiempo'"
+                    [yAxisLabel]="'Piezas'"
+                    [referenceLines]="[m.prodEsperado]"
+                    [showRefLines]="false"
+                    [schemeType]="'linear'"
+                    [results]="m.grafico"
+                    [scheme]="{domain:['#FFF']}"
+                    style="fill: white;"
+                  ></ngx-charts-line-chart>
+                </div>
+              </div>
+              <div class="col-12">
+                <p class="velProdGraph">
+                  Velocidad promedio {{m.velpromedioProd | number: '1.0-0'}}/h
+                </p>
+              </div>
+
+
+            </div>
+
+
+            <!--     <mwl-gauge
+                   class="sevenV"
+                   [max]="100"
+                   [dialStartAngle]="-90"
+                   [dialEndAngle]="-90.001"
+                   [value]="50"
+                   [animated]="true"
+                   [animationDuration]="1"
+                 >
+                 </mwl-gauge>
+                 <mwl-gauge
+                   class="sevenA"
+                   [max]="100"
+                   [dialStartAngle]="-90"
+                   [dialEndAngle]="-90.001"
+                   [value]="50"
+                   [animated]="true"
+                   [animationDuration]="1"
+                 >
+                 </mwl-gauge>
+                 <mwl-gauge
+                   class="sevenR"
+                   [max]="100"
+                   [dialStartAngle]="-90"
+                   [dialEndAngle]="-90.001"
+                   [value]="50"
+                   [animated]="true"
+                   [animationDuration]="1"
+                 >
+                 </mwl-gauge>
+                 <mwl-gauge
+                   class="seven"
+                   [max]="100"
+                   [dialStartAngle]="-90"
+                   [dialEndAngle]="-90.001"
+                   [value]="50"
+                   [animated]="true"
+                   [animationDuration]="1"
+                 >
+                 </mwl-gauge>-->
+
+
+            <!-- <ngx-charts-bar-vertical
+               [view]="[200,120]"
+               [xAxisLabel]="false"
+               [xAxis]="false"
+               [results]="[
+               {name:'Rendimiento',value:m.oee.rendimiento},
+               {name:'Calidad',value:m.oee.calidad},
+               {name:'Disponibilidad',value:m.oee.disponibilidad},
+               {name:'OEE',value:m.oee.oee}
+               ]"
+
+               [yAxis]="true"
+               [legend]="false"
+             >
+             </ngx-charts-bar-vertical>-->
+            <!-- <ngx-charts-pie-grid
+               [results]="[{name:'Rendimiento',value:m.oee.rendimiento}]" >
+             </ngx-charts-pie-grid>-->
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+<!--
+<mat-accordion>
+  &lt;!&ndash; <mat-expansion-panel hideToggle>
+     <mat-expansion-panel-header>
+       <mat-panel-title>
+         This is the expansion title
+       </mat-panel-title>
+       <mat-panel-description>
+         This is a summary of the content
+       </mat-panel-description>
+     </mat-expansion-panel-header>
+     <p>This is the primary content of the panel.</p>
+   </mat-expansion-panel>&ndash;&gt;
+  <mat-expansion-panel *ngFor="let planta of allPlants" (opened)="panelOpenState = true;llamarProcesos(planta)"
+                       (closed)="panelOpenState = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{planta.nombre}}
+      </mat-panel-title>
+      <mat-panel-description>
+        &lt;!&ndash; Currently I am {{panelOpenState ? 'open' : 'closed'}}&ndash;&gt;
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+
+
+    &lt;!&ndash;<div (click)="llamarMaquinas(proc,$event)" *ngFor="let proc of planta.procesos" class="procesoDiv mat-elevation-z8">
+      <p class="procnombre">{{proc.nombre}}</p>
+      <div class="row">
+        <div [ngClass]="
+       mach.oee.oee != null && mach.oee.oee <0.65 && mach.oee.oee <= 0.75 ? 'rojo':
+        mach.oee.oee != null && mach.oee.oee > 0.75 && mach.oee.oee <= 0.85 ? 'amarillo':
+         mach.oee.oee != null && mach.oee.oee > 0.85 ? 'verde':''
+      " *ngFor="let mach of proc.maquinas;let i =index" class="lista mat-elevation-z4"
+             [ngStyle]="{right:-300*(i+1) +'px'}">
+          <div (click)="irAlTurnoMaquina(mach)" class="obj ">
+            <p class="nameM">{{mach.nombre}}</p>
+            <div *ngIf="mach.oee.rendimiento != null && mach.oee.calidad != null &&
+                mach.oee.disponibilidad != null &&mach.oee.oee != null">
+              <p>Rendimiento: {{mach.oee.rendimiento}}</p>
+              <p>Disponibilidad: {{mach.oee.disponibilidad}}</p>
+              <p>Calidad: {{mach.oee.calidad}}</p>
+              <p>OEE: {{mach.oee.oee}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+&ndash;&gt;
+  </mat-expansion-panel>
+</mat-accordion>
+
+-->

@@ -1,0 +1,154 @@
+<div class="mainn">
+  <div class="row">
+    <div [ngClass]="editing ? 'col-6':'col-12'">
+      <div class="cnt">
+        <mat-card>
+          <div [ngStyle]="editing? {width:'100%','box-shadow':'none'}:''" class="formulario">
+            <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+              <fieldset>
+                <legend>{{editing ? 'Editar' : 'Crear'}} Maquina
+                  <b><em>{{f.nombre.value ? f.nombre.value : ''}}</em></b></legend>
+
+                <div class="row mt-2">
+                  <div class="col-12">
+                    <mat-form-field>
+                      <input matInput formControlName="nombre" type="text" placeholder="Nombre">
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="f.nombre.invalid && f.nombre.touched " style="margin: 0" class=" col-12">
+                    <app-error-form textAlert="Nombre requerido"
+                    ></app-error-form>
+
+                  </div>
+
+                </div>
+
+                <div class="row mt-2">
+                  <!--
+                                    <div class="col-12">
+                                      <mat-form-field style="width: 15%">
+                                        <input (keyup)="limitara100()" matInput min="0" max="100" size="1" maxlength="2"
+                                               formControlName="oeeesperado" type="number" placeholder="OEE esperado">
+                                        <p matSuffix>%</p>
+                                      </mat-form-field>
+                                    </div>-->
+                  <div class="col-12">
+                    <mat-checkbox formControlName="conSensor">Medición con sensor</mat-checkbox>
+                  </div>
+                  <div class="col-12">
+                    <mat-form-field>
+                      <input matInput formControlName="lugar" type="text" placeholder="Descripcion del lugar">
+
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+
+                <div class="row mt-2">
+                  <!-- <app-process-manager *ngIf="addMachine" ></app-process-manager>
+           -->
+                  <div class="col-12">
+
+                    <div class="row">
+                      <div class="col-11">
+                        <mat-form-field>
+                          <mat-select placeholder="Proceso al que pertenece" formControlName="idproceso">
+                            <mat-option *ngFor="let proceso of processList"
+                                        value="{{proceso.id}}">{{proceso.nombre}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <!-- <div class="col-1">
+                         <div (click)="showProcess()" class="btn btn-success btn-sm">+</div>
+                       </div>-->
+                    </div>
+
+
+                  </div>
+                </div>
+                <!--<div class="row mt-2" *ngIf="editing">
+                  <div class="col-12">
+                    &lt;!&ndash; <app-machine-detentions-manager></app-machine-detentions-manager>&ndash;&gt;
+                    <div class="btn btn-success" (click)="abrirParadasMaquina()">Ver paradas</div>
+                  </div>
+                </div>-->
+
+                <div class="row ">
+                  <!-- <div class="barr" style="&#45;&#45;alto: 2px;&#45;&#45;ancho: 95%;&#45;&#45;bg: #909090"></div>
+           -->
+                  <!-- <div class="col-12" *ngIf="editing">
+                     &lt;!&ndash;<app-machine-products-manager></app-machine-products-manager>
+                     &ndash;&gt;
+                     <div class="btn btn-success" (click)="abrirProductosMaquina()">Ver productos</div>
+
+                   </div>-->
+                  <div class="col-12" *ngIf="editing">
+                    <mat-form-field>
+                      <mat-select formControlName="subproductoasignado" placeholder="Subproducto asignado">
+                        <mat-option *ngFor="let spm of subproductsMachineSelected" value="{{spm.idsubproducto}}">
+                          {{spm.idsubproducto_subproducto.nombre}}
+                        </mat-option>
+                      </mat-select>
+                      <div *ngIf="f.subproductoasignado.invalid && f.nombre.touched " style="margin: 0" class=" col-12">
+                        <app-error-form textAlert="Debe asignar un subproducto"
+                        ></app-error-form>
+
+                      </div>
+
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+
+                <div class="row justify-content-between mt-3" style="padding-left: 15px;padding-right: 15px">
+
+                  <div (click)="limpiar()" class="btn btn-primary ">limpiar</div>
+
+                  <!--    <button [disabled]="isLoading || this.dataForm.invalid"-->
+                  <button [disabled]="isLoading || this.dataForm.invalid"
+                          class="btn btn-success ">{{editing ? 'Guardar' : 'Agregar'}}
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"
+                          aria-hidden="true"></span>
+                  </button>
+
+                </div>
+
+
+              </fieldset>
+
+            </form>
+          </div>
+
+        </mat-card>
+      </div>
+
+    </div>
+    <div class="col-6" *ngIf="editing">
+      <div class="cnt">
+        <mat-card>
+          <mat-tab-group>
+            <mat-tab label="Ver Paradas">
+              <div class="mt-1">
+                <app-machine-detentions-manager></app-machine-detentions-manager>
+
+              </div>
+            </mat-tab>
+            <mat-tab label="Ver Productos ">
+              <app-machine-products-manager [inModal]="false"></app-machine-products-manager>
+            </mat-tab>
+            <mat-tab *ngIf="f.conSensor.value" label="Ver Sensores">
+              <app-machine-sensor-manager></app-machine-sensor-manager>
+            </mat-tab>
+            <mat-tab  label="Ver Mantenciones">
+              <app-machine-maintenances-manager></app-machine-maintenances-manager>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card>
+      </div>
+    </div>
+
+
+  </div>
+</div>

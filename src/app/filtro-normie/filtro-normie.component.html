@@ -1,0 +1,69 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-8 filtroNor">
+      <mat-form-field appearance="outline">
+        <mat-label>Planta</mat-label>
+        <mat-select [(ngModel)]="selectedPlant" (selectionChange)="elegirPlanta()">
+          <mat-option [value]="null">Todo</mat-option>
+          <mat-option *ngFor="let obj of selectListPlants" [value]="obj.id">{{obj.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label >Proceso</mat-label>
+        <mat-select (selectionChange)="elegirProceso()" [(ngModel)]="selectedProcess" [disabled]="selectedPlant == null">
+          <mat-option [value]="null">Todo</mat-option>
+          <mat-option *ngFor="let obj of selectListProcesses" [value]="obj.id">{{obj.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Máquina</mat-label>
+        <mat-select [(ngModel)]="selectedMachine" [disabled]="selectedProcess == null" >
+          <mat-option [value]="null">Todo</mat-option>
+          <mat-option *ngFor="let obj of selectListMachines" [value]="obj.id">{{obj.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="fech" appearance="outline">
+        <mat-label>Fechas</mat-label>
+        <mat-date-range-input [comparisonEnd]=""  (keyup)="filtrar()"  [rangePicker]="picker">
+          <input [(ngModel)]="desde" matStartDate placeholder="Desde">
+          <input [(ngModel)]="hasta" matEndDate placeholder="Hasta">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker  [touchUi]="true" #picker></mat-date-range-picker>
+      </mat-form-field>
+      <div class="btnBuscar">
+        <button mat-icon-button (click)="filtrar()">
+          <mat-icon>search</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="row" >
+        <div class="col-6">
+          <div class="cajaAccion" (click)="imprimirBtn()">
+            <p>imprimir
+              <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M16 0H4V4H16V0ZM17 9C16.7348 9 16.4804 8.89464 16.2929 8.70711C16.1054 8.51957 16 8.26522 16 8C16 7.73478 16.1054 7.48043 16.2929 7.29289C16.4804 7.10536 16.7348 7 17 7C17.2652 7 17.5196 7.10536 17.7071 7.29289C17.8946 7.48043 18 7.73478 18 8C18 8.26522 17.8946 8.51957 17.7071 8.70711C17.5196 8.89464 17.2652 9 17 9ZM14 16H6V11H14V16ZM17 5H3C2.20435 5 1.44129 5.31607 0.87868 5.87868C0.316071 6.44129 0 7.20435 0 8V14H4V18H16V14H20V8C20 7.20435 19.6839 6.44129 19.1213 5.87868C18.5587 5.31607 17.7956 5 17 5Z"
+                  fill="#78909C"/>
+              </svg>
+
+            </p>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="cajaAccion" (click)="descargarBtn()">
+            <p>Descargar
+              <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0.51709 16.5809H13.8656V14.674H0.51709V16.5809ZM13.8656 6.09284H10.0517V0.37207H4.33094V6.09284H0.51709L7.19132 12.7671L13.8656 6.09284Z" fill="#78909C"/>
+              </svg>
+
+
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

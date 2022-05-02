@@ -1,0 +1,120 @@
+<app-btn-cerrar-modal></app-btn-cerrar-modal>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12">
+      <p><b>Orden de trabajo: </b> {{data.nombre}}</p>
+    </div>
+    <div class="col-8">
+
+      <p><b>Estado:</b> {{data.estado}}</p>
+    </div>
+    <div class="col-4">
+      <p><b>Planta:</b> {{data.idplanta_plantum?.nombre}}</p>
+    </div>
+    <div class="col-8">
+      <div class="row">
+        <div class="col-4">
+          <p><b>Formato:</b> {{data.idsubproducto_subproducto?.formato}}</p>
+        </div>
+        <div class="col-4">
+          <p><b>Unidad:</b> {{data.idsubproducto_subproducto?.unidad}}</p>
+        </div>
+        <div class="col-4">
+          <p><b>Condicion:</b> {{data.idsubproducto_subproducto?.condicion}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <p><b>Proceso:</b>{{data.idproceso_proceso?.nombre}}</p>
+    </div>
+    <div class="col-8">
+      <div class="row">
+        <div class="col-6">
+          <p><b>Hora inicio:</b> {{(data.horainicio | date: "dd/MM/yyyy HH:mm") || 'sin definir'}}</p>
+        </div>
+        <div class="col-6">
+          <p><b>Hora fin estimada:</b> {{(data.horafinpredecida | date: "dd/MM/yyyy HH:mm") || 'sin definir'}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <p><b>Maquina:</b> {{data.maq?.nombre || 'Sin definir'}}</p>
+    </div>
+    <div class="col-4">
+      <p><b>Elemento: </b> {{data.idsubproducto_subproducto?.nombre}}</p>
+    </div>
+    <div class="col-4">
+      <p><b>Cantidad esperada:</b> {{data.cantidadesperada}}</p>
+    </div>
+    <div class="col-4">
+      <p><b>SKU: </b>{{data.idsubproducto_subproducto?.sku}}</p>
+    </div>
+    <div style="padding: 0" class="col-8 foto">
+      <div>
+        <img src="{{data.foto}}" alt="">
+      </div>
+    </div>
+    <div class="col-4">
+      <h3><b>Iniciada por </b></h3>
+      <p *ngFor="let iniciador of data.iniciadorots">{{iniciador.creador}}</p>
+    </div>
+    <div class="col-12">
+      <h2><b>Comentarios</b>
+        <button (click)="openCreateComment(data.id)" style="color:#2FA84F;float: right" mat-icon-button>
+          <mat-icon>add</mat-icon>
+        </button>
+      </h2>
+
+      <div class="comments">
+        <mat-list>
+          <mat-list-item *ngFor="let comment of listaComentarios">
+            <mat-icon matListIcon>message</mat-icon>
+            <h3 matLine> {{comment.creador }}
+              <mat-icon (click)="borrar(comment.id)" *ngIf="this.nombreCompletoUsuario == comment.creador" color="warn"
+                        style="cursor: pointer">delete
+              </mat-icon>
+            </h3>
+            <p matLine>
+              <span> {{comment.createdAt | date:'dd/MM/yyyy HH:mm:ss'}} </span>
+              <span class="demo-2"> {{comment.comentario}}</span>
+            </p>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+    <div class="col-12">
+
+      <div class="mermasTurno">
+        <div class="row">
+          <div class="col-12" *ngFor="let mot of mermasDelaOT">
+            <p (click)="eliminarMerma(mot.id)" style="color: red;cursor: pointer;margin:0">X</p>
+
+            <div class="row">
+
+              <div class="col-6">
+
+                <mat-form-field>
+
+                  <mat-label>
+                    Tipo de merma
+                  </mat-label>
+                  <mat-select (change)="guardarMermas()" [(ngModel)]="mot.idmerma">
+                    <mat-option *ngFor="let cat of tiposMermas" value="{{cat.id}}">{{cat.nombre}} </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field class="cant">
+                  <mat-label>Cantidad</mat-label>
+                  <input (keyup)="guardarMermas()" [(ngModel)]="mot.cantidad" matInput type="number">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <p style="color: green;cursor: pointer;font-size:18px" (click)="this.crearMermaOT(undefined,undefined)">+</p>
+    </div>
+  </div>
+</div>

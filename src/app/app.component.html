@@ -1,0 +1,566 @@
+﻿<mat-toolbar *ngIf="user " class="latoolbar "
+             [hidden]="!issticky"
+>
+  <!--<button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>-->
+
+
+  <div class="logo">
+    <!--  <img style="top:2px;left:1px;z-index:-3;width:30% !important;filter:brightness(0);position:absolute"
+           src="assets/iGr-6.png" alt="">-->
+   <!-- <img src="assets/iGr-6.png" alt="">-->
+    <svg  onclick="window.history.go(-1); return false;" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M23.71 15.12L19.12 19.71L23.71 24.3L22.29 25.71L16.29 19.71L22.29 13.71L23.71 15.12Z" fill="#78909C"/>
+    </svg>
+
+    <p class="toolbarTitle" style="text-transform: capitalize">{{actualSt ? actualSt : actual}}</p>
+
+  </div>
+
+
+  <span class="example-spacer"></span>
+  <!-- <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+     <mat-icon>favorite</mat-icon>
+   </button>-->
+ <!-- <div style="position:relative">
+    <button (click)="notifs = !notifs" mat-icon-button class="example-icon">
+      <mat-icon matBadgeSize="small" [matBadge]="notifsNoLeidas" matBadgeColor="warn" style="color: dodgerblue">
+        notifications
+      </mat-icon>
+    </button>
+    <div *ngIf="notifs" class="aquiNoti">
+      <app-notificaciones-viewer *ngIf="notifs"></app-notificaciones-viewer>
+    </div>
+
+  </div>-->
+
+  <!--<img class="ml-2" style="border-radius: 50%;box-shadow: 2px 1px 5px black" width="32" src="assets/images.png" alt="">-->
+</mat-toolbar>
+<div class="todo">
+  <ng-container #container></ng-container>
+  <mat-drawer-container class="matContainer">
+    <!--
+        <mat-drawer class="lateralBarMat" style="overflow:no-display" *ngIf="user" mode="side" opened
+                    [ngClass]="achicado ? 'achicado':''">
+          <div class="lateralBar " [ngStyle]="achicado ? {width:'87px',  background: '#919699'}:''">
+    -->
+
+
+    <mat-drawer class="lateralBarMat"
+
+                style="overflow:no-display" *ngIf="user" mode="side" opened disableClose
+    ><!--
+    <mat-drawer class="lateralBarMat"
+                [ngStyle]="{width:sideBarWidth+'vw'}"
+                style="overflow:no-display" *ngIf="user" mode="side" opened disableClose
+    >-->
+      <div class="lateralBar"
+           [ngClass]="achicado ? 'oscuro':''"
+      >
+
+
+        <div *ngIf="achicado">
+          <div routerLink="/vista-empresa"
+               class="menuLateralItem">
+            <div style="display: flex;align-items: center;justify-content: center">
+              <img class="achicadoimg" width="20" src="assets/iconVistaEmpresa.png" alt="">
+            </div>
+          </div>
+          <div routerLink="/interrupciones"
+               class="menuLateralItem">
+            <div style="display: flex;align-items: center;justify-content: center">
+              <img class="achicadoimg" width="20" src="assets/iconInterrupciones.png " alt="">
+
+            </div>
+          </div>
+          <div routerLink="/mantenciones"
+               class="menuLateralItem">
+            <div style="display: flex;align-items: center;justify-content: center">
+              <img class="achicadoimg" width="20" src="assets/iconMantenciones.png" alt="">
+            </div>
+          </div>
+          <div routerLink="/orden-trabajo"
+               class="menuLateralItem">
+            <div style="display: flex;align-items: center;justify-content: center">
+              <img class="achicadoimg" width="20" src="assets/turnoActual.png" alt="">
+
+            </div>
+          </div>
+          <div routerLink="/planificador"
+               class="menuLateralItem">
+            <div style="display: flex;align-items: center;justify-content: center">
+              <img class="achicadoimg" width="20" src="assets/iconOT.png" alt="">
+
+            </div>
+          </div>
+          <div routerLink="/reportes"
+               class="menuLateralItem">
+            <div style="display: flex;align-items: center;justify-content: center">
+              <img class="achicadoimg" width="20" src="assets/iconReportes.png" alt="">
+            </div>
+          </div>
+
+          <!--   <div routerLink="/datos"
+                  class="menuLateralItem">
+               <div style="display: flex;align-items: center;justify-content: center">
+                 <svg width="35" height="39" viewBox="0 0 35 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M28.6999 27L19.5999 17.9C20.4999 15.6 19.9999 12.9 18.0999 11C16.0999 9.00001 13.0999 8.60001 10.6999 9.70001L14.9999 14L11.9999 17L7.59994 12.7C6.39994 15.1 6.89994 18.1 8.89994 20.1C10.7999 22 13.4999 22.5 15.7999 21.6L24.8999 30.7C25.2999 31.1 25.8999 31.1 26.2999 30.7L28.5999 28.4C29.0999 28 29.0999 27.3 28.6999 27Z" fill="white"/>
+                 </svg>
+
+               </div>-->
+
+          <div class="endOptions">
+
+            <svg style="margin: auto;
+            margin-right: 220px;
+    width: fit-content;
+    display: block;" class="achicar" (click)="agrandarMenu()" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M17.4 14L16 15.4L20.6 20L16 24.6L17.4 26L23.4 20L17.4 14Z" fill="white"/>
+            </svg>
+
+            <!--
+            <svg class="achicar ml-4" (click)="achicar()" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M17.4 14L16 15.4L20.6 20L16 24.6L17.4 26L23.4 20L17.4 14Z" fill="white"/>
+            </svg>-->
+
+          </div>
+
+        </div>
+        <div *ngIf="!achicado" class="barraNormie">
+          <!--  <img routerLink="/" src="assets/images.png" alt="">
+            <h1 routerLink="/">IMES</h1>
+            <h4>Su plataforma de planificación</h4>
+  -->
+
+          <div class="logoIgr">
+            <div>
+              <img routerLink="/" src="/assets/logoIgr.png" alt="">
+            </div>
+          </div>
+          <div routerLink="/vista-empresa" *ngIf="isSupervisor || isAdmin " class="menuLateralItem">
+            <div>
+              <img width="20" src="assets/icono-vista-empresa.png" alt="">
+              <section class="ml-2">
+                <p>Máquinas</p>
+            <!--    <small>Todos tus KPIs en tiempo real</small>
+             --> </section>
+            </div>
+          </div>
+
+          <div routerLink="/interrupciones" *ngIf="isSupervisor || isAdmin " class="menuLateralItem">
+            <div>
+              <img width="20" src="assets/icono-paradas.png " alt="">
+              <section class="ml-2">
+                <p>Paradas</p>
+                <!--<small>paradas de las maquinas</small>-->
+              </section>
+            </div>
+          </div>
+
+          <div routerLink="/plantas" *ngIf="isOperator && !isActiveTurn"
+               class="menuLateralItem">
+            <div>
+              <img width="20" src="assets/turnoActual.png" alt="">
+              <section class="ml-2">
+                <p>Tomar turno</p>
+                <small>Captura de datos y data maquinas </small>
+              </section>
+            </div>
+          </div>
+
+          <div [routerLink]="'/maquina/'+activeTurns[0].idturno_turno.idmaquina" *ngIf="isOperator && isActiveTurn"
+               class="menuLateralItem " style="background: #2FA84F">
+            <!-- [ngClass]="actual == 'plantas' ||
+             actual.split('/')[0] == 'procesos' ||
+             actual.split('/')[0] == 'maquinas'||
+             actual.split('/')[0] == 'maquina' ? 'act':''"-->
+            <div style="width: 100%;">
+              <img width="20" src="assets/turnoActual.png" style="filter:brightness(0%) invert(1)" alt="">
+              <section class="ml-2" style="width: 100%;">
+                <p style="color:white;">Ir al turno actual</p>
+                <small style="color:white;">Captura de datos y data maquinas </small>
+                <mat-icon style="color:white;position:absolute;right: 10px">
+                  warning
+                </mat-icon>
+              </section>
+            </div>
+          </div>
+
+          <!--   <div [routerLink]="'/maquina/'+activeTurns[0].idturno_turno.idmaquina" *ngIf="!isAdmin && isActiveTurn"
+                  [ngClass]="actual.split('/')[0] == 'maquina' ? 'act':''" class="menuLateralItem">
+               <div>
+                 <img width="20" src="assets/turnoActual.png" alt="">
+                 <section class="ml-2">
+                   <p>Turno actual</p>
+                   <small>View your results as Excel file</small>
+                 </section>
+               </div>
+             </div>
+   -->
+
+          <div class="menuLateralItem" *ngIf="isSupervisor|| isAdmin">
+            <div routerLink="/mantenciones">
+              <img width="20" src="assets/icono-mantenciones.png" alt="">
+              <section class="ml-2">
+                <p>Mantenciones</p>
+               <!-- <small>Organice y gestiones sus tareas</small>-->
+              </section>
+            </div>
+          </div>
+
+          <div class="menuLateralItem" *ngIf="isSupervisor|| isAdmin">
+            <div routerLink="/orden-trabajo">
+              <img width="20" src="assets/icono-ordenes.png" alt="">
+              <section class="ml-2">
+                <p>Ordenes de trabajo</p>
+                <!--<small>Progreso de sus ordenes de trabajo</small>-->
+              </section>
+            </div>
+          </div>
+          <div class="menuLateralItem" *ngIf="isSupervisor|| isAdmin">
+            <div routerLink="/planificador">
+              <img width="20" src="assets/icono-planificacion.png" alt="">
+              <section class="ml-2">
+                <p>Planificación</p>
+               <!-- <small>Progreso de sus ordenes de trabajo</small>-->
+              </section>
+            </div>
+          </div>
+
+          <div class="menuLateralItem" *ngIf="isSupervisor|| isAdmin">
+            <div routerLink="/monitoreo">
+              <img width="20" src="assets/icono-monitoreo.png" alt="">
+              <section class="ml-2">
+                <p>Monitoreo</p>
+                <!--<small>Obtenga poderas KPis y big data</small>-->
+              </section>
+            </div>
+          </div>
+          <div class="menuLateralItem" *ngIf="isSupervisor|| isAdmin">
+            <div routerLink="/analitica">
+              <img width="20" src="assets/iconos-analitica.png" alt="">
+              <section class="ml-2">
+                <p>Analítica</p>
+                <!--<small>Obtenga poderas KPis y big data</small>-->
+              </section>
+            </div>
+          </div>
+
+          <!--
+                    <div class="menuLateralItem" *ngIf=" isThingsURL != ''">
+                      <div >
+                        <mat-icon style="color: #78909c;font-size: 1.2rem">
+                          speed
+                        </mat-icon>
+                        <section class="ml-2">
+                          <p><a target="_blank" href="{{isThingsURL}}">DashBoard</a></p>
+                          <small>Revise la información capturada por sensores</small>
+                        </section>
+                      </div>
+                    </div>-->
+
+
+          <div class="endOptions">
+            <div *ngIf="isAdmin" routerLink="/datos/empresa" class="endMenuLateralItem">
+              <div>
+                <img width="18" src="assets/icono-settings.png" alt="">
+                <section class="ml-2">
+                  <p>Configuración</p>
+                </section>
+              </div>
+            </div>
+
+            <div (click)="logout()" class="endMenuLateralItem">
+              <div>
+                <img width="18" src="assets/icono-salir.png" alt="">
+                <section class="ml-2">
+                  <p>Cerrar sesión</p>
+                </section>
+              </div>
+            </div>
+
+            <div class="endMenuLateralItem">
+              <!-- <div>
+                 <img width="25" src="assets/soporte.png" alt="">
+                 <section class="ml-2">
+                   <p>Soporte</p>
+                 </section>
+               </div>-->
+            </div>
+          <!--  <div class="achicoaa">
+              <button *ngIf="isSupervisor|| isAdmin" (click)="achicarMenu()" mat-icon-button>
+                <mat-icon style="color:#78909c">arrow_back_ios</mat-icon>
+              </button>
+              &lt;!&ndash;
+                    <button (click)="achicar()" mat-icon-button>
+                              <mat-icon style="color:#78909c">arrow_back_ios</mat-icon>
+                            </button>
+              &ndash;&gt;
+
+            </div>-->
+            <!--  <svg (click)="achicar()" class="ml-5 achicar" width="8" height="13" viewBox="0 0 8 13" fill="none"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M6.43705 12.0908L7.81776 10.6718L3.15525 6.13516L7.69188 1.47265L6.27285 0.0919347L0.355511 6.17347L6.43705 12.0908Z"
+                      fill="white"/>
+              </svg>-->
+
+          </div>
+
+          <!--
+
+                    <div class="menuLateralItem">
+                      <div>
+                        <img width="20" src="assets/planificacion.png" alt="">
+                        <p>Tablero</p>
+                      </div>
+                    </div>
+                    <div *ngIf="isAdmin" class="menuLateralItem " [ngClass]="actual == 'datos' ? 'act':''">
+                      <div routerLink="/datos">
+                        <mat-icon>
+                          build
+                        </mat-icon>
+                        <p>Configuracion</p>
+                      </div>
+
+                    </div>
+
+                    <div *ngIf="!isAdmin && !isActiveTurn" class="menuLateralItem "
+                         [ngClass]="actual == 'plantas' || actual.split('/')[0] == 'procesos' || actual.split('/')[0] == 'maquinas'|| actual.split('/')[0] == 'maquina' ? 'act':''">
+                      <div routerLink="/plantas">
+                        <mat-icon>
+                          precision_manufacturing
+                        </mat-icon>
+                        <p>Vista empresa</p>
+                      </div>
+                    </div>
+
+                    &lt;!&ndash;<div *ngIf="!isAdmin "  class="menuLateralItem " [ngClass]="actual.split('/')[0] == 'procesos' ? 'act':''">
+                      <div routerLink="/procesos/todos">
+                        <mat-icon>
+                          list_alt
+                        </mat-icon>
+                        <p>Procesos</p>
+                      </div>
+                    </div>
+                    <div *ngIf="!isAdmin"  class="menuLateralItem " [ngClass]="actual.split('/')[0] == 'maquinas' ? 'act':''">
+                      <div routerLink="/maquinas/todos">
+                        <mat-icon>
+                          settings
+                        </mat-icon>
+                        <p>Maquinas</p>
+                      </div>
+                    </div>&ndash;&gt;
+                    <div *ngIf="!isAdmin && isActiveTurn" class="menuLateralItem "
+                         [ngClass]="actual.split('/')[0] == 'maquina' ? 'act':''">
+                      <div [routerLink]="'/maquina/'+activeTurns[0].idturno_turno.idmaquina">
+                        <mat-icon>
+                          settings
+                        </mat-icon>
+                        <p>Turno actual</p>
+                      </div>
+                    </div>
+                    <div *ngIf="!isAdmin && isActiveTurn" class="menuLateralItem "
+                         [ngClass]="actual == 'interrupciones' ? 'act':''">
+                      <div routerLink="/interrupciones">
+                        <mat-icon>
+                          settings
+                        </mat-icon>
+                        <p>Interrupciones</p>
+                      </div>
+                    </div>
+                    <div *ngIf="!isAdmin && isActiveTurn" class="menuLateralItem " [ngClass]="actual== 'mantenciones' ? 'act':''">
+                      <div routerLink="/mantenciones">
+                        <mat-icon>
+                          settings
+                        </mat-icon>
+                        <p>Mantenciones</p>
+                      </div>
+                    </div>
+                    <div *ngIf="!isAdmin" class="menuLateralItem " [ngClass]="actual == 'alertas' ? 'act':''">
+                      <div routerLink="/alertas">
+                        <mat-icon>
+                          notifications
+                        </mat-icon>
+                        <p>Alertas</p>
+                      </div>
+                    </div>
+                    <div *ngIf="!isAdmin" class="menuLateralItem " [ngClass]="actual == 'mensajes' ? 'act':''">
+                      <div routerLink="/mensajes">
+                        <mat-icon>
+                          question_answer
+                        </mat-icon>
+                        <p>Mensajes</p>
+                      </div>
+                    </div>
+                    <div class="menuLateralItem ">
+                      <div (click)="logout()">
+                        <mat-icon>
+                          logout
+                        </mat-icon>
+                        <p>Salir</p>
+                      </div>
+                    </div>
+
+          -->
+
+        </div>
+
+
+      </div>
+    </mat-drawer>
+    <mat-drawer-content class="laCentralC" [ngStyle]="achicado ? {'margin-left':sideBarWidth+'vw'}:{'margin-left':sideBarWidth+'vw'}">
+      <div class="mainContent">
+        <div class="container-fluido">
+
+          <!-- <nav class="navbar navbar-expand navmain" *ngIf="user">
+
+             <div class="navItem">
+               <div>
+                 <mat-icon>
+                   precision_manufacturing
+                 </mat-icon>
+                 <p>
+                   Planta
+                 </p>
+               </div>
+
+             </div>
+           &lt;!&ndash;  <div class="navbar-nav">
+               <a class="navbar-brand" href="#">
+                 <img src="https://loremflickr.com/500/500" width="30" height="30" alt="" loading="lazy">
+               </a>
+               <p class="nav-item navbar-text ctmFont"
+                  style="text-transform: capitalize">{{actual != '' ? format(actual) : "Inicio"}}</p>
+               <div class="subnav">
+                 <nav aria-label="breadcrumb">
+                   <ol class="breadcrumb ">
+                     <li class="breadcrumb-item"><a routerLink="/plantas" href="#">Planta</a></li>
+                     <li class="breadcrumb-item"><a routerLink="/procesos/todos" href="#">Proceso</a></li>
+                     <li class="breadcrumb-item" aria-current="page"><a routerLink="/maquinas/todos">Maquina</a></li>
+                   </ol>
+                 </nav>
+                 &lt;!&ndash; <a class="nav-item nav-link" routerLink="/">Home</a>
+                  <a class="nav-item nav-link" routerLink="/maquina">Mis Maquinas</a>
+                  <a class="nav-item nav-link" routerLink="/admin" *ngIf="isAdmin">Admin</a>
+                  <a class="nav-item nav-link" (click)="logout()">Logout</a>
+               &ndash;&gt; </div>
+
+               <div class="endnav">
+
+                 <button class="btn btn-success btnnotification mr-4">🔔<span class="badge badge-light">4</span></button>
+                 <img (click)="logout()" class="profilephoto" src="https://loremflickr.com/500/500" width="40" height="40"
+                      alt=""
+                      loading="lazy">
+
+               </div>
+
+             </div>&ndash;&gt;
+           </nav>-->
+
+          <!-- <ul class="nav flex-column" *ngIf="user">
+             &lt;!&ndash; <li *ngIf="!isInMenu" class="nav-item">
+                <div class="itemLogo">
+                  &lt;!&ndash;<img src="" alt="" width="30" height="30">&ndash;&gt;
+                  <p routerLink="/datos">⚙</p>
+                </div>
+              </li>&ndash;&gt;
+             &lt;!&ndash;<app-list-item *ngIf="isInMenu" icon="⚙" title="Configuracion" comment="configuracion de datos"></app-list-item>&ndash;&gt;
+             <div class="classMenu" [ngClass]="actual == 'oee' ? 'selectedMenu':''">
+               <mat-icon [style]="{cursor:'pointer'}" routerLink="/oee" style="color: white;margin: auto">
+                 bar_chart
+               </mat-icon>
+             </div>  <div class="classMenu" [ngClass]="actual == 'plantas' ? 'selectedMenu':''">
+             <mat-icon [style]="{cursor:'pointer'}" routerLink="/plantas" style="color: white;margin: auto">
+               precision_manufacturing
+             </mat-icon>
+           </div>
+             <div class="classMenu" [ngClass]="actual == 'interrupciones' ? 'selectedMenu':''">
+               <mat-icon [style]="{cursor:'pointer'}" routerLink="/interrupciones" style="color: white;margin: auto">
+                 done
+               </mat-icon>
+             </div>
+             <div class="classMenu" [ngClass]="actual == 'mantenciones' ? 'selectedMenu':''">
+               <mat-icon [style]="{cursor:'pointer'}" routerLink="/mantenciones" style="color: white;margin: auto">
+                 construction
+               </mat-icon>
+             </div>
+             <div *ngIf="isAdmin" class="classMenu mt-3" [ngClass]="actual == 'datos' ? 'selectedMenu':''">
+               <mat-icon [style]="{cursor:'pointer'}" routerLink="/datos" style="color: white;margin: auto">
+                 build
+               </mat-icon>
+             </div>
+             &lt;!&ndash;  <app-list-item icon="🦾" title="Maquinas" comment="Track your apps across devices"></app-list-item>
+               <app-list-item icon="👷" title="Supervisores" comment="View your results as Excel file"></app-list-item>
+               <app-list-item icon="🛠️" title="Operadores" comment="Track your apps across devices"></app-list-item>
+               <app-list-item icon="🏭" title="Plantas" comment="Track visits to your sites"></app-list-item>
+               <app-list-item icon="⚙" title="Proceso" comment="Track your apps across devices"></app-list-item>
+               <app-list-item icon="🛒" title="Productos" comment="Get insights into the big data"></app-list-item>
+               <app-list-item icon="🔩" title="Inventario" comment="Track your apps across devices"></app-list-item>&ndash;&gt;
+           </ul>-->
+
+
+          <router-outlet class="contentRoute"></router-outlet>
+
+
+          <!--<div *ngIf="user" class="perfilBar">
+            <ul class="list-group" style="padding:10px">
+
+              <li class="list-group-item" style="background:#F1F3F4;font-weight: bold">Configuracion</li>
+              <li class="list-group-item">Maquina</li>
+              <li class="list-group-item">Perfil</li>
+
+            </ul>
+            <div class="infoUser">
+              <div class="fotoPerfil">
+                <img
+                  src="https://loremflickr.com/500/500"
+                  width="96" height="96" alt="">
+              </div>
+              <div class="textoPerfil">
+                <p class="textPerfilName">{{userInfo?.firstName}} {{ userInfo?.lastName }}</p>
+                <p class="textPerfilOperador">{{userInfo?.role}}</p>
+
+                <p class="textPlantaName">
+                  En turno
+                  <mat-icon>
+                    warning
+                  </mat-icon>
+
+                </p>
+              </div>
+              <div class="turnos" >
+                <div class="turno" *ngFor="let turn of activeTurns">
+                  <div class="row">
+                    <div class="col-12">
+                      <p>turno pendiente {{toReadableDate(turn.horainicio)  }} {{turn.idturno_turno.horario}}</p>
+                      <small> {{turn.idturno_turno.idmaquina_maquina.nombre}}</small>
+
+                    </div>
+                    <div class="col-12">
+                      <button (click)="endTurn(turn.id)" class="btn btn-sm btn-danger">Terminar</button>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>-->
+
+        </div>
+
+
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+
+  <!-- nav -->
+
+
+</div>

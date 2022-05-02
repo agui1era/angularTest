@@ -1,0 +1,173 @@
+.aLine:hover
+  border: outset 4px white
+  transition: all 50ms ease-in
+
+.vLine
+  width: 2px
+  height: 5vh
+  background: white
+  position: absolute
+  margin-left: 5vw
+  left: var(--le)
+  z-index: -2
+  //top: -1vh
+  margin-top: 2vh
+.lineTitle
+  max-width: 4.5vw
+  min-width: 4.5vw
+  height: 60px
+  display: flex
+  align-items: center
+  justify-content: center
+  background: black
+  margin-right: 2px
+
+  //border-top: solid 1px white
+  //border-bottom: solid 1px white
+  p
+    color: #E3E5E6
+    margin: 0
+    font-size: 1.2rem
+.rLine
+  border-right: 1px solid #fff
+.aLine
+  border: inset 4px white
+  margin-bottom: 1%
+  //height: 65px
+  display: flex
+  position: relative
+  //border-top: solid 1px white
+  //border-bottom: solid 1px white
+
+
+
+.aEvent
+  animation: suFade 500ms linear
+  transition: all 200ms ease-in
+  //width: 1.577%
+  height: 60px
+  border-radius: 3px
+  //border-top: solid 1px white
+  //border-bottom: solid 1px white
+  position: relative
+  //border-right: solid 1px black
+  p
+    color: white
+    font-size: 0.8rem
+
+  .separator
+    width: 2px
+    background: gray
+    height: 100px
+    position: absolute
+    top: -18px
+    right: 0px
+.todo
+  padding-right:  0.5%
+  padding-left: 0.5%
+.aEvent:hover
+  cursor: pointer
+  //transition: all 2000ms ease-in
+  z-index: 100
+  box-shadow: 1px 1px 2px white
+  transform: scale(1.01)
+  p
+    font-weight: bolder
+    font-size: 120%
+
+.aEvent:hover::before
+  transition: all 2000ms ease-in !important
+  content: ''
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  background-color: rgba(0, 0, 0, 0.6)
+
+
+.separator:hover
+  top: -26px !important
+  width: 6px !important
+  cursor: pointer
+
+.tooltipInfo
+  position: absolute
+  top: 60px
+  background: rgba(0, 0, 0, 0.8)
+  z-index: 100
+  width: 200px
+  height: 182px
+  padding: 10px
+  left: 0
+  right: 0
+  margin: auto
+
+  h2, h3
+    color: white
+    margin: 0
+    padding: 0
+
+.tooltipInfo:hover
+  opacity: 1 !important
+
+.sched-Error
+  background: rgba(255, 0, 52, 0.9)
+  cursor: pointer
+
+.sched-Error-Categorized
+  background: rgba(98, 0, 27, 0.9)
+  cursor: pointer
+
+.sched-Error-Categorized-noConfirmation
+  background: rgba(255, 42, 105, 0.9)
+  cursor: pointer
+  animation: blind 2s linear infinite, beat 1.5s ease-out infinite
+
+.sched-Error-Categorized-noConfirmation:hover
+  animation: none
+
+
+.sched-Error-Categorized-noConfirmation:before
+  content: "!"
+  position: absolute
+  left: 0
+  right: 0
+  margin: auto
+  width: fit-content
+  top: 30%
+  font-size: 350%
+  animation:  shake2 0.7s linear infinite
+
+.sched-Ok
+  background: #2FA84F
+
+.sched-Maintenance
+  background: rgba(134, 128, 255, 0.9)
+
+.sched-Warning
+  background: rgba(243, 170, 24, 0.9)
+  cursor: pointer
+
+//.sched-Warning:hover
+  border: solid 1px black
+  background: rgba(243, 170, 24, 0.69)
+
+//.sched-Maintenance:hover
+  border: solid 1px black
+  background: rgba(75, 75, 75, 0.9)
+
+//.sched-Error:hover
+  border: solid 1px black
+  background: rgba(220, 20, 60, 0.69)
+
+//.sched-Error-Categorized:hover
+  border: solid 1px black
+  background: rgba(98, 0, 27, 0.78)
+
+
+.sched-Zero
+  background: rgba(162, 162, 162, 0.75)
+
+.sched-nothing
+  background: rgba(82, 82, 82, 0.75)

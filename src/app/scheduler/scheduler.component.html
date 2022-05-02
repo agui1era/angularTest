@@ -1,0 +1,99 @@
+<div class="todo">
+  <div class="aLine">
+
+    <div class="lineTitle">
+      <p>
+        {{labelH}}
+      </p>
+    </div>
+
+    <div (click)="mostrarProduccion(sensorData[i<10 ? '0'+i.toString():i],prodInfo,i)" class="aEvent rLine"
+         *ngFor="let mi of [].constructor(tope);let i = index;let ult = last"
+         [ngClass]="
+         prodInfo?.length>0 ? 'sched-Ok':
+         sensorData[i<10 ? '0'+i.toString():i]?.produccion >= (getspAsignado?.idsubproducto_subproducto.velprod / 60) ? 'sched-Ok':
+          sensorData[i<10 ? '0'+i.toString():i]?.produccion > 0 && sensorData[i<10 ? '0'+i.toString():i]?.produccion < getspAsignado?.idsubproducto_subproducto.velprod / 60 ? 'sched-Warning':
+                    sensorData[i<10 ? '0'+i.toString():i]?.produccion == 0 ? 'sched-Zero':
+                    'sched-nothing'"
+         [ngStyle]="{
+         'max-width':wid+'vw',
+         'min-width':wid+'vw'
+         }">
+      <p>
+        {{i < 10 ? "0"+i:i}}
+
+       <!-- {{ sensorData[i<10 ? '0'+i.toString():i]?.produccion > 0 && sensorData[i<10 ? '0'+i.toString():i]?.produccion < getspAsignado?.idsubproducto_subproducto.stdprod / 60 ? 'sched-Warning':''}}
+-->
+        <!--{{(getspAsignado?.idsubproducto_subproducto.stdprod / 60)}}
+                {{sensorData[i]?.produccion}}-->
+      </p>
+      <!--"m": "39",
+      "type": "error",
+      "f": "42",
+      "info": {
+      "id": 5,
+      "horainicio": "2021-11-18T14:39:14.224Z",
+      "duracion": "181.386",
+      "tipo": "2",
+      "idturno": null,
+      "comentario": "Alerta reportada por el sensor",
+      "mantencions": [],
+      "tipo_parada": {
+      "id": 2,
+      "nombre": "Maquina sin producir",
+      "idmaqrel": "2",
+      "inventarioreq": null,
+      "idcategoriaparada": null
+      }
+      }
+      }-->
+      <!--<p *ngIf="min.elTope && min.n != 60 || min.error || min.warning">
+        {{min.n}}
+      </p>-->
+    </div>
+
+    <!--
+
+        <div class="aEvent" [ngClass]="'sched-Error'" [ngStyle]="{
+        width:((1.56)*(15)) +'vw' ,
+        position: 'absolute',
+        left:(1.56*45)+'vw',
+        'margin-left':'4.54vw'}">
+          <p>x</p>
+        </div>
+    -->
+
+
+    <div [hidden]="aEv.mostrar" (click)="aEv.dataSensor = sensorData;verInterruption(aEv)" class="aEvent" [ngClass]="
+    aEv.info.tipo_parada?.idcategoriaparada_categoriadeparada?.tipo == 'programada' ? 'sched-Maintenance':aEv.type == 'error'
+    && aEv.info.tipo_parada.idcategoriaparada == null ? 'sched-Error': aEv.type == 'error' && aEv.info.tipo_parada.idcategoriaparada != null &&
+      aEv.info.tipo_parada?.idcategoriaparada_categoriadeparada?.alertacritica && aEv.info.necesitaconfirmacion  ? 'sched-Error-Categorized-noConfirmation': aEv.info.tipo_parada.idcategoriaparada != null ?
+    'sched-Error-Categorized':aEv.type == 'warning' ? 'sched-Warning':'' " *ngFor="let aEv of eventsList" [ngStyle]="{
+    'max-width':((1.56)*(+aEv.f - +aEv.m)) +'vw' ,
+    'min-width':((1.56)*(+aEv.f - +aEv.m)) +'vw' ,
+    position: 'absolute',
+    left:(1.56*(aEv.m))+'vw',
+    'margin-left':'4.54vw'}">
+      <p>{{aEv.m}}</p>
+    </div>
+    <!--  <div (click)="ocultar(min)" class="aEvent" *ngFor="let in of [].constructor(10);let ult = last"
+          [ngClass]="obtenerEstado(min)"
+          [ngStyle]="{width:min.w}">
+       <p >
+         {{min.n}}
+       </p>--><!--<p *ngIf="min.elTope && min.n != 60 || min.error || min.warning">
+        {{min.n}}
+      </p>-->
+  <!-- <div [ngStyle]="{width:(wid*8)+'%' ,position: 'absolute','margin-left':'4.5vw'}"   class="aEvent sched-Error">
+
+   </div>
+   <div [ngStyle]="{left:(wid*2)+'%',width:(wid*2)+'%' ,position: 'absolute','margin-left':'4.5vw'}"   class="aEvent sched-Warning">
+
+   </div>-->
+  <!--   <div class="vLine" style="&#45;&#45;le: 24%;"></div>
+     <div class="vLine" style="&#45;&#45;le: 47.1%;"></div>
+     <div class="vLine" style="&#45;&#45;le: 70.2%;"></div>-->
+</div>
+
+
+</div>

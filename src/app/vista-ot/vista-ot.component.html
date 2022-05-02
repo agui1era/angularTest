@@ -1,0 +1,227 @@
+<app-mi-loader *ngIf="loading"></app-mi-loader>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-10">
+      <div class="row">
+        <div class="col-3">
+          <div style="display: flex">
+            <mat-form-field style="width:50%">
+              <mat-label>N serie</mat-label>
+              <!--   <mat-select (openedChange)="selectSerie()" [(ngModel)]="selectedSerie">
+                   <mat-option [value]="''">Todas</mat-option>
+                   <mat-option *ngFor="let s of allSeries" [value]="s">{{s}}</mat-option>
+                 </mat-select>-->
+              <input type="text" (keyup)="selectSerie()" [(ngModel)]="selectedSerie" matInput [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let s of allSeries" [value]="s">{{s}}</mat-option>
+
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field style="margin-left:3%;width:50%">
+              <mat-label>Estado</mat-label>
+              <mat-select (openedChange)="selectEstado()" [(ngModel)]="selectedEstado">
+                <mat-option [value]="''">Todos</mat-option>
+                <mat-option [value]="'Comenzar'">Sin comenzar</mat-option>
+                <mat-option [value]="'Pausado'">Pausadas</mat-option>
+                <mat-option [value]="'Comenzado'">En curso</mat-option>
+                <mat-option [value]="'Terminado'">Terminadas</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-2">
+          <mat-form-field>
+            <mat-label>Planta</mat-label>
+            <mat-select (selectionChange)="selecPlanta()" [(ngModel)]="plantSelected">
+              <mat-option [value]="''">Todas</mat-option>
+              <mat-option *ngFor="let ent of listaPlants" [value]="ent.id">{{ent.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field>
+            <mat-label>Proceso</mat-label>
+            <mat-select (selectionChange)="selecProcess()" [disabled]="plantSelected == ''" [(ngModel)]="procSelected">
+              <mat-option [value]="''">Todos</mat-option>
+              <mat-option *ngFor="let ent of listaProcesos" [value]="ent.id">{{ent.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field>
+            <mat-label>Máquina</mat-label>
+            <mat-select (selectionChange)="filtrar()" [disabled]="procSelected == ''" [(ngModel)]="machSelected">
+              <mat-option [value]="''">Todas</mat-option>
+              <mat-option *ngFor="let ent of listaMaquinas" [value]="ent.id">{{ent.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- <div class="col-2">
+           <mat-form-field>
+             <mat-label>Planta</mat-label>
+             <mat-select>
+               <mat-option [value]="'s'">aa</mat-option>
+             </mat-select>
+           </mat-form-field>
+         </div>-->
+        <div class="col-3" style="display: flex">
+          <mat-form-field>
+            <mat-label>Fechas</mat-label>
+            <mat-date-range-input [comparisonEnd]="buscar()" (keyup)="buscar()" [rangePicker]="picker">
+              <input [(ngModel)]="desde" matStartDate placeholder="Desde">
+              <input [(ngModel)]="hasta" matEndDate placeholder="Hasta">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker [touchUi]="true" #picker></mat-date-range-picker>
+          </mat-form-field>
+          <!-- <mat-icon (click)="buscar()">search</mat-icon>
+ -->
+        </div>
+      </div>
+
+    </div>
+    <div [ngClass]="'col-2'" style="display: flex">
+      <button mat-icon-button color="primary">
+        <mat-icon *ngIf="!vistaCalendario" (click)="vistaCalendario = !vistaCalendario">event_note</mat-icon>
+        <mat-icon *ngIf="vistaCalendario" (click)="vistaCalendario = !vistaCalendario">view_list</mat-icon>
+      </button>
+      <button mat-icon-button color="primary">
+        <mat-icon (click)="abrirSubidaMasiva()">file_upload</mat-icon>
+      </button>
+      <button mat-icon-button color="primary">
+        <mat-icon (click)="openOtManager()">add</mat-icon>
+      </button>
+      <!--   <button (click)="openOtManager()" style="border: none;width:fit-content;padding:0 13px;float: right"
+                 class=" fig ">
+           <div>
+             <div style="padding-left: 5px;margin-right: 9px">
+               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path
+                   d="M19.3333 11.3332H11.3333V19.3332H8.66663V11.3332H0.666626V8.6665H8.66663V0.666504H11.3333V8.6665H19.3333V11.3332Z"
+                   fill="white"/>
+               </svg>
+
+             </div>
+           </div>
+         </button>-->
+    </div>
+    <div class="col-12" *ngIf="!vistaCalendario">
+      <table mat-table [dataSource]="listaOt">
+
+
+        <ng-container matColumnDef="ot">
+          <th mat-header-cell *matHeaderCellDef> OT</th>
+          <td mat-cell *matCellDef="let element">{{element.nombre}}</td>
+        </ng-container>
+        <ng-container matColumnDef="codigo">
+          <th mat-header-cell *matHeaderCellDef> Serie</th>
+          <td mat-cell *matCellDef="let element"> {{element.codigo}} </td>
+        </ng-container>
+        <ng-container matColumnDef="asignacion">
+          <th mat-header-cell *matHeaderCellDef> Asignado</th>
+          <td mat-cell *matCellDef="let element"> {{element.maq?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="SKU">
+          <th mat-header-cell *matHeaderCellDef> Producto</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.idsubproducto_subproducto?.nombre}}
+            {{element.idsubproducto_subproducto?.unidad}}
+            {{element.idsubproducto_subproducto?.formato}}
+            {{element.idsubproducto_subproducto?.condicion}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="cantidad">
+          <th mat-header-cell *matHeaderCellDef> Cantidad</th>
+          <td mat-cell *matCellDef="let element"> {{element.cantidadesperada}} </td>
+        </ng-container>
+        <ng-container matColumnDef="cantidada">
+          <th mat-header-cell *matHeaderCellDef> Cantidad actual</th>
+          <td mat-cell *matCellDef="let element"> {{element.cantidadactual }} </td>
+        </ng-container>
+        <ng-container matColumnDef="progreso">
+          <th mat-header-cell *matHeaderCellDef> Progreso</th>
+
+          <td mat-cell *matCellDef="let element">
+            <p
+              style="margin:0;font-size:80%"> {{element.progreso | number: '1.0-0'}}
+              %</p>
+            <mat-progress-bar mode="determinate"
+                              value="{{element.progreso | number: '1.0-0'}}"></mat-progress-bar>
+
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="operador">
+          <th mat-header-cell *matHeaderCellDef> Operador</th>
+          <td mat-cell *matCellDef="let element">
+            <p *ngFor="let iniciador of element.iniciadorots">{{iniciador.creador}}</p>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="HoraFecha">
+          <th mat-header-cell *matHeaderCellDef> Hora/fecha</th>
+          <td mat-cell
+              *matCellDef="let element"> {{(element.horainicioaccion ? element.horainicioaccion : element.horainicio) | date:'dd/MM/yyyy HH:mm:ss'}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="ver">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="verOT(element)">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="editar">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button (click)="editar(element)" color="accent" mat-icon-button>
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="eliminar">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button (click)="eliminarOT(element.id)" color="warn" mat-icon-button>
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="qr">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button (click)="OpenQROT(element)" mat-icon-button>
+              <mat-icon>qr_code</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+    </div>
+    <div class="col-12" *ngIf="vistaCalendario">
+      <ngx-ts
+        [items]="items"
+        [periods]="periods"
+        [sections]="sections"
+        [events]="events"
+        [showBusinessDayOnly]="false"
+        [allowDragging]="false"
+        [locale]="'es'"
+        [text]="textoCalCustom"
+      ></ngx-ts>
+      <!--<button (click)="agregarNuevo()">aaa</button>
+      <button (click)="popItem()">pop</button>
+      <button (click)="addSection()">addSec</button>
+      <button (click)="popSection()">popSe</button>-->
+    </div>
+  </div>
+</div>
+

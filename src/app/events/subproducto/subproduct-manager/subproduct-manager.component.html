@@ -1,0 +1,99 @@
+<div style="float: right">
+  <button mat-dialog-close class="btn btn-danger" mat-icon-button><mat-icon >close</mat-icon></button>
+</div>
+<legend>{{editing ? 'Editar':'Crear'}} Subproducto <b><em>{{f.nombre.value?f.nombre.value:''}}</em></b></legend>
+
+<div class="formulario">
+  <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+    <fieldset>
+      <div class="row">
+
+        <div class="col-12">
+          <mat-form-field>
+            <input matInput formControlName="nombre" type="text"  placeholder="Nombre">
+
+          </mat-form-field>
+        </div>
+        <div *ngIf="f.nombre.invalid && f.nombre.touched " style="margin: 0" class=" col-12">
+          <app-error-form textAlert="Nombre requerido"
+          ></app-error-form>
+        </div>
+        <div class="col-12">
+          <mat-form-field>
+            <input matInput formControlName="formato" type="text"  placeholder="Formato" >
+          </mat-form-field>
+        </div>
+        <div class="col-12">
+          <mat-form-field>
+            <input matInput formControlName="unidad" type="text"  placeholder="Unidad" >
+          </mat-form-field>
+        </div>
+        <div class="col-12">
+          <mat-form-field>
+            <input matInput formControlName="condicion" type="text"  placeholder="Condición" >
+          </mat-form-field>
+        </div>
+        <div class="col-12">
+          <mat-form-field>
+            <input matInput formControlName="pesoenvase" type="number"  placeholder="Peso envase(gr)" >
+          </mat-form-field>
+        </div>
+        <div class="col-12">
+          <mat-form-field>
+            <input matInput formControlName="pesofinal" type="number"  placeholder="Peso final(gr)" >
+          </mat-form-field>
+        </div>
+       <!-- <div class="col-12">
+          <mat-form-field>
+            <input matInput formControlName="stdprod" type="number"  placeholder="Estándar de producción" >
+          </mat-form-field>
+        </div>-->
+        <div class="col-12">
+          <mat-form-field>
+            <input matInput formControlName="velprod" type="number"  placeholder="Velocidad producción / H" >
+          </mat-form-field>
+        </div>
+        <div class="col-12">
+        <mat-form-field>
+          <mat-label>
+            Producto al que pertenece
+          </mat-label>
+          <mat-select formControlName="idproducto" >
+            <mat-option value="{{prod.id}}" *ngFor="let prod of productsList">
+              {{prod.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+          <!--<mat-form-field>
+            <input matInput formControlName="idproducto" type="text" placeholder="Producto al que pertenece">
+          </mat-form-field>-->
+        </div>
+        <div class="col-12">
+          <mat-form-field>
+            <input matInput formControlName="sku" type="text"  placeholder="SKU" >
+          </mat-form-field>
+        </div>
+        <div *ngIf="f.formato.invalid && f.formato.touched " style="margin: 0" class=" col-12">
+          <app-error-form textAlert="Formato requerido"
+          ></app-error-form>
+        </div>
+      </div>
+
+
+
+
+    </fieldset>
+
+  </form>
+</div>
+<div class="row justify-content-between mt-3" style="padding-left: 15px;padding-right: 15px">
+
+  <div (click)="limpiar()" class="btn btn-primary ">limpiar</div>
+
+  <button [disabled]="isLoading || this.dataForm.invalid" (click)="onSubmit()" type="button"
+          class="btn btn-success ">{{editing ? 'Guardar' : 'Agregar'}}
+    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  </button>
+
+</div>

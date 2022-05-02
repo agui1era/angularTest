@@ -1,0 +1,147 @@
+<app-mi-loader *ngIf="loading"></app-mi-loader>
+<div class="container-fluid box">
+  <div class="row">
+    <!-- <div class="col-12">
+       <h1>{{isEdit ? 'Editar':"Crear"}} una orden de trabajo</h1>
+     </div>-->
+    <div class="col-6">
+      <mat-form-field>
+        <mat-label>Nombre</mat-label>
+        <input required [(ngModel)]="inputNombre" matInput type="text">
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <mat-form-field>
+        <mat-label>Serie</mat-label>
+        <input matInput [(ngModel)]="inputCodigo" type="text">
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <mat-form-field>
+        <mat-label>Fecha inicio</mat-label>
+        <input matInput [(ngModel)]="inputFechaI" type="datetime-local">
+      </mat-form-field>
+    </div>
+
+    <div class="col-6">
+      <p style="color: rgba(0, 0, 0, 0.38)">Foto</p>
+      <input type="file" (change)="handleUpload($event)">
+      <img src="{{inputFoto}}" height="75" alt="">
+    </div>
+    <div class="col-6">
+      <mat-form-field>
+        <mat-label>SKU</mat-label>
+        <input disabled matInput type="text" [(ngModel)]="spSelected.sku">
+      </mat-form-field>
+    </div>
+    <!-- <div class="col-6" *ngIf="spSelected.id">
+       <div class="row">
+         <div class="col-4">
+           <mat-form-field>
+             <mat-label>Formato</mat-label>
+             <mat-select [(ngModel)]="formatoSelected">
+               <mat-option *ngFor="let f of spSelected.formato" [value]="f">{{f}}</mat-option>
+             </mat-select>
+           </mat-form-field>
+         </div>
+         <div class="col-4">
+
+           <mat-form-field>
+             <mat-label>Unidad</mat-label>
+             <mat-select [(ngModel)]="unidadSelected">
+               <mat-option *ngFor="let f of spSelected.unidad" [value]="f">{{f}}</mat-option>
+             </mat-select>
+           </mat-form-field>
+         </div>
+         <div class="col-4">
+
+           <mat-form-field>
+             <mat-label>Condicion</mat-label>
+             <mat-select [(ngModel)]="condicionSelected">
+               <mat-option *ngFor="let f of spSelected.condicion" [value]="f">{{f}}</mat-option>
+             </mat-select>
+           </mat-form-field>
+         </div>
+       </div>
+     </div>-->
+
+
+    <!-- <div class="col-6">
+       <mat-form-field>
+         <mat-label>Proceso</mat-label>
+         <mat-select [(ngModel)]="procesoSelected" >
+           <mat-option *ngFor="let f of listaProcesos" [value]="f.id">{{f.nombre}}</mat-option>
+         </mat-select>
+       </mat-form-field>
+     </div>
+ -->
+
+    <div class="col-6">
+      <mat-form-field>
+        <mat-label>Planta</mat-label>
+        <mat-select required (selectionChange)="cambiarPlanta()" [disabled]="esOperador" [(ngModel)]="plantSelected">
+          <mat-option *ngFor="let maq of allPlants " [value]="maq.id">{{maq.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <mat-form-field>
+        <mat-label>Proceso</mat-label>
+        <mat-select required (selectionChange)="cambiarProceso()" [disabled]="plantSelected == '' || esOperador"
+                    [(ngModel)]="procSelected">
+          <mat-option *ngFor="let maq of allProcs " [value]="maq.id">{{maq.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <mat-form-field>
+        <mat-select required (selectionChange)="cambiarSp()" [formControl]="bankCtrl"
+                    placeholder="Subproducto a fabricar" #singleSelect>
+          <mat-option>
+            <ngx-mat-select-search noEntriesFoundLabel="No existen subproductos"
+                                   placeholderLabel="Palabra clave..."
+                                   [formControl]="bankFilterCtrl"></ngx-mat-select-search>
+          </mat-option>
+
+          <mat-option *ngFor="let sp of allSp" [value]="sp.id">
+            {{sp.nombre}} {{sp.unidad}} {{sp.formato}} {{sp.condicion}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+    <div class="col-6">
+      <mat-form-field>
+        <mat-label>Maquina</mat-label>
+        <mat-select (selectionChange)="cambiarSpMaquina()" [disabled]="procSelected == '' || esOperador"
+                    [(ngModel)]="maqSelected">
+          <mat-option [value]="''">Sin definir</mat-option>
+          <mat-option *ngFor="let maq of allMaqs " [value]="maq.id">{{maq.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <mat-form-field>
+        <mat-label>Cantidad esperada</mat-label>
+        <input required [(ngModel)]="inputCantidadE" matInput type="number">
+      </mat-form-field>
+    </div>
+    <div class="col-12">
+
+    </div>
+    <div class="col-12">
+      <button *ngIf="!isEdit" (click)="crear()" [disabled]="
+       !bankCtrl.value ||
+        yaCreo ||
+        !plantSelected ||
+         !procSelected  ||
+          !inputCantidadE ||
+           !inputNombre " style="float: right" mat-raised-button color="primary">Crear orden de trabajo
+      </button>
+      <button *ngIf="isEdit" (click)="editar()"
+              [disabled]="  spSelected.id == undefined && plantSelected != '' && procesoSelected != '' "
+              style="float: right" mat-raised-button color="primary">Editar orden de trabajo
+      </button>
+    </div>
+  </div>
+</div>

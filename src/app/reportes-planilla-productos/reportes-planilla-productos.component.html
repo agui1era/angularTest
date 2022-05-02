@@ -1,0 +1,14 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h1>Datos de producción</h1>
+      <mat-form-field>
+        <mat-label>Fecha</mat-label>
+        <input (change)="descargar()" matInput [(ngModel)]="inputFechaI" type="date">
+      </mat-form-field>
+    </div>
+    <div class="col-12">
+      <angular2csv [data]="data" [filename]="'MES-PlanillaProduccion'+inputFechaI" [options]="options"></angular2csv>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,168 @@
+<app-mi-loader *ngIf="loading"></app-mi-loader>
+<div class="title mt-1- mb-2">
+  <div class="row">
+    <div class="col-3">
+      <a [href]="isOperator ? '#/maquina/'+activeTurnObj.idmaquina_maquina.id:'/'" style="margin-top: -50px" (click)="isOperator ? endTurn():''" >{{isOperator ? 'Volver a ordenes de trabajo':'Volver a vista empresa'}}</a>
+
+    </div>
+    <div class="col-6">
+      <div style="display: flex;width: fit-content;margin: auto">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M12 0C5.4 0 0 5.4 0 12C0 18.6 5.4 24 12 24C18.6 24 24 18.6 24 12C24 5.4 18.6 0 12 0V0ZM9.6 18L3.6 12L5.28 10.32L9.6 14.64L18.72 5.52L20.4 7.2L9.6 18V18Z"
+                fill="#2FA84F"/>
+        </svg>
+        <p>Orden de trabajo</p>
+        <p>{{productTurnActivo.idordendetrabajo_ordendetrabajo?.nombre}}</p>
+      </div>
+    </div>
+    <div class="col-3">
+      <svg style="float: right;margin-top: -10px" *ngIf="subprodAsociados.length>=1 && isProdTurn && produccionesperada && nSerieInput" (click)="guardar()" mat-dialog-close width="44"
+           height="46"
+           viewBox="0 0 44 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="2" width="32" height="28" rx="4" fill="url(#paint0_linear)"/>
+        <g filter="url(#filter0_dd)">
+          <path
+            d="M27.6 11.5279L26.472 10.3999L22 14.8719L17.528 10.3999L16.4 11.5279L20.872 15.9999L16.4 20.4719L17.528 21.5999L22 17.1279L26.472 21.5999L27.6 20.4719L23.128 15.9999L27.6 11.5279Z"
+            fill="white"/>
+        </g>
+        <defs>
+          <filter id="filter0_dd" x="0.400024" y="2.3999" width="43.2" height="43.2" filterUnits="userSpaceOnUse"
+                  color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                           result="hardAlpha"/>
+            <feOffset dy="4"/>
+            <feGaussianBlur stdDeviation="4"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0.0295189 0 0 0 0 0.137798 0 0 0 0 0.187773 0 0 0 0.16 0"/>
+            <feBlend mode="multiply" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                           result="hardAlpha"/>
+            <feOffset dy="8"/>
+            <feGaussianBlur stdDeviation="8"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0.0295189 0 0 0 0 0.137798 0 0 0 0 0.187773 0 0 0 0.1 0"/>
+            <feBlend mode="multiply" in2="effect1_dropShadow" result="effect2_dropShadow"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow" result="shape"/>
+          </filter>
+          <linearGradient id="paint0_linear" x1="6" y1="16" x2="38" y2="16" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFB199"/>
+            <stop offset="1" stop-color="#FF0844"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+    </div>
+  </div>
+
+
+</div>
+<!--
+<mat-checkbox *ngIf="subprodAsociados.length > 0" [(ngModel)]="modificar">No modificar</mat-checkbox>
+-->
+
+<div *ngIf="subprodAsociados.length == 0">
+  <p style="color: red">No existen subproductos asociados a la maquina</p>
+  <!--<button (click)="openMachineProducts()" class="btn btn-success btn-block">
+    Asociar subproductos
+  </button>-->
+</div>
+
+
+<!--<mat-form-field>
+  <mat-select (selectionChange)="selectExistent()" placeholder="Productos creados" formControlName="id">
+    <mat-option value="{{productExistent.id}}" *ngFor="let productExistent of data">
+      {{productExistent.idproducto_producto.nombre}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>-->
+
+
+<div *ngIf="subprodAsociados.length> 0">
+  <mat-form-field>
+    <mat-select (selectionChange)="cambiarSp()" [disabled]="modificar" [(ngModel)]="idsubproductoasidgnado" placeholder="Sub producto asignado">
+      <mat-option [value]="sp.idsubproducto_subproducto.id" *ngFor="let sp of subprodAsociados">
+        {{sp.idsubproducto_subproducto.nombre}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <input name="produccionesperada" required [disabled]="modificar" [(ngModel)]="produccionesperada" matInput
+           placeholder="Producción esperada" type="number">
+  </mat-form-field>
+
+
+  <mat-form-field *ngIf="idsubproductoasidgnado">
+    <mat-label>Formato</mat-label>
+    <mat-select [(ngModel)]="formato">
+      <mat-option *ngFor="let f of listaFormatos" [value]="f">{{f}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <mat-form-field *ngIf="idsubproductoasidgnado">
+    <mat-label>Unidad</mat-label>
+    <mat-select [(ngModel)]="unidad">
+      <mat-option *ngFor="let f of listaFormatosUnidad" [value]="f">{{f}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <mat-form-field *ngIf="idsubproductoasidgnado">
+    <mat-label>Condición</mat-label>
+    <mat-select [(ngModel)]="condicion">
+      <mat-option *ngFor="let f of listaCondicion" [value]="f">{{f}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <input [disabled]="modificar" required [(ngModel)]="nSerieInput" matInput placeholder="número de serie" type="text">
+  </mat-form-field>
+
+</div>
+
+<!--  <mat-form-field>
+    <mat-select placeholder="Producto" formControlName="idproducto">
+      <mat-option value="{{product.id}}" *ngFor="let product of allProducts">
+        {{product.nombre}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="row" *ngIf="this.formGroup.controls.idproducto.value">
+    <div class="col-6">
+      <mat-form-field>
+        <input [matAutocomplete]="auto" type="number" matInput placeholder="cantidad" formControlName="formatocantidad">
+      </mat-form-field>
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let option of [1,3,5,10,15]" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
+    </div>
+    <div class="col-6">
+
+
+      <mat-form-field>
+        <mat-select placeholder="Formato" formControlName="formato">
+          <mat-option *ngFor="let f of formatosDelProducto()" [value]="f">{{f}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+
+  <mat-form-field>
+    <input matInput placeholder="condicion" type="text" formControlName="condicion">
+  </mat-form-field>
+
+ -->
+
+<button [disabled]="
+                  produccionesperada == '' ||
+                  nSerieInput == ''
+" *ngIf="!modificar" (click)="guardar()" class="btn btn-success btn-block">
+  Guardar cambios
+</button>
+

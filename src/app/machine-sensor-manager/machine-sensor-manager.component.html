@@ -1,0 +1,16 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="plomoP">Sensores de la maquina</h2>
+    </div>
+    <div class="col-12">
+      <div class="listSen">
+        <div class="row">
+          <div class="col-6" *ngFor="let sen of sensorRList">
+            <mat-checkbox (change)="selecSensor(sen)" [(ngModel)]="sen.activo">Sensor {{sen.idreferencia}} {{sen.idcategoriasensor_categoriasensor.nombre}}</mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

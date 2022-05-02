@@ -1,0 +1,14 @@
+<div class="todo" [hidden]="cerrar" >
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <em>{{tipo}}  <b style="cursor: pointer" class="fR" (click)="cerrar = true">X</b></em>
+        <h2><b>{{header}}</b> </h2>
+      </div>
+      <div class="col-12">
+        <p>{{body}}</p>
+        <a *ngIf="header == 'Creación de parada critica'" routerLink="/mantenciones">Crear Mantencion</a>
+      </div>
+    </div>
+  </div>
+</div>
